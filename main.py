@@ -14,14 +14,18 @@ st.set_page_config(
 )
 
 # ======================================
-# BACKGROUND IMAGE FUNCTIONS
+# BACKGROUND IMAGE FUNCTION
 # ======================================
-def get_base64_image(image_file):
-    with open(image_file, "rb") as f:
-        data = f.read()
-    return base64.b64encode(data).decode()
+def get_base64_image(image_path):
+    if not Path(image_path).exists():
+        st.warning(f"Image not found: {image_path}")
+        return None
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode()
 
 def set_background(image_base64):
+    if image_base64 is None:
+        return
     st.markdown(
         f"""
         <style>
@@ -32,7 +36,7 @@ def set_background(image_base64):
             background-repeat: no-repeat;
         }}
         .block-container {{
-            background-color: rgba(255, 255, 255, 0.88);
+            background-color: rgba(255, 255, 255, 0.88); /* overlay for readability */
             padding: 2rem;
             border-radius: 14px;
         }}
@@ -42,8 +46,15 @@ def set_background(image_base64):
     )
 
 # Apply background
-bg_image = get_base64_image("assets/sses_background.png")
+BASE_DIR = Path(__file__).resolve().parent
+IMAGE_PATH = BASE_DIR / "assets" / "sses_background.png"
+bg_image = get_base64_image(str(IMAGE_PATH))
 set_background(bg_image)
+
+# ======================================
+# DISPLAY LOGO / HEADER IMAGE
+# ======================================
+st.image("assets/sses_background.png", width=250, caption="SSES Survey Dashboard")
 
 # ======================================
 # TITLE
