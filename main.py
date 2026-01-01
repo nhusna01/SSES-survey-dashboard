@@ -175,6 +175,7 @@ elif page == "🤖 Machine Learning":
 
         st.markdown("### Clustered Data Preview")
         st.dataframe(clustered_df.head(), use_container_width=True)
+        
 # ======================================
 # 🎯 EMOTIONAL RESILIENCE & PERSONAL DEVELOPMENT
 # ======================================
@@ -190,7 +191,7 @@ elif page == "🎯 Emotional Resilience Analysis":
     """)
 
     # --------------------------------------------------
-    # 1️⃣ CLEAN COLUMN NAMES (GOOGLE SHEETS SAFE)
+    # 1️⃣ CLEAN COLUMN NAMES
     # --------------------------------------------------
     df.columns = df.columns.str.strip()
 
@@ -217,8 +218,6 @@ elif page == "🎯 Emotional Resilience Analysis":
     if len(detected_cols) < 2:
         st.error("Required variables for Emotional Resilience analysis are missing.")
         st.write("Detected columns:", detected_cols)
-        st.write("Available columns in dataset:")
-        st.write(list(df.columns))
         st.stop()
 
     # --------------------------------------------------
@@ -229,7 +228,7 @@ elif page == "🎯 Emotional Resilience Analysis":
     )
 
     # ==================================================
-    # 1️⃣ DISTRIBUTION (LIKERT BAR CHART)
+    # 1️⃣ DISTRIBUTION (MULTI-COLOR BAR)
     # ==================================================
     st.markdown("### 1. Distribution of Emotional Resilience Attributes")
 
@@ -240,7 +239,7 @@ elif page == "🎯 Emotional Resilience Analysis":
 
     selected_col = detected_cols[selected_label]
 
-    value_counts = df[selected_col].value_counts().reset_index()
+    value_counts = df[selected_col].value_counts().sort_index().reset_index()
     value_counts.columns = ["Response", "Count"]
 
     fig1 = px.bar(
@@ -248,13 +247,15 @@ elif page == "🎯 Emotional Resilience Analysis":
         x="Response",
         y="Count",
         text="Count",
+        color="Response",
+        color_discrete_sequence=px.colors.qualitative.Set2,
         title=f"Response Distribution: {selected_label}"
     )
 
     st.plotly_chart(fig1, use_container_width=True)
 
     # ==================================================
-    # 2️⃣ RADAR CHART (AVERAGE PROFILE)
+    # 2️⃣ RADAR CHART (FILLED, MULTI-COLOR)
     # ==================================================
     st.markdown("### 2. Average Emotional Resilience and Personal Development Profile")
 
@@ -268,13 +269,29 @@ elif page == "🎯 Emotional Resilience Analysis":
         r="Mean Score",
         theta="Attribute",
         line_close=True,
-        title="Average Emotional Resilience Profile"
+        color_discrete_sequence=["#1f77b4"]
+    )
+
+    fig2.update_traces(
+        fill="toself",
+        marker=dict(size=6),
+        line=dict(width=3)
+    )
+
+    fig2.update_layout(
+        title="Average Emotional Resilience Profile",
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, mean_scores["Mean Score"].max() + 0.5]
+            )
+        )
     )
 
     st.plotly_chart(fig2, use_container_width=True)
 
     # ==================================================
-    # 3️⃣ CORRELATION HEATMAP
+    # 3️⃣ CORRELATION HEATMAP (DIVERGING COLORS)
     # ==================================================
     st.markdown("### 3. Correlation Between Attributes")
 
@@ -285,13 +302,16 @@ elif page == "🎯 Emotional Resilience Analysis":
     fig3 = px.imshow(
         corr_df,
         text_auto=".2f",
+        color_continuous_scale="RdBu",
+        zmin=-1,
+        zmax=1,
         title="Correlation Heatmap of Emotional Resilience Attributes"
     )
 
     st.plotly_chart(fig3, use_container_width=True)
 
     # ==================================================
-    # 4️⃣ BOX PLOT (VARIABILITY)
+    # 4️⃣ BOX PLOT (CATEGORICAL MULTI-COLOR)
     # ==================================================
     st.markdown("### 4. Distribution and Variability")
 
@@ -307,19 +327,29 @@ elif page == "🎯 Emotional Resilience Analysis":
         melted,
         x="Attribute",
         y="Score",
+        color="Attribute",
+        color_discrete_sequence=px.colors.qualitative.Set3,
         title="Variability of Emotional Resilience and Development Attributes"
     )
 
     st.plotly_chart(fig4, use_container_width=True)
 
     # ==================================================
-    # 5️⃣ GROUP COMPARISON (GENDER)
+    # 5️⃣ GROUP COMPARISON (GENDER – STRONG CONTRAST)
     # ==================================================
     st.markdown("### 5. Comparison by Gender")
 
-    if "gender" in df.columns:
+    gender_col = None
+    for col in df.columns:
+        if any(k in col.lower() for k in ["gender", "sex"]):
+            gender_col = col
+            break
+
+    if gender_col:
+        df[gender_col] = df[gender_col].astype(str).str.strip().str.title()
+
         gender_means = (
-            df.groupby("gender")[list(detected_cols.values())]
+            df.groupby(gender_col)[list(detected_cols.values())]
             .mean()
             .reset_index()
         )
@@ -328,9 +358,10 @@ elif page == "🎯 Emotional Resilience Analysis":
 
         fig5 = px.bar(
             gender_means,
-            x="gender",
+            x=gender_col,
             y=list(reverse_map.values()),
             barmode="group",
+            color_discrete_sequence=px.colors.qualitative.Dark2,
             title="Emotional Resilience Attributes by Gender"
         )
 
