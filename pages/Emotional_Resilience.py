@@ -13,13 +13,10 @@ st.set_page_config(
 )
 
 # ======================================
-# LOAD DATA (shared group dataset)
+# LOAD DATA (GROUP SHARED SOURCE)
 # ======================================
 df = load_data()
 
-# ======================================
-# PAGE TITLE & OBJECTIVE
-# ======================================
 st.title("Emotional Resilience and Personal Development")
 
 st.markdown("""
@@ -29,54 +26,66 @@ including motivation, adaptability, emotional control, task persistence, and tea
 """)
 
 # ======================================
-# STEP 4: DEFINE OBJECTIVE 3 VARIABLES
+# MAP OBJECTIVE 3 VARIABLES (RAW COLUMN NAMES)
 # ======================================
-objective3_cols = [
-    'calm_under_pressure',
-    'emotional_control',
-    'adaptability',
-    'self_motivation',
-    'task_persistence',
-    'teamwork'
-]
+objective3_map = {
+    "Calm Under Pressure": "I can stay calm even when under pressure.",
+    "Emotional Control": "I can control my emotions when I feel angry or upset.",
+    "Adaptability": "I can adapt easily to new or unexpected situations.",
+    "Self Motivation": "I am motivated to improve my skills and knowledge.",
+    "Task Persistence": "I finish tasks even when they are difficult.",
+    "Teamwork": "I find it easy to work well with others."
+}
 
-available_cols = [c for c in objective3_cols if c in df.columns]
+# Keep only columns that exist in the dataset
+available_map = {
+    label: col for label, col in objective3_map.items() if col in df.columns
+}
 
-if len(available_cols) < 2:
-    st.warning("Required variables for Emotional Resilience analysis are not available.")
+if len(available_map) < 2:
+    st.error("Objective 3 variables not found in the dataset.")
+    st.write("Expected columns:", list(objective3_map.values()))
     st.stop()
 
-# ======================================
-# STEP 5: SCIENTIFIC VISUALIZATIONS
-# ======================================
-
-# 1️⃣ Likert Distribution
-st.subheader("1. Distribution of Emotional Resilience Attributes")
-
-selected_attr = st.selectbox(
-    "Select an attribute",
-    options=available_cols
+# Convert Likert responses to numeric (safe)
+df[list(available_map.values())] = df[list(available_map.values())].apply(
+    pd.to_numeric, errors="coerce"
 )
 
-value_counts = df[selected_attr].value_counts().reset_index()
-value_counts.columns = [selected_attr, "Count"]
+# ======================================
+# 1️⃣ DISTRIBUTION (LIKERT BAR)
+# ======================================
+st.subheader("1. Distribution of Emotional Resilience Attributes")
+
+selected_label = st.selectbox(
+    "Select Attribute",
+    options=list(available_map.keys())
+)
+
+selected_col = available_map[selected_label]
+
+value_counts = df[selected_col].value_counts().reset_index()
+value_counts.columns = ["Response", "Count"]
 
 fig1 = px.bar(
     value_counts,
-    x=selected_attr,
+    x="Response",
     y="Count",
     text="Count",
-    title=f"Response Distribution for {selected_attr}"
+    title=f"Response Distribution: {selected_label}"
 )
 
 st.plotly_chart(fig1, use_container_width=True)
 
+# ======================================
+# 2️⃣ RADAR CHART (AVERAGE PROFILE)
+# ======================================
+st.subheader("2. Average Emotional Resilience Profile")
 
-# 2️⃣ Radar Chart
-st.subheader("2. Average Personal Development Profile")
-
-mean_scores = df[available_cols].mean().reset_index()
-mean_scores.columns = ["Attribute", "Mean Score"]
+mean_scores = pd.DataFrame({
+    "Attribute": list(available_map.keys()),
+    "Mean Score": [df[col].mean() for col in available_map.values()]
+})
 
 fig2 = px.line_polar(
     mean_scores,
@@ -88,28 +97,36 @@ fig2 = px.line_polar(
 
 st.plotly_chart(fig2, use_container_width=True)
 
-
-# 3️⃣ Correlation Heatmap
+# ======================================
+# 3️⃣ CORRELATION HEATMAP
+# ======================================
 st.subheader("3. Correlation Between Attributes")
 
-corr = df[available_cols].corr()
+corr_df = df[list(available_map.values())].corr()
+corr_df.columns = available_map.keys()
+corr_df.index = available_map.keys()
 
 fig3 = px.imshow(
-    corr,
+    corr_df,
     text_auto=".2f",
     title="Correlation Heatmap of Emotional Resilience Attributes"
 )
 
 st.plotly_chart(fig3, use_container_width=True)
 
-
-# 4️⃣ Box Plot
+# ======================================
+# 4️⃣ BOX PLOT (VARIABILITY)
+# ======================================
 st.subheader("4. Distribution and Variability")
 
-melted = df[available_cols].melt(
+melted = df[list(available_map.values())].melt(
     var_name="Attribute",
     value_name="Score"
 )
+
+# Replace raw names with readable labels
+reverse_map = {v: k for k, v in available_map.items()}
+melted["Attribute"] = melted["Attribute"].map(reverse_map)
 
 fig4 = px.box(
     melted,
@@ -120,17 +137,24 @@ fig4 = px.box(
 
 st.plotly_chart(fig4, use_container_width=True)
 
-
-# 5️⃣ Group Comparison (Gender)
+# ======================================
+# 5️⃣ GROUP COMPARISON (GENDER)
+# ======================================
 st.subheader("5. Comparison by Gender")
 
-if 'gender' in df.columns:
-    gender_means = df.groupby('gender')[available_cols].mean().reset_index()
+if "gender" in df.columns:
+    gender_means = (
+        df.groupby("gender")[list(available_map.values())]
+        .mean()
+        .reset_index()
+    )
+
+    gender_means.rename(columns=reverse_map, inplace=True)
 
     fig5 = px.bar(
         gender_means,
         x="gender",
-        y=available_cols,
+        y=list(reverse_map.values()),
         barmode="group",
         title="Emotional Resilience Attributes by Gender"
     )
