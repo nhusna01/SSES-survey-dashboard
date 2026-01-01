@@ -192,19 +192,23 @@ elif page == "🎯 Emotional Resilience Analysis":
     # Define Objective 3 Variables (FIX)
     # --------------------------------------
     objective3_cols = [
-        'calm_under_pressure',
-        'emotional_control',
-        'adaptability',
-        'self_motivation',
-        'task_persistence',
-        'teamwork'
-    ]
+    "I can stay calm even when under pressure.",
+    "I can control my emotions when I feel angry or upset.",
+    "I can adapt easily to new or unexpected situations.",
+    "I am motivated to improve my skills and knowledge.",
+    "I finish tasks even when they are difficult.",
+    "I find it easy to work well with others."
+]
 
     available_cols = [c for c in objective3_cols if c in df.columns]
 
     if len(available_cols) < 2:
         st.error("Required variables for Emotional Resilience analysis are missing.")
         st.stop()
+
+    df[objective3_cols] = df[objective3_cols].apply(
+    pd.to_numeric, errors="coerce"
+)
 
 # ======================================
 # 1. Likert Distribution
