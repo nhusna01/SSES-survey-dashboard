@@ -364,31 +364,41 @@ elif page == "🎯 Emotional Resilience Analysis":
     )
 
     st.plotly_chart(fig4, use_container_width=True)
+# ==================================================
+# 5️⃣ GROUP COMPARISON BY GENDER (ATTRIBUTE SELECTABLE)
+# ==================================================
+st.markdown("### 5. Comparison by Gender")
 
-    # ==================================================
-    # 5️⃣ GROUP COMPARISON BY GENDER (FORCED MULTI-COLOR)
-    # ==================================================
-    st.markdown("### 5. Comparison by Gender")
+if gender_col:
+    selected_gender_attr = st.selectbox(
+        "Select Attribute for Gender Comparison",
+        options=list(detected_cols.keys()),
+        key="gender_attr_select"
+    )
 
-    if gender_col:
-        gender_means = (
-            df.groupby(gender_col)[list(detected_cols.values())]
-            .mean()
-            .reset_index()
-        )
+    selected_gender_col = detected_cols[selected_gender_attr]
 
-        gender_means.rename(columns=reverse_map, inplace=True)
+    gender_means = (
+        df.groupby(gender_col)[selected_gender_col]
+        .mean()
+        .reset_index()
+    )
 
-        fig5 = px.bar(
-            gender_means,
-            x=gender_col,
-            y=list(reverse_map.values()),
-            color=gender_col,
-            barmode="group",
-            color_discrete_sequence=px.colors.qualitative.Dark2,
-            title="Emotional Resilience Attributes by Gender"
-        )
+    fig5 = px.bar(
+        gender_means,
+        x=gender_col,
+        y=selected_gender_col,
+        color=gender_col,
+        color_discrete_sequence=px.colors.qualitative.Dark2,
+        labels={
+            selected_gender_col: "Average Score",
+            gender_col: "Gender"
+        },
+        title=f"{selected_gender_attr} by Gender"
+    )
 
-        st.plotly_chart(fig5, use_container_width=True)
-    else:
-        st.info("Gender variable is not available for group comparison.")
+    st.plotly_chart(fig5, use_container_width=True)
+else:
+    st.info("Gender variable is not available for group comparison.")
+
+  
