@@ -73,8 +73,9 @@ page = st.sidebar.selectbox(
     [
         "🏠 Overview",
         "👥 Demographic Analysis",
-        "📊 Survey Charts",
-        "🤖 Machine Learning"
+        "📊 Survey Charts", 
+        "🤖 Machine Learning",
+        "🎯 Emotional Resilience Analysis"
     ]
 )
 
@@ -174,3 +175,16 @@ elif page == "🤖 Machine Learning":
 
         st.markdown("### Clustered Data Preview")
         st.dataframe(clustered_df.head(), use_container_width=True)
+
+# ======================================
+# 🎯 EMOTIONAL RESILIENCE ANALYSIS PAGE
+# ======================================
+elif page == "🎯 Emotional Resilience Analysis":
+    st.subheader("Emotional Resilience and Personal Development Analysis")
+
+    st.markdown("""
+    **Objective:**  
+    To investigate the relationship between emotional resilience and personal development attributes,
+    including motivation, adaptability, emotional control, task persistence, and teamwork skills.
+    """)
+
