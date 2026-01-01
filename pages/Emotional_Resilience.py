@@ -3,17 +3,11 @@ import plotly.express as px
 import pandas as pd
 from preprocess import load_data
 
-# ======================================
-# PAGE CONFIG
-# ======================================
 st.set_page_config(
     page_title="Emotional Resilience Analysis",
     layout="wide"
 )
 
-# ======================================
-# LOAD DATA
-# ======================================
 df = load_data()
 
 st.title("Emotional Resilience and Personal Development")
@@ -24,10 +18,7 @@ To investigate the relationship between emotional resilience and personal develo
 including motivation, adaptability, emotional control, task persistence, and teamwork skills.
 """)
 
-# ======================================
-# OBJECTIVE 3 VARIABLE MAPPING
-# (MATCH YOUR GOOGLE FORM HEADERS)
-# ======================================
+# Objective 3 variable mapping
 objective3_map = {
     "Calm Under Pressure": "I can stay calm even when under pressure.",
     "Emotional Control": "I can control my emotions when I feel angry or upset.",
@@ -43,17 +34,15 @@ available_map = {
 }
 
 if len(available_map) < 2:
-    st.error("Objective 3 variables not found in the dataset.")
+    st.error("Required Emotional Resilience variables are missing.")
     st.stop()
 
-# Convert Likert to numeric
+# Convert Likert responses to numeric
 df[list(available_map.values())] = df[list(available_map.values())].apply(
     pd.to_numeric, errors="coerce"
 )
 
-# ======================================
-# 1️⃣ LIKERT DISTRIBUTION (BAR CHART)
-# ======================================
+# 1. Likert Distribution
 st.subheader("1. Distribution of Emotional Resilience Attributes")
 
 selected_label = st.selectbox(
@@ -76,9 +65,7 @@ fig1 = px.bar(
 
 st.plotly_chart(fig1, use_container_width=True)
 
-# ======================================
-# 2️⃣ RADAR CHART (AVERAGE PROFILE)
-# ======================================
+# 2. Radar Chart
 st.subheader("2. Average Emotional Resilience Profile")
 
 mean_scores = pd.DataFrame({
@@ -96,9 +83,7 @@ fig2 = px.line_polar(
 
 st.plotly_chart(fig2, use_container_width=True)
 
-# ======================================
-# 3️⃣ CORRELATION HEATMAP
-# ======================================
+# 3. Correlation Heatmap
 st.subheader("3. Correlation Between Attributes")
 
 corr = df[list(available_map.values())].corr()
@@ -113,9 +98,7 @@ fig3 = px.imshow(
 
 st.plotly_chart(fig3, use_container_width=True)
 
-# ======================================
-# 4️⃣ BOX PLOT (VARIABILITY)
-# ======================================
+# 4. Box Plot
 st.subheader("4. Distribution and Variability")
 
 melted = df[list(available_map.values())].melt(
@@ -135,9 +118,7 @@ fig4 = px.box(
 
 st.plotly_chart(fig4, use_container_width=True)
 
-# ======================================
-# 5️⃣ GROUP COMPARISON (GENDER)
-# ======================================
+# 5. Group Comparison
 st.subheader("5. Comparison by Gender")
 
 if "gender" in df.columns:
