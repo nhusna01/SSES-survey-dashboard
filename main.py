@@ -185,13 +185,13 @@ elif page == "🎯 Emotional Resilience Analysis":
 
     st.markdown("""
     **Objective:**  
-    To investigate the relationship between emotional resilience and personal development attributes,
-    including calmness under pressure, emotional control, adaptability, self-motivation,
-    task persistence, and teamwork.
+    To investigate emotional resilience and personal development attributes,
+    including calmness under pressure, emotional control, adaptability,
+    self-motivation, task persistence, and teamwork.
     """)
 
     # --------------------------------------------------
-    # 1️⃣ CLEAN COLUMN NAMES
+    # 1️⃣ CLEAN COLUMN NAMES (GOOGLE SHEETS SAFE)
     # --------------------------------------------------
     df.columns = df.columns.str.strip()
 
@@ -221,14 +221,28 @@ elif page == "🎯 Emotional Resilience Analysis":
         st.stop()
 
     # --------------------------------------------------
-    # 3️⃣ CONVERT LIKERT RESPONSES TO NUMERIC
+    # 3️⃣ DETECT GENDER COLUMN (ROBUST)
+    # --------------------------------------------------
+    gender_col = None
+    for col in df.columns:
+        if any(k in col.lower() for k in ["gender", "sex"]):
+            gender_col = col
+            break
+
+    if gender_col:
+        df[gender_col] = df[gender_col].astype(str).str.strip().str.title()
+
+    # --------------------------------------------------
+    # 4️⃣ CONVERT LIKERT RESPONSES TO NUMERIC
     # --------------------------------------------------
     df[list(detected_cols.values())] = df[list(detected_cols.values())].apply(
         pd.to_numeric, errors="coerce"
     )
 
+    reverse_map = {v: k for k, v in detected_cols.items()}
+
     # ==================================================
-    # 1️⃣ DISTRIBUTION (MULTI-COLOR BAR)
+    # 1️⃣ LIKERT DISTRIBUTION (MULTI-COLOR BARS)
     # ==================================================
     st.markdown("### 1. Distribution of Emotional Resilience Attributes")
 
@@ -239,15 +253,19 @@ elif page == "🎯 Emotional Resilience Analysis":
 
     selected_col = detected_cols[selected_label]
 
-    value_counts = df[selected_col].value_counts().sort_index().reset_index()
+    value_counts = (
+        df[selected_col]
+        .value_counts()
+        .sort_index()
+        .reset_index()
+    )
     value_counts.columns = ["Response", "Count"]
 
     fig1 = px.bar(
         value_counts,
         x="Response",
         y="Count",
-        text="Count",
-        color="Response",
+        color=value_counts["Response"].astype(str),
         color_discrete_sequence=px.colors.qualitative.Set2,
         title=f"Response Distribution: {selected_label}"
     )
@@ -255,38 +273,52 @@ elif page == "🎯 Emotional Resilience Analysis":
     st.plotly_chart(fig1, use_container_width=True)
 
     # ==================================================
-    # 2️⃣ RADAR CHART (FILLED, MULTI-COLOR)
+    # 2️⃣ RADAR CHART (MULTI-TRACE → MULTI-COLOR)
     # ==================================================
-    st.markdown("### 2. Average Emotional Resilience and Personal Development Profile")
+    st.markdown("### 2. Average Emotional Resilience Profile")
 
-    mean_scores = pd.DataFrame({
-        "Attribute": list(detected_cols.keys()),
-        "Mean Score": [df[col].mean() for col in detected_cols.values()]
-    })
-
-    fig2 = px.line_polar(
-        mean_scores,
-        r="Mean Score",
-        theta="Attribute",
-        line_close=True,
-        color_discrete_sequence=["#1f77b4"]
-    )
-
-    fig2.update_traces(
-        fill="toself",
-        marker=dict(size=6),
-        line=dict(width=3)
-    )
-
-    fig2.update_layout(
-        title="Average Emotional Resilience Profile",
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[0, mean_scores["Mean Score"].max() + 0.5]
-            )
+    if gender_col:
+        radar_df = (
+            df.groupby(gender_col)[list(detected_cols.values())]
+            .mean()
+            .reset_index()
         )
-    )
+
+        radar_df = radar_df.melt(
+            id_vars=gender_col,
+            var_name="Attribute",
+            value_name="Mean Score"
+        )
+
+        radar_df["Attribute"] = radar_df["Attribute"].map(reverse_map)
+
+        fig2 = px.line_polar(
+            radar_df,
+            r="Mean Score",
+            theta="Attribute",
+            color=gender_col,
+            line_close=True,
+            color_discrete_sequence=px.colors.qualitative.Dark2,
+            title="Average Emotional Resilience Profile by Gender"
+        )
+
+        fig2.update_traces(fill="toself")
+    else:
+        mean_scores = pd.DataFrame({
+            "Attribute": list(detected_cols.keys()),
+            "Mean Score": [df[col].mean() for col in detected_cols.values()]
+        })
+
+        fig2 = px.line_polar(
+            mean_scores,
+            r="Mean Score",
+            theta="Attribute",
+            line_close=True,
+            color_discrete_sequence=["#1f77b4"],
+            title="Average Emotional Resilience Profile"
+        )
+
+        fig2.update_traces(fill="toself")
 
     st.plotly_chart(fig2, use_container_width=True)
 
@@ -311,7 +343,7 @@ elif page == "🎯 Emotional Resilience Analysis":
     st.plotly_chart(fig3, use_container_width=True)
 
     # ==================================================
-    # 4️⃣ BOX PLOT (CATEGORICAL MULTI-COLOR)
+    # 4️⃣ BOX PLOT (ATTRIBUTE-WISE MULTI-COLOR)
     # ==================================================
     st.markdown("### 4. Distribution and Variability")
 
@@ -320,7 +352,6 @@ elif page == "🎯 Emotional Resilience Analysis":
         value_name="Score"
     )
 
-    reverse_map = {v: k for k, v in detected_cols.items()}
     melted["Attribute"] = melted["Attribute"].map(reverse_map)
 
     fig4 = px.box(
@@ -335,19 +366,11 @@ elif page == "🎯 Emotional Resilience Analysis":
     st.plotly_chart(fig4, use_container_width=True)
 
     # ==================================================
-    # 5️⃣ GROUP COMPARISON (GENDER – STRONG CONTRAST)
+    # 5️⃣ GROUP COMPARISON BY GENDER (FORCED MULTI-COLOR)
     # ==================================================
     st.markdown("### 5. Comparison by Gender")
 
-    gender_col = None
-    for col in df.columns:
-        if any(k in col.lower() for k in ["gender", "sex"]):
-            gender_col = col
-            break
-
     if gender_col:
-        df[gender_col] = df[gender_col].astype(str).str.strip().str.title()
-
         gender_means = (
             df.groupby(gender_col)[list(detected_cols.values())]
             .mean()
@@ -360,6 +383,7 @@ elif page == "🎯 Emotional Resilience Analysis":
             gender_means,
             x=gender_col,
             y=list(reverse_map.values()),
+            color=gender_col,
             barmode="group",
             color_discrete_sequence=px.colors.qualitative.Dark2,
             title="Emotional Resilience Attributes by Gender"
