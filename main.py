@@ -182,62 +182,38 @@ elif page == "🤖 Machine Learning":
 elif page == "🎯 Emotional Resilience Analysis":
     st.subheader("Emotional Resilience and Personal Development Analysis")
 
-    st.markdown("""
-    **Objective:**  
-    To investigate the relationship between emotional resilience and personal development attributes,
-    including motivation, adaptability, emotional control, task persistence, and teamwork skills.
-    """)
-
-    # --------------------------------------
-    # Define Objective 3 Variables (FIX)
-    # --------------------------------------
     objective3_cols = [
-    "I can stay calm even when under pressure.",
-    "I can control my emotions when I feel angry or upset.",
-    "I can adapt easily to new or unexpected situations.",
-    "I am motivated to improve my skills and knowledge.",
-    "I finish tasks even when they are difficult.",
-    "I find it easy to work well with others."
-]
+        "I can stay calm even when under pressure.",
+        "I can control my emotions when I feel angry or upset.",
+        "I can adapt easily to new or unexpected situations.",
+        "I am motivated to improve my skills and knowledge.",
+        "I finish tasks even when they are difficult.",
+        "I find it easy to work well with others."
+    ]
 
     available_cols = [c for c in objective3_cols if c in df.columns]
 
     if len(available_cols) < 2:
-        st.error("Required variables for Emotional Resilience analysis are missing.")
+        st.error("Required Emotional Resilience variables are missing.")
         st.stop()
 
-    df[objective3_cols] = df[objective3_cols].apply(
-    pd.to_numeric, errors="coerce"
-)
+    # Convert Likert to numeric
+    df[available_cols] = df[available_cols].apply(
+        pd.to_numeric, errors="coerce"
+    )
 
-# ======================================
-# 1. Likert Distribution
-# ======================================
+    # 1. Distribution
     st.markdown("### 1. Distribution of Emotional Resilience Attributes")
+    selected_attr = st.selectbox("Select Attribute", options=available_cols)
 
-    selected_attr = st.selectbox(
-        "Select Attribute",
-        options=available_cols
-    )
+    vc = df[selected_attr].value_counts().reset_index()
+    vc.columns = ["Response", "Count"]
 
-    value_counts = df[selected_attr].value_counts().reset_index()
-    value_counts.columns = [selected_attr, "Count"]
-
-    fig1 = px.bar(
-        value_counts,
-        x=selected_attr,
-        y="Count",
-        text="Count",
-        title=f"Response Distribution for {selected_attr}"
-    )
-
+    fig1 = px.bar(vc, x="Response", y="Count", text="Count")
     st.plotly_chart(fig1, use_container_width=True)
 
-# ======================================
-# 2. Radar Chart
-# ======================================
+    # 2. Radar
     st.markdown("### 2. Average Personal Development Profile")
-
     mean_scores = df[available_cols].mean().reset_index()
     mean_scores.columns = ["Attribute", "Mean Score"]
 
@@ -245,57 +221,41 @@ elif page == "🎯 Emotional Resilience Analysis":
         mean_scores,
         r="Mean Score",
         theta="Attribute",
-        line_close=True,
-        title="Average Emotional Resilience and Personal Development Profile"
+        line_close=True
     )
-
     st.plotly_chart(fig2, use_container_width=True)
-# ======================================
-# 3. Correlation Heatmap
-# ======================================
-    st.markdown("### 3. Correlation Between Attributes")
 
+    # 3. Correlation
+    st.markdown("### 3. Correlation Between Attributes")
     corr = df[available_cols].corr()
 
-    fig3 = px.imshow(
-        corr,
-        text_auto=".2f",
-        title="Correlation Heatmap of Emotional Resilience Attributes"
-    )
-
+    fig3 = px.imshow(corr, text_auto=".2f")
     st.plotly_chart(fig3, use_container_width=True)
-# ======================================
-# 4. Box Plot
-# ======================================
+
+    # 4. Box Plot
     st.markdown("### 4. Distribution and Variability")
-
     melted = df[available_cols].melt(
-        var_name="Attribute",
-        value_name="Score"
+        var_name="Attribute", value_name="Score"
     )
 
-    fig4 = px.box(
-        melted,
-        x="Attribute",
-        y="Score",
-        title="Variability of Emotional Resilience and Development Attributes"
-    )
-
+    fig4 = px.box(melted, x="Attribute", y="Score")
     st.plotly_chart(fig4, use_container_width=True)
-# ======================================
-# 5. Group Comparison
-# ======================================
-    st.markdown("### 5. Comparison by Gender")
 
-    if 'gender' in df.columns:
-        gender_means = df.groupby('gender')[available_cols].mean().reset_index()
+    # 5. Gender Comparison
+    st.markdown("### 5. Comparison by Gender")
+    if "gender" in df.columns:
+        gender_means = df.groupby("gender")[available_cols].mean().reset_index()
 
         fig5 = px.bar(
             gender_means,
             x="gender",
             y=available_cols,
-            barmode="group",
-            title="Emotional Resilience Attributes by Gender"
+            barmode="group"
+        )
+        st.plotly_chart(fig5, use_container_width=True)
+    else:
+        st.info("Gender data is not available.")
+
         )
 
         st.plotly_chart(fig5, use_container_width=True)
