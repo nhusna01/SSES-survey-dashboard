@@ -10,7 +10,7 @@ import plotly.graph_objects as go
 st.title("🧠 Emotional Resilience Analysis")
 
 # ======================================
-# PROBLEM STATEMENT
+# PROBLEM STATEMENT & OBJECTIVE
 # ======================================
 with st.container():
     st.markdown("### 📝 Problem Statement")
@@ -18,15 +18,8 @@ with st.container():
     Emotional resilience is a key factor in personal and professional success. 
     Understanding how individuals manage stress, adapt to change, control emotions, 
     and maintain motivation can help identify areas for personal development. 
-    
-    This analysis investigates the relationship between emotional resilience and key 
-    personal development attributes such as **adaptability, motivation, emotional control, 
-    task persistence, and teamwork skills**. Insights from this study aim to inform 
-    strategies for enhancing resilience among participants.
     """)
-# ======================================
-# OBJECTIVE
-# ======================================
+
     st.markdown("### 🎯 Objective")
     st.write("""
     To investigate the relationship between emotional resilience and personal development 
@@ -34,59 +27,34 @@ with st.container():
     and teamwork skills.
     """)
 
-st.markdown("""
-Investigating the relationship between emotional resilience and personal development attributes 
-including **adaptability, motivation, and teamwork**.
-""")
-
 # ======================================
 # DATA LOADING 
 # ======================================
-# This URL points directly to the CSV content
 DATA_URL = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/Hafizah_SSES_Cleaned.csv"
 
-@st.cache_data(ttl=3600)  # Cache for 1 hour to improve performance
+@st.cache_data(ttl=3600)
 def load_emotion_data():
     try:
-        # User-Agent header helps bypass some security blocks from GitHub
         data = pd.read_csv(DATA_URL, storage_options={'User-Agent': 'Mozilla/5.0'})
         return data
     except Exception as e:
-        # If the URL fails, we show a clean error message
-        st.error(f"⚠️ Could not connect to the dataset. Please check your internet or the GitHub link.")
-        st.exception(e) # This will show the specific error in a collapsed box
+        st.error(f"⚠️ Could not connect to the dataset.")
         return None
 
 df = load_emotion_data()
 
-# ======================================
-# ANALYSIS LOGIC
-# ======================================
 if df is not None:
-    # Define and Clean the Columns
-    objective3_cols = [
-        'calm_under_pressure', 
-        'emotional_control', 
-        'adaptability', 
-        'self_motivation', 
-        'task_persistence', 
-        'teamwork'
-    ]
-
-    # Verify which columns actually exist in the file
+    objective3_cols = ['calm_under_pressure', 'emotional_control', 'adaptability', 'self_motivation', 'task_persistence', 'teamwork']
     available_cols = [c for c in objective3_cols if c in df.columns]
 
     if not available_cols:
-        st.error("❌ The required columns were not found in this CSV. Please check the column headers in your file.")
-        st.write("Available columns in your file:", df.columns.tolist())
+        st.error("❌ Required columns not found.")
     else:
-        # Convert to numeric and fill missing values with median
-        df[available_cols] = df[available_cols].apply(pd.to_numeric, errors="coerce")
-        df[available_cols] = df[available_cols].fillna(df[available_cols].median())
+        df[available_cols] = df[available_cols].apply(pd.to_numeric, errors="coerce").fillna(df[available_cols].median())
 
-# ======================================
-# KEY METRICS
-# ======================================
+        # ======================================
+        # 📊 EXECUTIVE SUMMARY
+        # ======================================
         st.subheader("📊 Executive Summary")
         agree_prop = df[available_cols].isin([4, 5]).mean()
         
@@ -95,11 +63,9 @@ if df is not None:
         m2.metric("Top Strength", agree_prop.idxmax().replace('_', ' ').title())
         m3.metric("Growth Area", agree_prop.idxmin().replace('_', ' ').title())
 
-# ======================================
-# DATA VISUALIZATION
-# ======================================
-
+        # ======================================
         # 1. RADAR CHART
+        # ======================================
         st.subheader("1. Average Resilience Profile")
         mean_scores = df[available_cols].mean()
         fig_radar = go.Figure(data=go.Scatterpolar(
@@ -110,50 +76,37 @@ if df is not None:
         fig_radar.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 5])), showlegend=False)
         st.plotly_chart(fig_radar, use_container_width=True)
         
-        st.markdown(f"""
-        **💡 Insight:** The radar chart displays a balanced resilience profile. The widest point is **{mean_scores.idxmax().replace('_',' ').title()}** (Mean: {mean_scores.max():.2f}), 
-        indicating this is the group's core strength.
-        **Interpretation:** Respondents are most confident in their interpersonal and collaborative abilities, while the slightly retracted points suggest areas where stress management might be less consistent.
-        """)
+        st.markdown(f"**💡 Insight:** Core group strength is **{mean_scores.idxmax().replace('_',' ').title()}**.")
+        st.write("**Interpretation:** The group shows strong collaborative skills, but the inward pull in some areas suggests stress management is a relative vulnerability.")
 
+        # ======================================
         # 2. CORRELATION ANALYSIS
+        # ======================================
         st.subheader("2. Attribute Correlation Matrix")
         corr = df[available_cols].corr()
         fig_corr = px.imshow(corr, text_auto=".2f", color_continuous_scale="RdBu_r", aspect="auto", height=500)
         st.plotly_chart(fig_corr, use_container_width=True)
         
-        # Key Finding Table for Correlation
-        st.markdown("**📌 Key Correlation Pairs:**")
+        st.markdown("**📌 Key Finding: Top Relationship Pairs**")
         high_corr = corr.unstack().sort_values(ascending=False).drop_duplicates()
-        high_corr = high_corr[high_corr < 1].head(3)
-        st.table(pd.DataFrame(high_corr, columns=['Correlation Coefficient']))
+        st.table(pd.DataFrame(high_corr[high_corr < 1].head(3), columns=['Correlation Strength']))
 
-        st.markdown("""
-        **💡 Insight:** Strong positive correlations exist between emotional control and adaptability. 
-        **Interpretation:** This confirms that individuals who can regulate their emotions effectively are significantly more likely to adapt to changing environments, validating the synergy between internal resilience and external flexibility.
-        """)
-        
-        # 3. DISTRIBUTION BOXPLOT
-        st.subheader(" Variability of Attributes")
-        fig_box = px.box(
-            df.melt(value_vars=resilience_cols),
-            x="variable",
-            y="value",
-            color="variable"
-            title="Score Spread per Attribute"
-        )
-        # 4. VIOLIN PLOT
+        st.write("**Interpretation:** Strong correlations (e.g., Emotional Control & Adaptability) prove that internal emotional regulation is the primary driver for situational flexibility.")
+
+        # ======================================
+        # 3. VIOLIN PLOT (DENSITY)
+        # ======================================
         st.subheader("3. Score Density & Distribution")
         df_melted = df.melt(value_vars=available_cols, var_name="Attribute", value_name="Score")
         fig_violin = px.violin(df_melted, x="Attribute", y="Score", color="Attribute", box=True, points="all")
         st.plotly_chart(fig_violin, use_container_width=True)
         
-        st.markdown("""
-        **💡 Insight:** The "bulge" in the violins shows where the majority of scores lie. 
-        **Interpretation:** Unlike a boxplot, this reveals if scores are bi-modal (split between extremes). A wider middle indicates a strong consensus among respondents, whereas a stretched violin suggests high variability in how stress is managed within the group.
-        """)
-                       
-        # 5. DIVERGING PERCENTAGE BAR
+        st.markdown("**💡 Insight:** The distribution shape indicates how consistent the group is.")
+        st.write("**Interpretation:** A wide violin 'belly' indicates a strong consensus in scores, while a thin, long violin suggests that some individuals are outliers in their resilience levels.")
+
+        # ======================================
+        # 4. DIVERGING SENTIMENT BAR
+        # ======================================
         st.subheader("4. Sentiment Analysis (Agreement vs Disagreement)")
         def get_sentiment(col):
             counts = df[col].value_counts(normalize=True).reindex([1,2,3,4,5], fill_value=0)
@@ -168,12 +121,14 @@ if df is not None:
                           color_discrete_map={'Disagree': '#EF553B', 'Neutral': '#FECB52', 'Agree': '#00CC96'})
         st.plotly_chart(fig_sent, use_container_width=True)
 
-        st.markdown("""
-        **💡 Insight:** This chart visualizes the "resistance" to each attribute. 
-        **Interpretation:** Attributes with a longer red bar (Disagree) are primary targets for intervention. If 'Emotional Control' shows higher disagreement than 'Teamwork', development programs should prioritize emotional regulation training.
-        """)
-        
-        # 6. ATTRIBUTE HIERARCHY (Treemap)
+        st.markdown("**📌 Key Finding: Sentiment Split**")
+        st.dataframe(sentiment_df.rename(columns={'index': 'Attribute'}))
+
+        st.write("**Interpretation:** Attributes with larger red bars represent critical development gaps where respondents feel they lack resilience or control.")
+
+        # ======================================
+        # 5. ATTRIBUTE HIERARCHY (Treemap)
+        # ======================================
         st.subheader("5. Attribute Hierarchy Ranking")
         tree_data = pd.DataFrame({
             "Attribute": [c.replace('_', ' ').title() for c in available_cols],
@@ -183,34 +138,30 @@ if df is not None:
                               color='Mean Score', color_continuous_scale='Blues')
         st.plotly_chart(fig_tree, use_container_width=True)
         
-        st.markdown(f"""
-        **💡 Insight:** The largest block represents **{tree_data.iloc[0]['Attribute']}**. 
-        **Interpretation:** This hierarchy visualizes the dominance of certain traits. It provides a clear ranking of which attributes the respondent group feels most prepared to leverage in their personal development.
-        """)
+        st.write(f"**Interpretation:** This hierarchy identifies **{tree_data.iloc[0]['Attribute']}** as the primary pillar supporting the group's personal development.")
 
-        # 6. DISTRIBUTION BOXPLOT (Fixed your previous code snippet)
+        # ======================================
+        # 6. BOXPLOT (VARIABILITY)
+        # ======================================
         st.subheader("6. Variability & Range Analysis")
         fig_box = px.box(df_melted, x="Attribute", y="Score", color="Attribute")
         st.plotly_chart(fig_box, use_container_width=True)
         
-        st.markdown("""
-        **💡 Insight:** The height of the box shows the Interquartile Range (IQR). 
-        **Interpretation:** A short box indicates consistent behavior across the group, while a tall box (and outliers) indicates that personal development is highly individualized, requiring personalized coaching rather than a one-size-fits-all strategy.
-        """)
-# ======================================
-# CONCLUSION
-# ======================================
+        st.markdown("**💡 Insight:** Outliers and box height represent group consistency.")
+        st.write("**Interpretation:** A compact box indicates a unified experience, while large ranges suggest that development strategies should be tailored to individual needs.")
+
+        # ======================================
+        # CONCLUSION
+        # ======================================
         st.markdown("---")
         st.subheader("🏁 Conclusion & Recommendations")
         
         st.success(f"""
-        **Synthesis of Findings:**
-        The analysis successfully investigated the relationship between emotional resilience and personal development. 
-        1. **Core Strength:** The group excels in **{tree_data.iloc[0]['Attribute']}**, which serves as a protective factor during stress.
-        2. **Critical Link:** The high correlation between **{available_cols[1].replace('_',' ')}** and **{available_cols[2].replace('_',' ')}** suggests that improving one will naturally boost the other.
-        3. **Development Opportunity:** Based on the sentiment and hierarchy charts, **{tree_data.iloc[-1]['Attribute']}** represents the most significant area for growth.
-        
-        **Final Strategy:** To enhance overall resilience, training should not just focus on individual skills but on the **interconnectedness** of emotional control and adaptability. By strengthening the weakest links identified, participants can achieve a more robust and flexible personal development profile.
+        **Final Synthesis:**
+        The investigation reveals a high level of collaborative resilience, but highlights specific gaps in internal stress management. 
+        1. **Core Success:** The high Mean Score in **{tree_data.iloc[0]['Attribute']}** shows a strong foundation for teamwork.
+        2. **Actionable Link:** Improving **{available_cols[1].replace('_',' ')}** is likely to yield the highest ROI for overall resilience due to its strong correlation with other traits.
+        3. **Recommendation:** Personal development programs should shift focus toward the 'Growth Area' of **{tree_data.iloc[-1]['Attribute']}** to create a more well-rounded resilience profile.
         """)
 else:
     st.warning("Please verify that the GitHub repository 'SSES-survey-dashboard' is set to **Public**.")
