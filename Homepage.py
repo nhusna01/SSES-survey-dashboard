@@ -50,3 +50,6 @@ def show_home():
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         st.dataframe(df[demo_col].value_counts(), use_container_width=True)
+
+show_home()
+
