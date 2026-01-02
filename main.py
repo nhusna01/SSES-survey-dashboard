@@ -12,6 +12,10 @@ st.set_page_config(
     layout="wide"
 )
 
+# --- LOAD DATA ONCE ---
+if "df" not in st.session_state:
+    st.session_state.df = load_data()
+
 # ======================================
 # NAVIGATION MENU DEFINITION
 # ======================================
