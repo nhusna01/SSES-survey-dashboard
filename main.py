@@ -5,6 +5,9 @@ import base64
 from pathlib import Path
 from preprocess import load_data
 
+# Import the Emotional Resilience page as a function
+from pages import Emotional_Resilience
+
 # ======================================
 # PAGE CONFIG (MUST BE FIRST)
 # ======================================
@@ -73,7 +76,6 @@ df = load_data()
 st.subheader("📌 Dashboard Overview")
 
 col1, col2, col3 = st.columns(3)
-
 col1.metric("Total Responses", len(df))
 col2.metric("Total Variables", df.shape[1])
 col3.metric("Missing Values", df.isna().sum().sum())
@@ -97,10 +99,13 @@ st.markdown("""
 ### 📂 Available Analysis Pages
 Use the **sidebar** to navigate between analysis pages:
 
-- 👥 **Demographic Analysis**
-- 📊 **Survey Charts**
-- 🤖 **Machine Learning**
-- 🎯 **Emotional Resilience Analysis** *(Main Project Page)*
-
-Each page uses the **same dataset** and focuses on different analytical perspectives.
+- 👥 Demographic Analysis
+- 📊 Survey Charts
+- 🤖 Machine Learning
+- 🎯 Emotional Resilience Analysis *(Main Project Page)*
 """)
+
+# ======================================
+# RUN EMOTIONAL RESILIENCE ANALYSIS
+# ======================================
+Emotional_Resilience.app()
