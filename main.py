@@ -23,7 +23,7 @@ emotion_resilience = st.Page("pages/Emotion_Resilience.py", title="Emotion & Res
 # 3. NAVIGATION MENU DEFINITION
 pg = st.navigation({
     "Menu": [
-        Homepage,
+        homepage,
         husna,
         machine_learning,
         survey_charts,
