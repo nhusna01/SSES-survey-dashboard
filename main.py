@@ -5,7 +5,12 @@ import base64
 from pathlib import Path
 from preprocess import load_data
 
-
+# Set page config
+st.set_page_config(
+    page_title="🏠 SSES Survey Dashboard",
+    page_icon="📊",
+    layout="wide"
+)
 
 # ======================================
 # NAVIGATION MENU DEFINITION
