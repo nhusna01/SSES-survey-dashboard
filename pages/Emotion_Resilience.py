@@ -1,49 +1,103 @@
 import streamlit as st
 import pandas as pd
+import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 
+# ======================================
+# PAGE HEADER
+# ======================================
 st.title("🧠 Emotional Resilience Analysis")
 
-# USE THE RAW URL
-DATA_URL = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/Hafizah_SSES_Cleaned.csv"
+st.markdown("""
+Investigating the relationship between emotional resilience and personal development attributes 
+including **adaptability, motivation, and teamwork**.
+""")
 
-@st.cache_data
+# ======================================
+# DATA LOADING (USING YOUR RAW URL)
+# ======================================
+# This URL points directly to the CSV content
+DATA_URL = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/Hafizah_SSES_Cleaned.csv"
+
+@st.cache_data(ttl=3600)  # Cache for 1 hour to improve performance
 def load_emotion_data():
     try:
-        data = pd.read_csv(DATA_URL)
+        # User-Agent header helps bypass some security blocks from GitHub
+        data = pd.read_csv(DATA_URL, storage_options={'User-Agent': 'Mozilla/5.0'})
         return data
     except Exception as e:
-        st.error(f"Error connecting to GitHub data: {e}")
+        # If the URL fails, we show a clean error message
+        st.error(f"⚠️ Could not connect to the dataset. Please check your internet or the GitHub link.")
+        st.exception(e) # This will show the specific error in a collapsed box
         return None
 
 df = load_emotion_data()
 
+# ======================================
+# ANALYSIS LOGIC
+# ======================================
 if df is not None:
-    objective3_cols = ['calm_under_pressure', 'emotional_control', 'adaptability', 'self_motivation', 'task_persistence', 'teamwork']
-    
-    # Ensure columns exist in the file
-    available_cols = [c for c in objective3_cols if c in df.columns]
-    
-    if len(available_cols) > 0:
-        df[available_cols] = df[available_cols].apply(pd.to_numeric, errors="coerce").fillna(df[available_cols].median())
+    # 1. Define and Clean the Columns
+    objective3_cols = [
+        'calm_under_pressure', 
+        'emotional_control', 
+        'adaptability', 
+        'self_motivation', 
+        'task_persistence', 
+        'teamwork'
+    ]
 
-        # Metrics
+    # Verify which columns actually exist in the file
+    available_cols = [c for c in objective3_cols if c in df.columns]
+
+    if not available_cols:
+        st.error("❌ The required columns were not found in this CSV. Please check the column headers in your file.")
+        st.write("Available columns in your file:", df.columns.tolist())
+    else:
+        # Convert to numeric and fill missing values with median
+        df[available_cols] = df[available_cols].apply(pd.to_numeric, errors="coerce")
+        df[available_cols] = df[available_cols].fillna(df[available_cols].median())
+
+        # 2. KEY METRICS
+        st.subheader("📊 Executive Summary")
         agree_prop = df[available_cols].isin([4, 5]).mean()
+        
         m1, m2, m3 = st.columns(3)
-        m1.metric("Avg. Resilience", f"{agree_prop.mean():.1%}")
-        m2.metric("Strongest", agree_prop.idxmax().replace('_', ' ').title())
+        m1.metric("Overall Agreement", f"{agree_prop.mean():.1%}")
+        m2.metric("Top Strength", agree_prop.idxmax().replace('_', ' ').title())
         m3.metric("Growth Area", agree_prop.idxmin().replace('_', ' ').title())
 
-        # Radar Chart
-        st.subheader("Resilience Profile")
+        # 3. RADAR CHART
+        st.subheader("🕸️ Average Resilience Profile")
         mean_scores = df[available_cols].mean()
+        
         fig_radar = go.Figure()
         fig_radar.add_trace(go.Scatterpolar(
             r=mean_scores.values.tolist() + [mean_scores.values[0]],
             theta=[c.replace('_', ' ').title() for c in available_cols] + [available_cols[0].replace('_', ' ').title()],
-            fill='toself'
+            fill='toself',
+            fillcolor='rgba(31, 119, 180, 0.5)',
+            line_color='#1f77b4'
         ))
+        fig_radar.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 5])),
+            showlegend=False,
+            margin=dict(t=20, b=20)
+        )
         st.plotly_chart(fig_radar, use_container_width=True)
-    else:
-        st.error("The expected columns were not found in the CSV file.")
+
+        # 4. CORRELATION ANALYSIS
+        st.subheader("🔗 How Attributes Connect")
+        st.write("A higher value (red) means those two strengths often appear together in respondents.")
+        corr = df[available_cols].corr()
+        fig_corr = px.imshow(
+            corr, 
+            text_auto=".2f", 
+            color_continuous_scale="RdBu_r",
+            aspect="auto"
+        )
+        st.plotly_chart(fig_corr, use_container_width=True)
+
+else:
+    st.warning("Please verify that the GitHub repository 'SSES-survey-dashboard' is set to **Public**.")
