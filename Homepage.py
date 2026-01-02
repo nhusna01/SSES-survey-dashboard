@@ -1,8 +1,7 @@
 import streamlit as st
 import plotly.express as px
 
-def show_home():
-    df = st.session_state.df
+df = st.session_state.df
 
     # Header + logo
     st.markdown("""
@@ -50,6 +49,4 @@ def show_home():
         st.plotly_chart(fig, use_container_width=True)
     with col2:
         st.dataframe(df[demo_col].value_counts(), use_container_width=True)
-
-show_home()
 
