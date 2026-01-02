@@ -23,10 +23,10 @@ if "df" not in st.session_state:
 pg = st.navigation({
     "Menu": [
         homepage,
-        demographic,
+        husna,
         machine_learning,
-        survey,
-        emotion resilience
+        survey_charts,
+        emotion_resilience
     ]
 })
 
