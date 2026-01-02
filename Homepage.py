@@ -14,6 +14,46 @@ st.set_page_config(
 
 # Title and description
 st.title("🏠 SSES Survey Dashboard")
+# CSS to make the page background white and remove padding
+st.markdown("""
+<style>
+/* Remove default padding for a cleaner look */
+.css-18e3th9 {
+    padding-top: 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    padding-bottom: 0rem;
+}
+
+/* Center the title and subtitle */
+.center-title {
+    text-align: center;
+}
+
+/* Logo at top-right corner */
+.top-right-logo {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    height: 60px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# HTML for centered title and subtitle + top-right logo
+st.markdown("""
+<div class="center-title">
+    <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
+        🏠 SSES Survey Dashboard
+    </h1>
+    <p style="color:#555; font-size:20px;">
+        Interactive dashboard for Emotional Resilience & Personal Development
+    </p>
+</div>
+
+<!-- Logo top-right -->
+<img class="top-right-logo" src="https://img.icons8.com/color/64/000000/brain.png" alt="Logo">
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <div style="
