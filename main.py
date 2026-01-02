@@ -65,7 +65,7 @@ def set_background(image_base64):
 
 # Apply Background
 BASE_DIR = Path(os.getcwd())
-IMAGE_PATH = BASE_DIR / "assets" / "sses_background.jpg"
+IMAGE_PATH = BASE_DIR / "assets" / "background_SES.png"
 bg_image = get_base64_image(str(IMAGE_PATH))
 set_background(bg_image)
 
