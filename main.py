@@ -104,8 +104,3 @@ Use the **sidebar** to navigate between analysis pages:
 - 🤖 Machine Learning
 - 🎯 Emotional Resilience Analysis *(Main Project Page)*
 """)
-
-# ======================================
-# RUN EMOTIONAL RESILIENCE ANALYSIS
-# ======================================
-Emotional_Resilience.app()
