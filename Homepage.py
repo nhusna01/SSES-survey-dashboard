@@ -24,32 +24,32 @@ st.markdown("""
 
 
 # Metrics and data preview
-    st.subheader("📌 Dashboard Overview")
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Responses", len(df))
-    col2.metric("Total Variables", df.shape[1])
-    col3.metric("Missing Values", df.isna().sum().sum())
+st.subheader("📌 Dashboard Overview")
+col1, col2, col3 = st.columns(3)
+col1.metric("Total Responses", len(df))
+col2.metric("Total Variables", df.shape[1])
+col3.metric("Missing Values", df.isna().sum().sum())
 
-    with st.expander("🔍 View Dataset Preview"):
-        st.dataframe(df, use_container_width=True)
+with st.expander("🔍 View Dataset Preview"):
+    st.dataframe(df, use_container_width=True)
+    
+with st.expander("📈 View Summary Statistics"):
+    st.write(df.describe(include="all"))
 
-    with st.expander("📈 View Summary Statistics"):
-        st.write(df.describe(include="all"))
-
-    # Demographics
-    st.subheader("👥 Demographic Analysis")
-    demo_col = st.selectbox(
-        "Select Demographic Variable to Visualize",
-        options=['gender', 'age', 'location', 'education_level'] if 'gender' in df.columns else df.columns
-    )
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        fig = px.pie(df, names=demo_col, hole=0.4,
-                     title=f"Distribution of {demo_col.replace('_',' ').title()}",
-                     color_discrete_sequence=px.colors.qualitative.Pastel)
-        st.plotly_chart(fig, use_container_width=True)
-    with col2:
-        st.dataframe(df[demo_col].value_counts(), use_container_width=True)
+# Demographics
+st.subheader("👥 Demographic Analysis")
+demo_col = st.selectbox(
+    "Select Demographic Variable to Visualize",
+    options=['gender', 'age', 'location', 'education_level'] if 'gender' in df.columns else df.columns
+)
+col1, col2 = st.columns([2, 1])
+with col1:
+    fig = px.pie(df, names=demo_col, hole=0.4,
+                title=f"Distribution of {demo_col.replace('_',' ').title()}",
+                color_discrete_sequence=px.colors.qualitative.Pastel)
+    st.plotly_chart(fig, use_container_width=True)
+with col2:
+    st.dataframe(df[demo_col].value_counts(), use_container_width=True)
 
 
 
