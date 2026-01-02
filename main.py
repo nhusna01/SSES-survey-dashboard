@@ -16,7 +16,7 @@ st.set_page_config(
 # Make sure these .py files exist in your "pages" folder
 homepage = st.Page("Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
-machine_learning = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
+adawiyah = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
 survey_charts = st.Page("pages/Survey_Charts.py", title="Survey Charts", icon="📈")
 emotion_resilience = st.Page("pages/Emotion_Resilience.py", title="Emotion & Resilience", icon="🧠")
 
