@@ -4,8 +4,6 @@ from preprocess import load_data
 # Note: st.set_page_config is NOT needed here if it's already in app.py
 # But the title and data loading should live here now.
 
-import streamlit as st
-
 # Set page config
 st.set_page_config(
     page_title="🏠 SSES Survey Dashboard",
