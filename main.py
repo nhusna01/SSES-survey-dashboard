@@ -36,7 +36,8 @@ pg = st.navigation({
 # BACKGROUND IMAGE FUNCTIONS
 # ======================================
 def get_base64_image(image_path):
-    if not Path(image_path).exists():
+    # Check if the file exists before trying to open it
+    if not os.path.isfile(image_path):
         return None
     with open(image_path, "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -48,24 +49,29 @@ def set_background(image_base64):
         f"""
         <style>
         .stApp {{
-            background-image: url("data:image/jpg;base64,{image_base64}");
+            background-image: url("data:image/png;base64,{image_base64}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
         }}
+        /* This makes the main content area slightly transparent so you can see the background */
         .block-container {{
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 2rem;
-            border-radius: 14px;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-top: 2rem;
         }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# Apply Background
-BASE_DIR = Path(os.getcwd())
-IMAGE_PATH = BASE_DIR / "assets" / "background_SES.png"
+# --- Apply Background ---
+# Use the directory where main.py lives to find the assets folder
+CURRENT_DIR = Path(__file__).parent
+IMAGE_PATH = CURRENT_DIR / "assets" / "background_SES.png"
+
 bg_image = get_base64_image(str(IMAGE_PATH))
 set_background(bg_image)
 
