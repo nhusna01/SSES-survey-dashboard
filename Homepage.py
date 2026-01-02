@@ -3,26 +3,27 @@ import plotly.express as px
 
 df = st.session_state.df
 
-    # Header + logo
-    st.markdown("""
-    <style>
-    .center-title { text-align: center; }
-    .top-right-logo { position: absolute; top: 10px; right: 20px; height: 60px; }
-    </style>
+# Header + logo
+st.markdown("""
+<style>
+.center-title { text-align: center; }
+.top-right-logo { position: absolute; top: 10px; right: 20px; height: 60px; }
+</style>
 
-    <div class="center-title">
-        <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
-            🏠 SSES Survey Dashboard
-        </h1>
-        <p style="color:#555; font-size:20px;">
-            Interactive dashboard for Emotional Resilience & Personal Development
-        </p>
-    </div>
+<div class="center-title">
+    <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
+        🏠 SSES Survey Dashboard
+    </h1>
+    <p style="color:#555; font-size:20px;">
+        Interactive dashboard for Emotional Resilience & Personal Development
+    </p>
+</div>
 
-    <img class="top-right-logo" src="https://img.icons8.com/color/64/000000/brain.png" alt="Logo">
-    """, unsafe_allow_html=True)
+<img class="top-right-logo" src="https://img.icons8.com/color/64/000000/brain.png">
+""", unsafe_allow_html=True)
 
-    # Metrics and data preview
+
+# Metrics and data preview
     st.subheader("📌 Dashboard Overview")
     col1, col2, col3 = st.columns(3)
     col1.metric("Total Responses", len(df))
@@ -50,3 +51,6 @@ df = st.session_state.df
     with col2:
         st.dataframe(df[demo_col].value_counts(), use_container_width=True)
 
+
+
+    
