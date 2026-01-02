@@ -18,13 +18,14 @@ Understanding the intersection between external environmental safety and interna
 """)
 
 # Load Dataset
-# Replace 'your_data.csv' with your actual file path on GitHub
 @st.cache_data
 def load_data():
-    # df = pd.read_csv("your_cleaned_data.csv")
-    
-    return data
+    # Loading your specific cleaned dataset
+    path = "dataset/Adawiyah_SSES_cleaned.csv"
+    df = pd.read_csv(path)
+    return df
 
+# Initialize the dataframe
 df = load_data()
 
 # Sidebar - Interactive Filters
