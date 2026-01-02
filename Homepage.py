@@ -11,15 +11,25 @@ st.set_page_config(
     layout="wide"
 )
 
-# Main title with emoji
+
+# Title and description
 st.title("🏠 SSES Survey Dashboard")
 
-# Description with styled markdown
 st.markdown("""
-<div style="font-size:18px; color:#444;">
-Welcome to the interactive dashboard for analysing <b>Emotional Resilience</b> 
-and <b>Personal Development</b> based on the SSES survey responses.
+<div style="
+    text-align: center; 
+    font-family: 'Arial'; 
+    font-size: 50px; 
+    font-weight: bold; 
+    color: white; 
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    padding: 20px; 
+    border-radius: 10px;">
+    🏠 SSES Survey Dashboard
 </div>
+<p style="text-align:center; color:#555; font-size:18px;">
+Interactive dashboard for Emotional Resilience & Personal Development
+</p>
 """, unsafe_allow_html=True)
 
 # Add top metrics using columns
