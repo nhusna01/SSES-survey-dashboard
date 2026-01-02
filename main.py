@@ -26,11 +26,14 @@ machine_learning = st.Page("pages/Machine_Learning.py", title="Machine Learning"
 survey = st.Page("pages/Survey_Charts.py", title="Survey Chart")
 emotion = st.Page("pages/Emotion_Resilience.py", title="Emotion Resilience")
 
-pg = st.navigation(
-    {
-        "Menu": [homepage, demographic, machine_learning, survey, emotion]
-    }
-)
+pg = st.navigation({
+    "Menu": [
+        st.Page("Homepage.py", default=True),
+        st.Page("pages/husna.py"),
+    ]
+})
+pg.run()
+
 
 # ======================================
 # BACKGROUND IMAGE FUNCTIONS
