@@ -2,35 +2,22 @@ import streamlit as st
 import plotly.express as px
 from preprocess import load_data
 
-st.set_page_config(
-    page_title="Survey Charts",
-    layout="wide"
-)
+st.title("📊 Individual Survey Questions")
+st.markdown("Select any question below to see the frequency of responses.")
 
 df = load_data()
 
-st.title("Survey Question Analysis")
+# Column Selection
+target_col = st.selectbox("Choose a Question", options=df.columns)
 
-st.markdown("""
-This page allows exploration of individual survey questions
-to understand response patterns.
-""")
-
-question_col = st.selectbox(
-    "Select Survey Question",
-    options=df.columns
-)
-
-value_counts = df[question_col].value_counts().reset_index()
-value_counts.columns = ["Response", "Count"]
+# Charting
+counts = df[target_col].value_counts().reset_index()
+counts.columns = ["Response", "Count"]
 
 fig = px.bar(
-    value_counts,
-    x="Response",
-    y="Count",
+    counts, x="Response", y="Count", 
+    color="Response", 
     text="Count",
-    title=f"Response Distribution for {question_col}"
+    title=f"Results: {target_col}"
 )
-
 st.plotly_chart(fig, use_container_width=True)
-
