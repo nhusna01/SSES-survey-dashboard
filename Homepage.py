@@ -15,7 +15,7 @@ def show_home():
 
     <div class="center-title">
         <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
-            🏠 SSES Survey Dashboard
+            🏠 SSES Survey Dashboarddd
         </h1>
         <p style="color:#555; font-size:20px;">
             Interactive dashboard for Emotional Resilience & Personal Development
@@ -40,7 +40,7 @@ def show_home():
         st.write(df.describe(include="all"))
 
     # --- DEMOGRAPHIC ANALYSIS ---
-    st.subheader("👥 Demographic Analysis")
+    st.subheader("👥 Demographic")
     st.markdown("Explore the background and characteristics of the survey respondents.")
 
     # Choose column for visualization
