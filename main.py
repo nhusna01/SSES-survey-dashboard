@@ -5,22 +5,21 @@ import base64
 from pathlib import Path
 from preprocess import load_data
 
-# 1. SET PAGE CONFIG (Must be the very first Streamlit command)
+# SET PAGE CONFIG 
 st.set_page_config(
     page_title="🏠 SSES Survey Dashboard",
     page_icon="📊",
     layout="wide"
 )
 
-# 2. DEFINE PAGES (Fixes the NameError)
-# Make sure these .py files exist in your "pages" folder
+# DEFINE PAGES 
 homepage = st.Page("Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
 adawiyah = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
 survey_charts = st.Page("pages/Survey_Charts.py", title="Survey Charts", icon="📈")
 emotion_resilience = st.Page("pages/Emotion_Resilience.py", title="Emotion & Resilience", icon="🧠")
 
-# 3. NAVIGATION MENU DEFINITION
+# NAVIGATION MENU DEFINITION
 pg = st.navigation({
     "Menu": [
         homepage,
@@ -31,14 +30,14 @@ pg = st.navigation({
     ]
 })
 
-# 4. LOAD DATA
+# LOAD DATA
 if "df" not in st.session_state:
     try:
         st.session_state.df = load_data()
     except Exception as e:
         st.error(f"Error loading data: {e}")
 
-# 5. BACKGROUND IMAGE FUNCTIONS
+# BACKGROUND IMAGE 
 def get_base64_image(image_path):
     """Reads an image file and returns a base64 encoded string."""
     if not os.path.isfile(image_path):
@@ -73,7 +72,7 @@ def set_background(image_base64):
         unsafe_allow_html=True
     )
 
-# 6. APPLY BACKGROUND
+# APPLY BACKGROUND
 # Path relative to this file
 CURRENT_DIR = Path(__file__).parent
 IMAGE_PATH = CURRENT_DIR / "assets" / "background_SES.png"
@@ -86,5 +85,5 @@ else:
     # Debug message if image is missing (only shows if image isn't found)
     st.sidebar.warning(f"Background image not found at assets/background_SES.png")
 
-# 7. RUN NAVIGATION
+# RUN NAVIGATION
 pg.run()
