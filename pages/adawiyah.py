@@ -18,15 +18,12 @@ Understanding the intersection between external environmental safety and interna
 """)
 
 # Load Dataset
-@st.cache_data
-def load_data():
-    # Loading your specific cleaned dataset
-    path = "dataset/Adawiyah_SSES_cleaned.csv"
-    df = pd.read_csv(path)
-    return df
-
-# Initialize the dataframe
-df = load_data()
+csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
+try:
+    df = pd.read_csv(csv_url)
+except Exception as e:
+    st.error(f"Error loading dataset: {e}")
+    df = pd.DataFrame()
 
 # Sidebar - Interactive Filters
 st.sidebar.header("Explore & Filter Data")
