@@ -20,19 +20,16 @@ if "df" not in st.session_state:
 # NAVIGATION MENU DEFINITION
 # ======================================
 # Ensure these filenames match your actual files in the directory
-homepage = st.Page("Homepage.py", title="Homepage", icon="🏠", default=True)
-demographic = st.Page("pages/husna.py", title="HUSNA")
-machine_learning = st.Page("pages/Machine_Learning.py", title="Machine Learning")
-survey = st.Page("pages/Survey_Charts.py", title="Survey Chart")
-emotion = st.Page("pages/Emotion_Resilience.py", title="Emotion Resilience")
-
 pg = st.navigation({
     "Menu": [
-        st.Page("Homepage.py", default=True),
-        st.Page("pages/husna.py"),
+        homepage,
+        demographic,
+        machine_learning,
+        survey,
+        emotion resilience
     ]
 })
-pg.run()
+
 
 
 # ======================================
