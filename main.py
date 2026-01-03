@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # DEFINE PAGES 
-homepage = st.Page("Homepage.py", title="Home", icon="🏠", default=True)
+homepage = st.Page("pages/Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
 adawiyah = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
 survey_charts = st.Page("pages/Survey_Charts.py", title="Survey Charts", icon="📈")
