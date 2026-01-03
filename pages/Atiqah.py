@@ -1,91 +1,253 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-# Page Configuration
-st.set_page_config(page_title="", layout="wide")
-
-# Title and Introduction
-st.title("🌟 Impact")
-
-st.markdown("""
-### **Objective**
-To analyze the highest state vs the lowest state in demaining workplace life.
-
-# Load Dataset
-csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_cleaned.csv"
-try:
-    df = pd.read_csv(csv_url)
-except Exception as e:
-    st.error(f"Error loading dataset: {e}")
-    df = pd.DataFrame()
-
-# Sidebar - Interactive Filters
-st.sidebar.header("Explore & Filter Data")
-st.sidebar.write("Adjust the parameters to update the visualizations.")
-
-# Example Slider for Life Satisfaction
-satisfaction_filter = st.sidebar.slider(
-    "Select Life Satisfaction Range", 
-    float(df['life_satisfaction'].min()), 
-    float(df['life_satisfaction'].max()), 
-    (0.0, 1.0)
+# ===============================
+# PAGE CONFIG
+# ===============================
+st.set_page_config(
+    page_title="Wellbeing & Emotional Comparison",
+    layout="wide"
 )
 
-# Filtering the dataframe based on selection
-df_filtered = df[(df['life_satisfaction'] >= satisfaction_filter[0]) & 
-                 (df['life_satisfaction'] <= satisfaction_filter[1])]
-
-# Summary Metrics (The "Boxes")
-st.subheader("Key Statistics")
-col1, col2, col3, col4 = st.columns(4)
-
-col1.metric(label="Avg. Life Satisfaction", value=f"{df_filtered['life_satisfaction'].mean():.2f}", border=True)
-col2.metric(label="Social Support Score", value=f"{df_filtered['social_support_index'].mean():.2f}", border=True)
-col3.metric(label="Community Safety", value=f"{df_filtered['community_safety_index'].mean():.2f}", border=True)
-col4.metric(label="Emotion Management", value=f"{df_filtered['emotion_management_index'].mean():.2f}", border=True)
-
-st.write("---")
-
-# VISUAL ANALYSIS: State Comparison in Workplace Life
-st.subheader("Visual Analysis")
-
+# ===============================
+# TITLE & OBJECTIVE
+# ===============================
+st.title("🌟 Emotional Wellbeing & Work Functioning Comparison")
 st.markdown("""
-### **1. Highest vs Lowest State in Workplace Life**
-This visualization compares the average workplace life score across states.  
-It highlights regional differences in workplace conditions and helps identify
-which states experience better or poorer workplace life outcomes.
+### **Main Objective**
+To compare emotional wellbeing, health, and work functioning between **Selangor** and **Pahang**,  
+focusing on emotional regulation, calmness under pressure, and overall health outcomes.
 """)
 
-# Calculate average workplace life score by state
-state_workplace = (
-    df_filtered
-    .groupby('state')['workplace_life_index']
-    .mean()
-    .reset_index()
-)
+# ===============================
+# LOAD DATA
+# ===============================
+st.sidebar.header("📂 Load Dataset")
+uploaded_file = st.sidebar.file_uploader("Upload cleaned CSV file", type="csv")
 
-# Sort for clear highest vs lowest comparison
-state_workplace = state_workplace.sort_values(
-    by='workplace_life_index',
-    ascending=False
-)
+if uploaded_file is not None:
+    df = pd.read_csv(uploaded_file)
 
-fig1 = px.bar(
-    state_workplace,
-    x='state',
-    y='workplace_life_index',
-    text=state_workplace['workplace_life_index'].round(2),
-    title="<b>Average Workplace Life Index by State</b>"
-)
+    st.success("Dataset loaded successfully!")
 
-fig1.update_layout(
-    title_x=0.5,
-    xaxis_title="State",
-    yaxis_title="Average Workplace Life Index"
-)
+    # ===============================
+    # FILTER STATES
+    # ===============================
+    df_state = df[df['state'].isin(['Selangor', 'Pahang'])]
 
-fig1.update_traces(textposition='outside')
+    # ===============================
+    # SUMMARY BOXES
+    # ===============================
+    st.subheader("📊 Summary Overview")
 
-st.plotly_chart(fig1, use_container_width=True)
+    col1, col2, col3 = st.columns(3)
 
+    col1.metric("Total Respondents", len(df))
+    col2.metric("Selangor Respondents", len(df[df['state'] == 'Selangor']))
+    col3.metric("Pahang Respondents", len(df[df['state'] == 'Pahang']))
+
+    st.divider()
+
+    # ===============================
+    # 1️⃣ RESPONDENT COUNT BY STATE
+    # ===============================
+    st.subheader("1️⃣ Number of Respondents by State")
+
+    state_counts = df['state'].value_counts().reset_index()
+    state_counts.columns = ['State', 'Count']
+
+    fig1 = px.bar(
+        state_counts,
+        x='State',
+        y='Count',
+        text='Count',
+        title='Number of Respondents per State'
+    )
+    fig1.update_layout(xaxis_title="State", yaxis_title="Count")
+
+    st.plotly_chart(fig1, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    This chart shows the distribution of respondents across states, ensuring fair comparison
+    between Selangor and Pahang.
+    """)
+
+    st.divider()
+
+    # ===============================
+    # 2️⃣ AVERAGE EMOTIONAL SCORES
+    # ===============================
+    st.subheader("2️⃣ Average Emotional Wellbeing by State")
+
+    emotion_vars = ['calm_under_pressure', 'emotional_control']
+    state_emotion_mean = df.groupby('state')[emotion_vars].mean().reset_index()
+
+    fig2 = px.bar(
+        state_emotion_mean[state_emotion_mean['state'].isin(['Selangor', 'Pahang'])],
+        x='state',
+        y=emotion_vars,
+        barmode='group',
+        title='Average Emotional Wellbeing Scores'
+    )
+
+    st.plotly_chart(fig2, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    Selangor generally shows higher emotional regulation scores, likely influenced by
+    work environment exposure and lifestyle demands.
+    """)
+
+    st.divider()
+
+    # ===============================
+    # 3️⃣ CALM UNDER PRESSURE (STACKED)
+    # ===============================
+    st.subheader("3️⃣ Calm Under Pressure Category Distribution")
+
+    df_state['calm_cat'] = df_state['calm_under_pressure'].apply(
+        lambda x: 'Low' if x <= 2 else 'Medium' if x == 3 else 'High'
+    )
+
+    fig3 = px.histogram(
+        df_state,
+        x='state',
+        color='calm_cat',
+        barmode='stack',
+        title='Calm Under Pressure Categories by State'
+    )
+
+    st.plotly_chart(fig3, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    Selangor respondents tend to cluster more in the **High** calmness category,
+    suggesting better stress-handling capabilities.
+    """)
+
+    st.divider()
+
+    # ===============================
+    # 4️⃣ OVERALL HEALTH (DONUT PIE)
+    # ===============================
+    st.subheader("4️⃣ Overall Health Distribution")
+
+    def health_category(x):
+        if x <= 2:
+            return 'Poor'
+        elif x == 3:
+            return 'Moderate'
+        else:
+            return 'Good'
+
+    df_state['overall_health_cat'] = df_state['overall_health'].apply(health_category)
+
+    health_counts = (
+        df_state.groupby(['state', 'overall_health_cat'])
+        .size()
+        .reset_index(name='count')
+    )
+
+    selangor_data = health_counts[health_counts['state'] == 'Selangor']
+    pahang_data = health_counts[health_counts['state'] == 'Pahang']
+
+    fig4 = make_subplots(
+        rows=1, cols=2,
+        specs=[[{'type': 'domain'}, {'type': 'domain'}]],
+        subplot_titles=['Selangor', 'Pahang']
+    )
+
+    fig4.add_trace(go.Pie(
+        labels=selangor_data['overall_health_cat'],
+        values=selangor_data['count'],
+        hole=0.4
+    ), row=1, col=1)
+
+    fig4.add_trace(go.Pie(
+        labels=pahang_data['overall_health_cat'],
+        values=pahang_data['count'],
+        hole=0.4
+    ), row=1, col=2)
+
+    fig4.update_layout(title_text="Overall Health Comparison")
+
+    st.plotly_chart(fig4, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    Selangor shows a higher proportion of **Good** health, while Pahang shows
+    more respondents in the **Moderate** category.
+    """)
+
+    st.divider()
+
+    # ===============================
+    # 5️⃣ RADAR CHART
+    # ===============================
+    st.subheader("5️⃣ Radar Chart: Emotional & Work Functioning")
+
+    variables = [
+        'calm_under_pressure',
+        'emotional_control',
+        'well_rested',
+        'overall_health',
+        'task_persistence',
+        'teamwork'
+    ]
+
+    state_means = df_state.groupby('state')[variables].mean().reset_index()
+
+    fig5 = go.Figure()
+
+    for state in ['Selangor', 'Pahang']:
+        values = state_means[state_means['state'] == state][variables].values.flatten()
+        fig5.add_trace(go.Scatterpolar(
+            r=values,
+            theta=variables,
+            fill='toself',
+            name=state
+        ))
+
+    fig5.update_layout(
+        polar=dict(radialaxis=dict(visible=True, range=[1, 5])),
+        title="Radar Comparison of Wellbeing Indicators"
+    )
+
+    st.plotly_chart(fig5, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    Selangor scores consistently higher across most wellbeing dimensions,
+    especially in emotional control and teamwork.
+    """)
+
+    st.divider()
+
+    # ===============================
+    # 6️⃣ HEATMAP
+    # ===============================
+    st.subheader("6️⃣ Heatmap of Wellbeing Scores")
+
+    fig6 = px.imshow(
+        state_means[variables],
+        x=variables,
+        y=state_means['state'],
+        text_auto=".2f",
+        color_continuous_scale='RdBu',
+        title="Heatmap of Mean Wellbeing Scores by State"
+    )
+
+    st.plotly_chart(fig6, use_container_width=True)
+
+    st.markdown("""
+    **Analysis:**  
+    The heatmap highlights clear differences between states, with Selangor
+    generally exhibiting higher emotional resilience and work functioning.
+    """)
+
+else:
+    st.info("👈 Please upload a cleaned CSV file to begin analysis.")
