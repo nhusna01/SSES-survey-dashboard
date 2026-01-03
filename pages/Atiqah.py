@@ -26,7 +26,7 @@ focusing on emotional regulation, calmness under pressure, and overall health ou
 # LOAD DATA
 # ===============================
 st.sidebar.header("📂 Load Dataset")
-uploaded_file = st.sidebar.file_uploader("Upload cleaned CSV file", type="csv")
+uploaded_file = st.sidebar.file_uploader("https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_cleaned.csv", type="csv")
 
 if uploaded_file is not None:
     df = pd.read_csv(uploaded_file)
