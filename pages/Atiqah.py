@@ -26,23 +26,8 @@ focusing on emotional regulation, calmness under pressure, and overall health ou
 # LOAD DATA FROM GITHUB
 # ===============================
 csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_Cleaned.csv"
-
-try:
-    df = pd.read_csv(csv_url)
-    st.success("Dataset loaded successfully from GitHub!")
-except Exception as e:
-    st.error(f"Error loading dataset: {e}")
-    df = pd.DataFrame()  # fallback empty dataframe
-
-# ===============================
-# CHECK IF DATA IS LOADED
-# ===============================
-if df.empty:
-    st.warning("No data available. Please check the GitHub link.")
-else:
-    st.subheader("Preview of Dataset")
-    st.dataframe(df.head())
-
+df = pd.read_csv(csv_url)
+    
     # ===============================
     # FILTER STATES
     # ===============================
