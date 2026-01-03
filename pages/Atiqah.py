@@ -25,7 +25,7 @@ focusing on emotional regulation, calmness under pressure, and overall health ou
 # ===============================
 # LOAD DATA FROM GITHUB
 # ===============================
-csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_cleaned.csv"
+csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_Cleaned.csv"
 
 try:
     df = pd.read_csv(csv_url)
