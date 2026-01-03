@@ -91,7 +91,7 @@ if df is not None:
         st.write("**Interpretation:** The width of the violin represents the frequency of scores. ")
 
         # ======================================
-        # 4. SENTIMENT ANALYSIS (DIVERGING BAR) - FIXED SECTION
+        # 4. SENTIMENT ANALYSIS (DIVERGING BAR) 
         # ======================================
         st.subheader("4. Sentiment Analysis (Agreement vs Disagreement)")
         
