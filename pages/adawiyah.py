@@ -65,6 +65,26 @@ with st.expander("View Research Objective", expanded=True):
 
 st.markdown("---")
 
+# 1. Initialize df as an empty DataFrame at the very start
+# This ensures line 69 always knows what 'df' is!
+df = pd.DataFrame() 
+
+csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
+
+@st.cache_data  
+def fetch_data(url):
+    data = pd.read_csv(url)
+    # ... (your indexing logic here) ...
+    return data
+
+# 2. Attempt to fill 'df' with real data
+with st.spinner("✦ Accessing Research Data..."):
+    try:
+        df = fetch_data(csv_url)
+    except Exception as e:
+        st.error(f"Connection Error: {e}")
+        # df is already an empty DataFrame from line 1, so no NameError will happen
+
 # INTERACTIVE EXPLORATION SECTION 
 if not df.empty:
     # Header and Methodology button
