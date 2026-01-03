@@ -27,10 +27,32 @@ st.markdown("""
 
 # Metrics and data preview
 st.subheader("📌 Dashboard Overview")
+
 col1, col2, col3 = st.columns(3)
-col1.metric("Total Responses", len(df))
-col2.metric("Total Variables", df.shape[1])
-col3.metric("Missing Values", df.isna().sum().sum())
+
+with col1:
+    st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">📋 Total Responses</div>
+        <div class="metric-value">{len(df)}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col2:
+    st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">🧩 Total Variables</div>
+        <div class="metric-value">{df.shape[1]}</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    st.markdown(f"""
+    <div class="metric-card">
+        <div class="metric-title">⚠️ Missing Values</div>
+        <div class="metric-value">{df.isna().sum().sum()}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with st.expander("🔍 View Dataset Preview"):
     st.dataframe(df, use_container_width=True)
