@@ -67,7 +67,7 @@ else:
     st.subheader("1️⃣ Number of Respondents by State")
 
     state_counts = df['state'].value_counts().reset_index()
-    state_counts.columns = ['State', 'Count']
+    state_counts.columns = ['state', 'Count']
 
     fig1 = px.bar(
         state_counts,
