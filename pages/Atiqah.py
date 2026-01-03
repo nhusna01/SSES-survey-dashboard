@@ -46,7 +46,7 @@ else:
     # ===============================
     # FILTER STATES
     # ===============================
-    df_state = df[df['state'].isin(['Selangor', 'Pahang'])].copy()
+    df_state= df[df['state'].isin(['Selangor', 'Pahang'])].copy()
 
     # ===============================
     # SUMMARY BOXES
@@ -119,7 +119,7 @@ else:
     # ===============================
     st.subheader("3️⃣ Calm Under Pressure Category Distribution")
 
-    df_state.loc['calm_cat'] = df_state['calm_under_pressure'].apply(
+    df_state.loc[:, 'calm_cat'] = df_state['calm_under_pressure'].apply(
         lambda x: 'Low' if x <= 2 else 'Medium' if x == 3 else 'High'
     )
 
@@ -154,7 +154,7 @@ else:
         else:
             return 'Good'
 
-    df_state.loc['overall_health_cat'] = df_state['overall_health'].apply(health_category)
+    df_state.loc[:, 'overall_health_cat'] = df_state['overall_health'].apply(health_category)
 
     health_counts = (
         df_state.groupby(['state', 'overall_health_cat'])
