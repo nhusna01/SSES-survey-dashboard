@@ -6,7 +6,7 @@ import plotly.express as px
 # 🌟 PAGE CONFIG (MUST BE FIRST)
 # ===============================
 st.set_page_config(
-    page_title="🧩 HUSNA Analysis",
+    page_title="🧩 Analysis of SSES",
     page_icon="👤",
     layout="wide"
 )
@@ -21,16 +21,48 @@ if "df" not in st.session_state:
 df = st.session_state.df
 
 # ===============================
+# 📄 DATASET PREVIEW (OPTIONAL)
+# ===============================
+with st.expander("📄 View Dataset Preview"):
+    st.dataframe(df, use_container_width=True)
+    
+# ===============================
 # 🧩 PAGE HEADER
 # ===============================
 st.markdown(
     """
-    <div style="text-align:center; margin-bottom: 1.5rem;">
-        <h1 style="color:#FF4500; font-size:42px;">🧩 HUSNA Analysis</h1>
-        <p style="color:#555; font-size:18px;">
-            Examining demographic characteristics, wellbeing, behavioral traits,
-            and community participation across employment status groups
-        </p>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+    .main-objectives-box {
+        font-family: 'Inter', sans-serif;
+        border-left: 6px solid #6A0DAD;
+        background-color: #f6f1fb;
+        padding: 1.6rem 2.2rem;
+        border-radius: 14px;
+        margin-bottom: 2rem;
+    }
+    .main-objectives-title {
+        font-size: 26px;
+        font-weight: 700;
+        color: #4B0082;
+        margin-bottom: 0.8rem;
+    }
+    .main-objectives-text {
+        font-size: 17px;
+        font-weight: 400;
+        color: #2f2f2f;
+        line-height: 1.7;
+    }
+    </style>
+
+    <div class="main-objectives-box">
+        <div class="main-objectives-title">🎯 Main Objective</div>
+        <div class="main-objectives-text">
+            To examine how demographic characteristics, wellbeing and life satisfaction,
+            behavioral traits, and community participation vary across employment status
+            groups, namely students, employed, and unemployed individuals.
+        </div>
     </div>
     """,
     unsafe_allow_html=True
@@ -129,8 +161,3 @@ elif selected == "community":
             st.markdown(f"### {col.replace('_',' ').title()}")
             st.bar_chart(df[col])
 
-# ===============================
-# 📄 DATASET PREVIEW (OPTIONAL)
-# ===============================
-with st.expander("📄 View Dataset Preview"):
-    st.dataframe(df, use_container_width=True)
