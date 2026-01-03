@@ -25,67 +25,76 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# Metrics and data preview
+# ===============================
+# 📌 Dashboard Overview (Summary Box)
+# ===============================
+
 st.subheader("📌 Dashboard Overview")
 
-st.markdown("""
-<style>
-.summary-box {
-    background-color: #f5f7fb;
-    border-left: 6px solid #6a5acd;
-    padding: 1.5rem 2rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-}
-.summary-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #4B0082;
-    margin-bottom: 1rem;
-}
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-}
-.summary-item {
-    text-align: center;
-}
-.summary-value {
-    font-size: 36px;
-    font-weight: bold;
-    color: #2c2c54;
-}
-.summary-label {
-    font-size: 15px;
-    color: #666;
-}
-</style>
-""", unsafe_allow_html=True)
+# --- Summary box styles ---
+st.markdown(
+    """
+    <style>
+    .summary-box {
+        background-color: #f5f7fb;
+        border-left: 6px solid #6a5acd;
+        padding: 1.5rem 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        margin-top: 1rem;
+    }
+    .summary-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #4B0082;
+        margin-bottom: 1rem;
+    }
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    .summary-item {
+        text-align: center;
+    }
+    .summary-value {
+        font-size: 36px;
+        font-weight: bold;
+        color: #2c2c54;
+    }
+    .summary-label {
+        font-size: 15px;
+        color: #666;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-st.markdown("""
-<div class="summary-box">
-    <div class="summary-title">📌 Dashboard Overview</div>
-    <div class="summary-grid">
-        <div class="summary-item">
-            <div class="summary-value">{responses}</div>
-            <div class="summary-label">Total Responses</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">{variables}</div>
-            <div class="summary-label">Total Variables</div>
-        </div>
-        <div class="summary-item">
-            <div class="summary-value">{missing}</div>
-            <div class="summary-label">Missing Values</div>
+# --- Summary box content ---
+st.markdown(
+    f"""
+    <div class="summary-box">
+        <div class="summary-title">📌 Dashboard Overview</div>
+        <div class="summary-grid">
+            <div class="summary-item">
+                <div class="summary-value">{len(df)}</div>
+                <div class="summary-label">Total Responses</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value">{df.shape[1]}</div>
+                <div class="summary-label">Total Variables</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value">{df.isna().sum().sum()}</div>
+                <div class="summary-label">Missing Values</div>
+            </div>
         </div>
     </div>
-</div>
-""".format(
-    responses=len(df),
-    variables=df.shape[1],
-    missing=df.isna().sum().sum()
-), unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
+
 
 
 with st.expander("🔍 View Dataset Preview"):
