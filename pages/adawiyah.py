@@ -321,10 +321,10 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
 with st.expander("Visualization 3: Distribution of Scores", expanded=False):
     selected_dist = st.selectbox("Select Dimension:", ['life_satisfaction', 'social_support_index', 'emotion_management_index'])
     
-    # UPDATED: Kept the primary Soft Pink color (#FFB6C1)
+    
     fig3 = px.histogram(
         df, x=selected_dist, nbins=15, 
-        color_discrete_sequence=['#FFB6C1'] 
+        color_discrete_sequence=['#D32F2F'] 
     ) 
     
     fig3.update_layout(
@@ -337,7 +337,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
     st.plotly_chart(fig3, use_container_width=True)
     
     st.markdown("""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
             <b>Interpretation:</b> This histogram shows where most people fall on the scale. A 
             "right-skewed" graph (more bars on the right) is a positive sign for well-being.
         </div>
@@ -369,10 +369,10 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
         r=values_closed,
         theta=categories_closed,
         fill='toself',
-        # FIX: Darker, bolder line (Deep Pink)
-        line=dict(color='#FF1493', width=5),
-        # FIX: Increased opacity from 0.4 to 0.6 for better fill visibility
-        fillcolor='rgba(255, 182, 193, 0.6)', 
+        # UPDATED: Bold Deep Red line (#B22222)
+        line=dict(color='#B22222', width=5),
+        # UPDATED: Semi-transparent Red fill
+        fillcolor='rgba(178, 34, 34, 0.4)', 
         name='Group Average'
     ))
 
@@ -414,7 +414,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
 
     # 5. Scientific Insight Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #B22222;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The "shape" of this web reveals the strengths and weaknesses of the group. 
                 A balanced shape indicates holistic well-being.
@@ -481,4 +481,49 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
         st.warning("Column 'community_safety_index' not found.")
         
 st.markdown("---")
+
+# VISUALIZATION 6: EMOTIONAL MANAGEMENT SHAPE 
+with st.expander("Visualization 6: Emotional Stability across Health Status", expanded=False):
+    
+    # 1. Create Violin Plot
+    # Shows the distribution of emotion management for each health category
+    fig7 = px.violin(
+        df, 
+        x='overall_health', 
+        y='emotion_management_index', 
+        color='overall_health',
+        box=True, # Adds a mini box plot inside the violin
+        points="all",
+        color_discrete_sequence=['#FFB6C1', '#FF69B4', '#CD5C5C', '#B22222', '#8B0000'],
+        title="<b>The 'Shape' of Emotional Management by Health Status</b>"
+    )
+
+    fig7.update_layout(
+        xaxis_title="Overall Health Status",
+        yaxis_title="Emotion Management Score",
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+    )
+
+    # 2. Layout: Chart + Guide
+    col_chart7, col_info7 = st.columns([4, 1])
+    with col_chart7:
+        st.plotly_chart(fig7, use_container_width=True, key="violin_viz_7")
+    
+    with col_info7:
+        st.write("") 
+        with st.popover("Guide"):
+            st.markdown("The **width** of the violin shows where most people are. A 'fat' middle means most people have average scores.")
+
+    # 3. Insight Box
+    st.markdown(f"""
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+            <p style="margin: 0; color: #333;">
+                <b>Interpretation:</b> This chart reveals the <b>consistency</b> of emotional management. 
+                If the 'Excellent' health category has a very thin, tall violin, it means their emotional 
+                control is highly stable and high-performing.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
 
