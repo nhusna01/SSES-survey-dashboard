@@ -1,8 +1,11 @@
 import streamlit as st
 import plotly.express as px
 
+st.error("🚨 THIS IS THE REAL HOMEPAGE FILE 🚨")
+st.write("If you see this, Streamlit is loading THIS file.")
+st.stop()
+
 df = st.session_state.df
-st.error("🚨 HOMEPAGE UPDATED 🚨")
 
 
 # Header + logo
