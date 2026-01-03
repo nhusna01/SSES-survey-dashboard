@@ -482,19 +482,21 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
         
 st.markdown("---")
 
-# VISUALIZATION 6: EMOTIONAL MANAGEMENT SHAPE 
+# VISUALIZATION 6: EMOTIONAL MANAGEMENT SHAPE
 with st.expander("Visualization 6: Emotional Stability across Health Status", expanded=False):
     
     # 1. Create Violin Plot
-    # Shows the distribution of emotion management for each health category
+    # UPDATED: Unified Red sequence from light to deep red
+    red_sequence = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#D32F2F']
+
     fig7 = px.violin(
         df, 
         x='overall_health', 
         y='emotion_management_index', 
         color='overall_health',
-        box=True, # Adds a mini box plot inside the violin
+        box=True, 
         points="all",
-        color_discrete_sequence=['#FFB6C1', '#FF69B4', '#CD5C5C', '#B22222', '#8B0000'],
+        color_discrete_sequence=red_sequence,
         title="<b>The 'Shape' of Emotional Management by Health Status</b>"
     )
 
@@ -518,7 +520,7 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
 
     # 3. Insight Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> This chart reveals the <b>consistency</b> of emotional management. 
                 If the 'Excellent' health category has a very thin, tall violin, it means their emotional 
@@ -526,4 +528,3 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
             </p>
         </div>
     """, unsafe_allow_html=True)
-
