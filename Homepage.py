@@ -2,6 +2,8 @@ import streamlit as st
 import plotly.express as px
 
 df = st.session_state.df
+st.error("🚨 HOMEPAGE UPDATED 🚨")
+
 
 # Header + logo
 st.markdown("""
