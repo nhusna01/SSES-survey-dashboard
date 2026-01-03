@@ -26,66 +26,74 @@ st.markdown("""
 
 
 # ===============================
-# 📌 Dashboard Overview (Summary Box)
+# 📌 Dashboard Overview (Interactive Summary)
 # ===============================
 
 st.subheader("📌 Dashboard Overview")
 
-# --- Summary box styles ---
 st.markdown(
     """
     <style>
-    .summary-box {
-        background-color: #f5f7fb;
-        border-left: 6px solid #6a5acd;
-        padding: 1.5rem 2rem;
-        border-radius: 12px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-        margin-top: 1rem;
-    }
-    .summary-title {
-        font-size: 22px;
-        font-weight: 700;
-        color: #4B0082;
-        margin-bottom: 1rem;
+    .summary-container {
+        border: 2px solid #6a5acd;
+        border-radius: 16px;
+        padding: 1.5rem;
+        background-color: #ffffff;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
     }
     .summary-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         gap: 1.5rem;
     }
-    .summary-item {
+    .summary-card {
+        border: 1px solid #ddd;
+        border-radius: 14px;
+        padding: 1.2rem;
         text-align: center;
+        transition: all 0.2s ease-in-out;
+    }
+    .summary-card:hover {
+        border-color: #6a5acd;
+        box-shadow: 0 6px 16px rgba(106,90,205,0.25);
+        transform: translateY(-3px);
+    }
+    .summary-icon {
+        font-size: 34px;
+        margin-bottom: 0.5rem;
     }
     .summary-value {
         font-size: 36px;
-        font-weight: bold;
+        font-weight: 700;
         color: #2c2c54;
     }
     .summary-label {
         font-size: 15px;
-        color: #666;
+        color: #555;
+        margin-bottom: 0.5rem;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# --- Summary box content ---
+# --- Container ---
 st.markdown(
     f"""
-    <div class="summary-box">
-        <div class="summary-title">📌 Dashboard Overview</div>
+    <div class="summary-container">
         <div class="summary-grid">
-            <div class="summary-item">
+            <div class="summary-card">
+                <div class="summary-icon">📋</div>
                 <div class="summary-value">{len(df)}</div>
                 <div class="summary-label">Total Responses</div>
             </div>
-            <div class="summary-item">
+            <div class="summary-card">
+                <div class="summary-icon">🧩</div>
                 <div class="summary-value">{df.shape[1]}</div>
                 <div class="summary-label">Total Variables</div>
             </div>
-            <div class="summary-item">
+            <div class="summary-card">
+                <div class="summary-icon">⚠️</div>
                 <div class="summary-value">{df.isna().sum().sum()}</div>
                 <div class="summary-label">Missing Values</div>
             </div>
@@ -94,6 +102,29 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# ===============================
+# 🔗 Streamlit Interactivity
+# ===============================
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("📋 View Responses"):
+        st.info("Showing dataset preview")
+        st.dataframe(df, use_container_width=True)
+
+with col2:
+    if st.button("🧩 Explore Variables"):
+        st.info("Showing variable list")
+        st.write(df.columns.tolist())
+
+with col3:
+    if st.button("⚠️ Inspect Missing Data"):
+        st.info("Showing missing values summary")
+        st.write(df.isna().sum())
+
+
 
 
 
