@@ -217,76 +217,127 @@ if not df.empty:
 
 st.markdown("---")
 
-# VISUALIZATION 1: CORRELATION HEATMAP
+# RESEARCH VISUALIZATIONS 
 
-st.markdown("### Visualization")
+st.markdown("## Research Visualizations")
+st.write("Explore the statistical relationships between social, environmental, and emotional factors.")
 
-# 1. Define the variables to include (No selection or toggle needed)
-viz1_cols = [
-    'life_satisfaction', 
-    'social_support_index', 
-    'community_safety_index', 
-    'emotion_management_index', 
-    'overall_health'
-]
+# VISUALIZATION 1: CORRELATION HEATMAP 
+with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
+    
+    viz1_cols = [
+        'life_satisfaction', 'social_support_index', 
+        'community_safety_index', 'emotion_management_index', 'overall_health'
+    ]
+    available_viz_cols = [col for col in viz1_cols if col in df.columns]
 
-# Ensure variables exist in the dataframe before plotting
-available_viz_cols = [col for col in viz1_cols if col in df.columns]
+    if len(available_viz_cols) > 1:
+        # Calculate Correlation
+        corr_matrix = df[available_viz_cols].corr()
 
-if len(available_viz_cols) > 1:
-    # 2. Calculate Correlation Matrix
-    corr_matrix = df[available_viz_cols].corr()
+        # Create Heatmap
+        fig1 = px.imshow(
+            corr_matrix, 
+            text_auto=".2f", 
+            color_continuous_scale='RdBu_r', 
+            aspect="auto",
+            labels=dict(color="Strength"),
+            zmin=-1, zmax=1
+        )
 
-    # 3. Create Heatmap (Numbers are forced to show with text_auto=".2f")
-    fig1 = px.imshow(
-        corr_matrix, 
-        text_auto=".2f", 
-        color_continuous_scale='RdBu_r', 
-        aspect="auto",
-        labels=dict(color="Strength"),
-        zmin=-1, zmax=1
+        fig1.update_layout(
+            title="<b>Correlation: How Social & Emotional Factors Relate</b>",
+            title_x=0.5,
+            margin=dict(l=20, r=20, t=50, b=20),
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+        )
+
+        # Layout: Chart + Guide
+        col_chart1, col_info1 = st.columns([4, 1])
+        with col_chart1:
+            st.plotly_chart(fig1, use_container_width=True, key="heatmap_1")
+        
+        with col_info1:
+            st.write("") # Spacer
+            with st.popover("Guide"):
+                st.markdown("**Scores:**\n- 1.0: Perfect match\n- 0.5+: Strong link\n- 0.0: No relation")
+
+        # Insight Box
+        st.markdown(f"""
+            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+                <p style="margin: 0; color: #333;">
+                    <b>Interpretation:</b> The values inside each square represent the statistical 
+                    relationship between factors. A higher score indicates that as one factor increases, the 
+                    other likely increases as well—providing clear evidence for your <b>Problem Statement</b>.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Insufficient data for correlation analysis.")
+
+
+# VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT 
+with st.expander("Visualization 2: Scatter Plot", expanded=False):
+    
+    # Interactive Controls
+    sc_col1, sc_col2 = st.columns([2, 2])
+    with sc_col1:
+        show_trend = st.toggle("Show Analysis Trendline (OLS)", value=True)
+    with sc_col2:
+        point_size = st.slider("Adjust Point Visibility", 5, 20, 10)
+
+    # Create Scatter Plot
+    fig2 = px.scatter(
+        df,
+        x='social_support_index',
+        y='life_satisfaction',
+        color='community_safety_index',
+        trendline="ols" if show_trend else None,
+        opacity=0.7,
+        size_max=point_size,
+        color_continuous_scale='Viridis',
+        labels={
+            'social_support_index': 'Social Support Score',
+            'life_satisfaction': 'Satisfaction Level',
+            'community_safety_index': 'Safety Score'
+        }
     )
 
-    fig1.update_layout(
-        title="<b>Correlation: How Social & Emotional Factors Relate</b>",
+    fig2.update_layout(
+        title="<b>Impact of Social Support & Community Safety</b>",
         title_x=0.5,
-        margin=dict(l=20, r=20, t=50, b=20),
-        plot_bgcolor='rgba(0,0,0,0)',
+        xaxis=dict(gridcolor='#f0f0f0'),
+        yaxis=dict(gridcolor='#f0f0f0'),
         paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
     )
 
-    # 4. Display Chart & Methodology Popover
-    col_chart, col_info = st.columns([4, 1])
-    
-    with col_chart:
-        # 2026 Update: Use width="stretch" for better container fitting
-        st.plotly_chart(fig1, key="heatmap_1")
-    
-    with col_info:
-        st.write("") # Vertical spacer
-        with st.popover("Guide"):
+    # Layout: Chart + Guide
+    sc_chart_col, sc_guide_col = st.columns([4, 1])
+    with sc_chart_col:
+        st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
+
+    with sc_guide_col:
+        st.write("") # Spacer
+        with st.popover("Reading Scatter"):
             st.markdown("""
-                **Quick Guide:**
-                - **1.00:** Perfect match.
-                - **0.50+:** Strong positive link.
-                - **0.00:** No relationship.
-                
-                *Note: Values are calculated using Pearson's Correlation.*
+                **What am I seeing?**
+                - **X-Axis:** Support level.
+                - **Y-Axis:** Happiness level.
+                - **Color:** Brighter colors = Safer community.
             """)
 
-    # 5. Scientific Insight Box (Matches your soft pink theme)
+    # Insight Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The values inside each square represent the statistical 
-                relationship between factors. A higher score indicates that as one factor increases, the 
-                other likely increases as well—providing clear evidence for your <b>Problem Statement</b>.
+                <b>Interpretation:</b> The scatter distribution helps identify "clusters." If you see many bright points 
+                at the top right, it confirms that <b>high community safety</b> combined with <b>strong social support</b> 
+                creates the highest levels of life satisfaction.
             </p>
         </div>
     """, unsafe_allow_html=True)
-
-else:
-    st.warning("Insufficient data columns found to generate the heatmap.")
 
 st.markdown("---")
 
