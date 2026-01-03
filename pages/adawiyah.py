@@ -78,7 +78,7 @@ def fetch_data(url):
     return data
 
 # 2. Attempt to fill 'df' with real data
-with st.spinner("✦ Accessing Research Data..."):
+with st.spinner("Accessing Research Data..."):
     try:
         df = fetch_data(csv_url)
     except Exception as e:
@@ -221,7 +221,7 @@ st.markdown("---")
 
 st.markdown("### Variable Relationship Analysis")
 
-# 1. Define the variables to include (No selection box needed)
+# 1. Define the variables to include 
 viz1_cols = [
     'life_satisfaction', 
     'social_support_index', 
@@ -234,13 +234,12 @@ viz1_cols = [
 available_viz_cols = [col for col in viz1_cols if col in df.columns]
 
 if len(available_viz_cols) > 1:
-    # 2. Add a simple interactive toggle for neatness
-    show_nums = st.checkbox("Show Correlation Values on Heatmap", value=True)
+    
 
     # Calculate Correlation
     corr_matrix = df[available_viz_cols].corr()
 
-    # 3. Create Heatmap
+    # Create Heatmap
     fig1 = px.imshow(
         corr_matrix, 
         text_auto=".2f" if show_nums else False, 
@@ -251,14 +250,14 @@ if len(available_viz_cols) > 1:
     )
 
     fig1.update_layout(
-        title="<b>Correlation: Interplay of Social & Emotional Factors</b>",
+        title="<b>Correlation: How Social & Emotional Factors Relate</b>",
         title_x=0.5,
         margin=dict(l=20, r=20, t=50, b=20),
         plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
     )
 
-    # 4. Display Chart & Interactive Popover
+    # Display Chart & Interactive Popover
     col_chart, col_info = st.columns([4, 1])
     
     with col_chart:
@@ -276,11 +275,11 @@ if len(available_viz_cols) > 1:
                 *Hover over squares for details.*
             """)
 
-    # 5. Scientific Insight Box (Matches your pink theme)
+    # 5. Scientific Insight Box 
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Scientific Insight:</b> This matrix visualizes how strongly different life factors are linked. 
+                <b>Interpretation:</b> This matrix visualizes how strongly different life factors are linked. 
                 A high score between <b>Social Support</b> and <b>Life Satisfaction</b> suggests that interpersonal 
                 networks are a critical pillar of well-being in this study group.
             </p>
