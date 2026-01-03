@@ -342,4 +342,25 @@ with st.expander("Visualization 2: Scatter Plot", expanded=False):
 st.markdown("---")
 
 
+# VISUALIZATION 3
+with st.expander("Visualization 3: Distribution of Psychological Scores", expanded=False):
+    selected_dist = st.selectbox("Select Dimension to View Distribution:", 
+                                 ['life_satisfaction', 'social_support_index', 'emotion_management_index'])
+    
+    fig3 = px.histogram(df, x=selected_dist, nbins=15, 
+                        color_discrete_sequence=['#FFB6C1'], # Soft Pink
+                        marginal="violin") # Adds a small violin plot on top
+    
+    fig3.update_layout(title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
+                      paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    
+    st.plotly_chart(fig3, use_container_width=True)
+    
+    st.markdown("""
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+            <b>✦ Interpretation:</b> This shows the "density" of your data. If the bars are higher on the right, your population generally scores high in that area.
+        </div>
+    """, unsafe_allow_html=True)
+
+
 
