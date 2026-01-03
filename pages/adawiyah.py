@@ -217,11 +217,6 @@ if not df.empty:
 
 st.markdown("---")
 
-# RESEARCH VISUALIZATIONS 
-
-st.markdown("## Research Visualizations")
-st.write("Explore the statistical relationships between social, environmental, and emotional factors.")
-
 # RESEARCH VISUALIZATIONS (UNIFIED PINK THEME) 
 
 st.markdown("## Research Visualizations")
@@ -350,4 +345,51 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
 
 st.markdown("---")
 
+# VISUALIZATION 4: HEALTH VS. SATISFACTION 
+with st.expander("Visualization 4: Impact of Health on Well-being", expanded=False):
+    
+    # 1. Define the unified color sequence (Light Pink to Deep Red)
+    # This ensures consistency with your other charts
+    pink_red_palette = ['#FFB6C1', '#FF69B4', '#CD5C5C', '#B22222', '#8B0000']
 
+    # 2. Create the Box Plot
+    fig4 = px.box(
+        df, 
+        x='overall_health', 
+        y='life_satisfaction', 
+        color='overall_health',
+        points="all", 
+        notched=True,
+        # Applying the unified color sequence
+        color_discrete_sequence=pink_red_palette,
+        title="<b>Satisfaction Variance by Health Category</b>",
+        labels={
+            'overall_health': 'Health Status',
+            'life_satisfaction': 'Satisfaction Score'
+        }
+    )
+
+    # 3. Clean up the Layout
+    fig4.update_layout(
+        xaxis_title="Physical Health Status",
+        yaxis_title="Life Satisfaction (1-5)",
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False # Legend is redundant since X-axis labels already exist
+    )
+
+    # 4. Display Chart
+    st.plotly_chart(fig4, use_container_width=True, key="box_viz_4")
+
+    # 5. Scientific Insight Box (Matches your pink theme)
+    st.markdown(f"""
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+            <p style="margin: 0; color: #333;">
+                <b>Interpretation:</b> The "notches" in the boxes represent the confidence interval. 
+                If the notches of two different health categories do not overlap, it provides strong 
+                statistical evidence that <b>Health Status</b> significantly influences <b>Life Satisfaction</b>.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+st.markdown("---")
