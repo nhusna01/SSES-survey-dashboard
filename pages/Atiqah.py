@@ -25,22 +25,20 @@ focusing on emotional regulation, calmness under pressure, and overall health ou
 # ===============================
 # LOAD DATA FROM GITHUB
 # ===============================
-st.sidebar.header("📂 Dataset Source")
-
-csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
+csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_cleaned.csv"
 
 try:
     df = pd.read_csv(csv_url)
-    st.sidebar.success("Dataset loaded successfully from GitHub!")
+    st.success("Dataset loaded successfully from GitHub!")
 except Exception as e:
-    st.sidebar.error(f"Error loading dataset: {e}")
-    df = pd.DataFrame()  # empty dataframe as fallback
-    
+    st.error(f"Error loading dataset: {e}")
+    df = pd.DataFrame()  # fallback empty dataframe
+
 # ===============================
-# CHECK DATA
+# CHECK IF DATA IS LOADED
 # ===============================
 if df.empty:
-    st.warning("No data available to display. Please check your GitHub link.")
+    st.warning("No data available. Please check the GitHub link.")
 else:
     st.subheader("Preview of Dataset")
     st.dataframe(df.head())
