@@ -46,7 +46,7 @@ else:
     # ===============================
     # FILTER STATES
     # ===============================
-    df_state = df[df['state'].isin(['Selangor', 'Pahang'])]
+    df_state = df[df['state'].isin(['Selangor', 'Pahang'])].copy()
 
     # ===============================
     # SUMMARY BOXES
@@ -67,7 +67,7 @@ else:
     st.subheader("1️⃣ Number of Respondents by State")
 
     state_counts = df['state'].value_counts().reset_index()
-    state_counts.columns = ['state', 'Count']
+    state_counts.columns = ['State', 'Count']
 
     fig1 = px.bar(
         state_counts,
@@ -119,7 +119,7 @@ else:
     # ===============================
     st.subheader("3️⃣ Calm Under Pressure Category Distribution")
 
-    df_state['calm_cat'] = df_state['calm_under_pressure'].apply(
+    df_state.loc['calm_cat'] = df_state['calm_under_pressure'].apply(
         lambda x: 'Low' if x <= 2 else 'Medium' if x == 3 else 'High'
     )
 
@@ -154,7 +154,7 @@ else:
         else:
             return 'Good'
 
-    df_state['overall_health_cat'] = df_state['overall_health'].apply(health_category)
+    df_state.loc['overall_health_cat'] = df_state['overall_health'].apply(health_category)
 
     health_counts = (
         df_state.groupby(['state', 'overall_health_cat'])
