@@ -1,8 +1,10 @@
 import streamlit as st
 import plotly.express as px
 
-st.error("🚨 NEW HOMEPAGE FILE IS LOADING 🚨")
-st.stop()
+# Check if data exists in session state before proceeding
+if "df" not in st.session_state:
+    st.error("Data not found! Please ensure the data is loaded in the main app.")
+    st.stop() 
 
 df = st.session_state.df
 
