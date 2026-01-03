@@ -6,6 +6,7 @@ from pathlib import Path
 from preprocess import load_data
 from st_pages import Page, Navigation
 
+
 # SET PAGE CONFIG 
 st.set_page_config(
     page_title="🏠 SSES Survey Dashboard",
@@ -13,6 +14,13 @@ st.set_page_config(
     layout="wide"
 )
 
+# LOAD DATA
+if "df" not in st.session_state:
+    try:
+        st.session_state.df = load_data()
+    except Exception as e:
+        st.error(f"Error loading data: {e}")
+        
 # DEFINE PAGES 
 homepage = st.Page("pages/Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
@@ -31,12 +39,6 @@ pg = st.navigation({
     ]
 })
 
-# LOAD DATA
-if "df" not in st.session_state:
-    try:
-        st.session_state.df = load_data()
-    except Exception as e:
-        st.error(f"Error loading data: {e}")
 
 # BACKGROUND IMAGE 
 def get_base64_image(image_path):
