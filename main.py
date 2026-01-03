@@ -4,7 +4,7 @@ import os
 import base64
 from pathlib import Path
 from preprocess import load_data
-from st_pages import Page, Navigation
+
 
 
 # SET PAGE CONFIG 
