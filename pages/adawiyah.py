@@ -111,7 +111,7 @@ if not df.empty:
         st.markdown("""
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1; margin-bottom: 20px;">
                 <p style="margin: 0; color: #333; font-size: 15px;">
-                    <b>About this Dataset:</b> This cleaned dataset contains processed survey responses focused on 
+                    <b>About this Dataset:</b> This cleaned dataset contains survey responses that focused on 
                     social-emotional well-being. It captures how individuals perceive their <b>social networks</b>, 
                     <b>environmental safety</b>, and their internal ability to <b>manage emotions</b>. The data has been 
                     cleaned to ensure statistical accuracy.
@@ -214,6 +214,65 @@ if not df.empty:
         help="Internal ability to manage stress", 
         border=True
     )
+
+st.markdown("---")
+
+# VISUALIZATION 1: CORRELATION HEATMAP 
+
+st.markdown("### Variable Relationship Analysis")
+
+# 1. Interactive Feature: User selects which variables to correlate
+st.write("Customize the heatmap by adding or removing variables:")
+default_cols = ['life_satisfaction', 'social_support_index', 'community_safety_index', 'emotion_management_index', 'overall_health']
+selected_cols = st.multiselect("Select variables for correlation:", 
+                               options=df.columns.tolist(), 
+                               default=[col for col in default_cols if col in df.columns])
+
+# 2. Check if enough columns are selected
+if len(selected_cols) > 1:
+    # Calculate Correlation
+    corr_matrix = df[selected_cols].corr()
+
+    # 3. Create the Heatmap (Plotly)
+    fig1 = px.imshow(
+        corr_matrix, 
+        text_auto=".2f", 
+        color_continuous_scale='RdBu_r', # Red-Blue scale (Scientific standard)
+        aspect="auto",
+        labels=dict(color="Correlation Strength"),
+        zmin=-1, zmax=1 # Ensures the scale is always -1 to 1
+    )
+
+    fig1.update_layout(
+        title="<b>Correlation Matrix: Interplay of Social & Emotional Factors</b>",
+        title_x=0.5,
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+    )
+
+    # 4. Interactive Help Popover
+    col_v1, col_v2 = st.columns([3, 1])
+    with col_v2:
+        with st.popover("How to read this heatmap?"):
+            st.markdown("""
+                **What do the numbers mean?**
+                - **+1.00 (Dark Blue):** Perfect positive relationship (as one goes up, the other goes up).
+                - **0.00 (White):** No relationship at all.
+                - **-1.00 (Dark Red):** Perfect negative relationship (as one goes up, the other goes down).
+                
+                *Look for the darkest blue squares to find the strongest drivers of life satisfaction.*
+            """)
+
+    # Display Chart
+    st.plotly_chart(fig1, use_container_width=True)
+
+    # 5. Scientific Insight Box (Neat & Interactive)
+    st.info("""
+        **✦ Key Observation:** Strong correlations (values above 0.50) between **Social Support** and **Life Satisfaction** suggest that personal networks may be a primary driver of well-being in this dataset.
+    """)
+
+else:
+    st.warning("Please select at least two variables to generate the correlation heatmap.")
 
 st.markdown("---")
 
