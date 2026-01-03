@@ -69,17 +69,23 @@ st.markdown("---")
 
 csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
 
-# 1. Subtle Loading Interactivity
-with st.status("Syncing Research Data...", expanded=False) as status:
-    try:
-        df = pd.read_csv(csv_url)
-        status.update(label="Data Loaded Successfully!", state="complete", expanded=False)
-    except Exception as e:
-        st.error(f"Error loading dataset: {e}")
-        df = pd.DataFrame()
-        status.update(label="Connection Failed", state="error")
+# DATA LOADING 
 
-# 2. Neat Interactive Data Section
+@st.cache_data  # This prevents the spinner from showing every time you click a button
+def fetch_data(url):
+    return pd.read_csv(url)
+
+# The spinner shows up only during the actual download
+with st.spinner("Accessing Research Data..."):
+    try:
+        df = fetch_data(csv_url)
+    except Exception as e:
+        st.error(f"Connection Error: {e}")
+        df = pd.DataFrame()
+
+
+
+# Neat Interactive Data Section
 if not df.empty:
     st.markdown("### Data Exploration")
     
@@ -124,12 +130,6 @@ if not df.empty:
                 help="Average perceived safety of the environment", border=True)
     col4.metric(label="🧠 Emotion Management", value=f"{avg_emotion:.2f}",
                 help="Average ability to regulate and manage emotions", border=True)
-
-st.markdown("---")
-
-# Display cleaned dataset preview
-st.subheader("Dataset: Social & Emotional Metrics")
-st.dataframe(df)
 
 st.markdown("---")
 
