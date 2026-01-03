@@ -34,15 +34,12 @@ except Exception as e:
     st.error(f"Error loading dataset: {e}")
     df = pd.DataFrame()
 
-# ===============================
-# STOP IF DATA EMPTY
-# ===============================
 if df.empty:
     st.warning("No data available. Please check the GitHub CSV link.")
     st.stop()
 
 # ===============================
-# PREVIEW DATA
+# DATA PREVIEW
 # ===============================
 st.subheader("📄 Dataset Preview")
 st.dataframe(df.head())
@@ -56,16 +53,14 @@ df_state = df[df['state'].isin(['Selangor', 'Pahang'])].copy()
 # SUMMARY METRICS
 # ===============================
 st.subheader("📊 Summary Overview")
-
 col1, col2, col3 = st.columns(3)
 col1.metric("Total Respondents", len(df))
 col2.metric("Selangor Respondents", len(df[df['state'] == 'Selangor']))
 col3.metric("Pahang Respondents", len(df[df['state'] == 'Pahang']))
-
 st.divider()
 
 # ===============================
-# 1️⃣ RESPONDENT COUNT BY STATE
+# 1️⃣ RESPONDENT COUNT
 # ===============================
 st.subheader("1️⃣ Number of Respondents by State")
 
@@ -79,12 +74,11 @@ fig1 = px.bar(
     text='Count',
     title='Number of Respondents per State'
 )
-
 st.plotly_chart(fig1, use_container_width=True)
 st.divider()
 
 # ===============================
-# 2️⃣ AVERAGE EMOTIONAL SCORES
+# 2️⃣ AVERAGE EMOTIONAL WELLBEING
 # ===============================
 st.subheader("2️⃣ Average Emotional Wellbeing by State")
 
@@ -98,7 +92,6 @@ fig2 = px.bar(
     barmode='group',
     title='Average Emotional Wellbeing Scores'
 )
-
 st.plotly_chart(fig2, use_container_width=True)
 st.divider()
 
@@ -118,14 +111,44 @@ fig3 = px.histogram(
     barmode='stack',
     title='Calm Under Pressure Categories by State'
 )
-
 st.plotly_chart(fig3, use_container_width=True)
 st.divider()
 
 # ===============================
-# 4️⃣ OVERALL HEALTH (DONUT)
+# 4️⃣ VIOLIN PLOTS
 # ===============================
-st.subheader("4️⃣ Overall Health Distribution")
+st.subheader("4️⃣ Distribution of Work Functioning by State")
+
+col1, col2 = st.columns(2)
+
+fig_tp = px.violin(
+    df_state,
+    x='state',
+    y='task_persistence',
+    color='state',
+    box=True,
+    points='all',
+    title='Distribution of Task Persistence by State'
+)
+col1.plotly_chart(fig_tp, use_container_width=True)
+
+fig_tw = px.violin(
+    df_state,
+    x='state',
+    y='teamwork',
+    color='state',
+    box=True,
+    points='all',
+    title='Distribution of Teamwork by State'
+)
+col2.plotly_chart(fig_tw, use_container_width=True)
+
+st.divider()
+
+# ===============================
+# 5️⃣ OVERALL HEALTH (DONUT)
+# ===============================
+st.subheader("5️⃣ Overall Health Distribution")
 
 def health_category(x):
     if x <= 2:
@@ -143,36 +166,26 @@ health_counts = (
     .reset_index(name='count')
 )
 
-selangor_data = health_counts[health_counts['state'] == 'Selangor']
-pahang_data = health_counts[health_counts['state'] == 'Pahang']
+sel = health_counts[health_counts['state'] == 'Selangor']
+pah = health_counts[health_counts['state'] == 'Pahang']
 
-fig4 = make_subplots(
+fig5 = make_subplots(
     rows=1, cols=2,
     specs=[[{'type': 'domain'}, {'type': 'domain'}]],
     subplot_titles=['Selangor', 'Pahang']
 )
 
-fig4.add_trace(go.Pie(
-    labels=selangor_data['overall_health_cat'],
-    values=selangor_data['count'],
-    hole=0.4
-), 1, 1)
+fig5.add_trace(go.Pie(labels=sel['overall_health_cat'], values=sel['count'], hole=0.4), 1, 1)
+fig5.add_trace(go.Pie(labels=pah['overall_health_cat'], values=pah['count'], hole=0.4), 1, 2)
 
-fig4.add_trace(go.Pie(
-    labels=pahang_data['overall_health_cat'],
-    values=pahang_data['count'],
-    hole=0.4
-), 1, 2)
-
-fig4.update_layout(title_text="Overall Health Comparison")
-
-st.plotly_chart(fig4, use_container_width=True)
+fig5.update_layout(title_text="Overall Health Comparison")
+st.plotly_chart(fig5, use_container_width=True)
 st.divider()
 
 # ===============================
-# 5️⃣ RADAR CHART
+# 6️⃣ RADAR CHART
 # ===============================
-st.subheader("5️⃣ Radar Chart: Emotional & Work Functioning")
+st.subheader("6️⃣ Radar Chart: Emotional & Work Functioning")
 
 variables = [
     'calm_under_pressure',
@@ -185,31 +198,28 @@ variables = [
 
 state_means = df_state.groupby('state')[variables].mean().reset_index()
 
-fig5 = go.Figure()
-
+fig6 = go.Figure()
 for state in ['Selangor', 'Pahang']:
-    values = state_means[state_means['state'] == state][variables].values.flatten()
-    fig5.add_trace(go.Scatterpolar(
-        r=values,
+    fig6.add_trace(go.Scatterpolar(
+        r=state_means[state_means['state'] == state][variables].values.flatten(),
         theta=variables,
         fill='toself',
         name=state
     ))
 
-fig5.update_layout(
-    polar=dict(radialaxis=dict(visible=True, range=[1, 5])),
+fig6.update_layout(
+    polar=dict(radialaxis=dict(range=[1, 5])),
     title="Radar Comparison of Wellbeing Indicators"
 )
-
-st.plotly_chart(fig5, use_container_width=True)
+st.plotly_chart(fig6, use_container_width=True)
 st.divider()
 
 # ===============================
-# 6️⃣ HEATMAP
+# 7️⃣ HEATMAP
 # ===============================
-st.subheader("6️⃣ Heatmap of Wellbeing Scores")
+st.subheader("7️⃣ Heatmap of Wellbeing Scores")
 
-fig6 = px.imshow(
+fig7 = px.imshow(
     state_means[variables],
     x=variables,
     y=state_means['state'],
@@ -217,5 +227,4 @@ fig6 = px.imshow(
     color_continuous_scale='RdBu',
     title="Heatmap of Mean Wellbeing Scores by State"
 )
-
-st.plotly_chart(fig6, use_container_width=True)
+st.plotly_chart(fig7, use_container_width=True)
