@@ -16,7 +16,7 @@ st.set_page_config(
 homepage = st.Page("pages/Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
 adawiyah = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
-atiqah = st.Page("pages/Survey_Charts.py", title="Atiqah's Analysis", icon="📈")
+atiqah = st.Page("pages/Atiqah.py", title="Atiqah's Analysis", icon="📈")
 emotion_resilience = st.Page("pages/Emotion_Resilience.py", title="Emotion & Resilience", icon="🧠")
 
 # NAVIGATION MENU DEFINITION
