@@ -7,20 +7,55 @@ import plotly.express as px
 # Page Configuration
 st.set_page_config(page_title="Social & Emotional Impact Analysis", layout="wide")
 
-# Custom Header following the template
-st.markdown("""
-    <h2 style='text-decoration: underline;'>
-        Assignment JIE42303: Scientific Visualization
-    </h2>
-""", unsafe_allow_html=True)
+# Main Title 
 st.title("🤝❤️ Social & Emotional Impact Analysis")
 st.markdown("---")
 
-# Objective and Problem Statement
-st.markdown(
-    "**Objective Statement:** To analyze how social support from family and friends, along with a safe community environment, influences an individual's ability to manage their emotions and how these factors collectively impact their overall life satisfaction."
-)
-st.info("**Problem Statement:** Understanding the intersection between external environmental safety and internal emotional regulation is critical to quantifying life satisfaction.")
+# --- Custom CSS for Soft Pink Boxes ---
+st.markdown("""
+    <style>
+    .pink-box {
+        background-color: #FFF0F5; /* Soft Lavender Blush/Pink */
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 8px solid #FFB6C1; /* Accent Pink border */
+        margin-bottom: 20px;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+    }
+    .pink-box h4 {
+        color: #D02090; /* Darker pink for the header */
+        margin-top: 0;
+    }
+    .pink-box p {
+        color: #333333;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# --- Interactive Section ---
+# We use an expander so the user can "interact" by opening/closing the goals of the study
+with st.expander("🎯 View Research Objective & Problem Statement", expanded=True):
+    
+    # Objective Box
+    st.markdown(f"""
+        <div class="pink-box">
+            <h4>📍 Objective Statement</h4>
+            <p>To analyze how <b>social support</b> from family and friends, along with a <b>safe community environment</b>, 
+            influences an individual's ability to manage their emotions and how these factors collectively impact 
+            their overall <b>life satisfaction</b>.</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # Problem Statement Box
+    st.markdown(f"""
+        <div class="pink-box" style="background-color: #FFE4E1;"> <h4>⚠️ Problem Statement</h4>
+            <p>Understanding the intersection between <b>external environmental safety</b> and <b>internal emotional regulation</b> 
+            is critical. This analysis seeks to quantify how much of our life satisfaction is driven by our surroundings 
+            versus our personal social networks.</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
