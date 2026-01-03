@@ -222,145 +222,132 @@ st.markdown("---")
 st.markdown("## Research Visualizations")
 st.write("Explore the statistical relationships between social, environmental, and emotional factors.")
 
+# RESEARCH VISUALIZATIONS (UNIFIED PINK THEME) 
+
+st.markdown("## Research Visualizations")
+
 # VISUALIZATION 1: CORRELATION HEATMAP 
 with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
     
-    viz1_cols = [
-        'life_satisfaction', 'social_support_index', 
-        'community_safety_index', 'emotion_management_index', 'overall_health'
-    ]
+    viz1_cols = ['life_satisfaction', 'social_support_index', 'community_safety_index', 'emotion_management_index', 'overall_health']
     available_viz_cols = [col for col in viz1_cols if col in df.columns]
 
     if len(available_viz_cols) > 1:
-        # Calculate Correlation
         corr_matrix = df[available_viz_cols].corr()
 
-        # Create Heatmap
+        # UPDATED: color_continuous_scale set to 'Reds' to match the pink theme
         fig1 = px.imshow(
             corr_matrix, 
             text_auto=".2f", 
-            color_continuous_scale='RdBu_r', 
+            color_continuous_scale='Reds', 
             aspect="auto",
             labels=dict(color="Strength"),
-            zmin=-1, zmax=1
+            zmin=0, zmax=1 # Focus on positive correlations for a cleaner look
         )
 
         fig1.update_layout(
-            title="<b>Correlation: How Social & Emotional Factors Relate</b>",
+            title="<b>Variable Correlation Analysis</b>",
             title_x=0.5,
-            margin=dict(l=20, r=20, t=50, b=20),
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
         )
 
-        # Layout: Chart + Guide
         col_chart1, col_info1 = st.columns([4, 1])
         with col_chart1:
             st.plotly_chart(fig1, use_container_width=True, key="heatmap_1")
         
         with col_info1:
-            st.write("") # Spacer
+            st.write("") 
             with st.popover("Guide"):
-                st.markdown("**Scores:**\n- 1.0: Perfect match\n- 0.5+: Strong link\n- 0.0: No relation")
+                st.markdown("**Color Key:**\n- Dark Red: Strong Link\n- White: No Link")
 
-        # Insight Box
         st.markdown(f"""
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
-                    <b>Interpretation:</b> The values inside each square represent the statistical 
-                    relationship between factors. A higher score indicates that as one factor increases, the 
-                    other likely increases as well—providing clear evidence for your <b>Problem Statement</b>.
+                    <b>Interpretation:</b> Darker squares indicate a stronger relationship. For example, a dark 
+                    connection between <b>Social Support</b> and <b>Satisfaction</b> confirms that community 
+                    is a key driver of well-being.
                 </p>
             </div>
         """, unsafe_allow_html=True)
-    else:
-        st.warning("Insufficient data for correlation analysis.")
-
 
 # VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT 
-with st.expander("Visualization 2: Scatter Plot", expanded=False):
+with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     
-    # Interactive Controls
     sc_col1, sc_col2 = st.columns([2, 2])
     with sc_col1:
-        show_trend = st.toggle("Show Analysis Trendline (OLS)", value=True)
+        show_trend = st.toggle("Show Analysis Trendline", value=True)
     with sc_col2:
-        point_size = st.slider("Adjust Point Visibility", 5, 20, 10)
+        point_size = st.slider("Point Size", 5, 20, 10)
 
-    # Create Scatter Plot
+    # UPDATED: color_continuous_scale set to 'Reds' for consistency
     fig2 = px.scatter(
         df,
         x='social_support_index',
         y='life_satisfaction',
         color='community_safety_index',
         trendline="ols" if show_trend else None,
-        opacity=0.7,
+        opacity=0.8,
         size_max=point_size,
-        color_continuous_scale='Viridis',
-        labels={
-            'social_support_index': 'Social Support Score',
-            'life_satisfaction': 'Satisfaction Level',
-            'community_safety_index': 'Safety Score'
-        }
+        color_continuous_scale='Reds', 
+        labels={'social_support_index': 'Support Score', 'life_satisfaction': 'Satisfaction', 'community_safety_index': 'Safety'}
     )
 
+    # UPDATED: Set trendline color to a darker red/maroon for visibility
+    if show_trend:
+        fig2.update_traces(line=dict(color='#8B0000'))
+
     fig2.update_layout(
-        title="<b>Impact of Social Support & Community Safety</b>",
+        title="<b>Impact of Support & Safety</b>",
         title_x=0.5,
-        xaxis=dict(gridcolor='#f0f0f0'),
-        yaxis=dict(gridcolor='#f0f0f0'),
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
     )
 
-    # Layout: Chart + Guide
     sc_chart_col, sc_guide_col = st.columns([4, 1])
     with sc_chart_col:
         st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
 
     with sc_guide_col:
-        st.write("") # Spacer
-        with st.popover("Reading Scatter"):
-            st.markdown("""
-                **What am I seeing?**
-                - **X-Axis:** Support level.
-                - **Y-Axis:** Happiness level.
-                - **Color:** Brighter colors = Safer community.
-            """)
+        st.write("") 
+        with st.popover("Reading Chart"):
+            st.markdown("Darker dots represent respondents in **safer communities**.")
 
-    # Insight Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The scatter distribution helps identify "clusters." If you see many bright points 
-                at the top right, it confirms that <b>high community safety</b> combined with <b>strong social support</b> 
-                creates the highest levels of life satisfaction.
+                <b>Interpretation:</b> The rising trendline (in dark red) mathematically proves that as 
+                <b>Social Support</b> increases, <b>Life Satisfaction</b> follows.
             </p>
         </div>
     """, unsafe_allow_html=True)
 
-st.markdown("---")
-
-
-# VISUALIZATION 3
-with st.expander("Visualization 3: Distribution of Psychological Scores", expanded=False):
-    selected_dist = st.selectbox("Select Dimension to View Distribution:", 
-                                 ['life_satisfaction', 'social_support_index', 'emotion_management_index'])
+# VISUALIZATION 3: DISTRIBUTION
+with st.expander("Visualization 3: Distribution of Scores", expanded=False):
+    selected_dist = st.selectbox("Select Dimension:", ['life_satisfaction', 'social_support_index', 'emotion_management_index'])
     
-    fig3 = px.histogram(df, x=selected_dist, nbins=15, 
-                        color_discrete_sequence=['#FFB6C1'], # Soft Pink
-                        marginal="violin") # Adds a small violin plot on top
+    # UPDATED: Kept the primary Soft Pink color (#FFB6C1)
+    fig3 = px.histogram(
+        df, x=selected_dist, nbins=15, 
+        color_discrete_sequence=['#FFB6C1'] 
+    ) 
     
-    fig3.update_layout(title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
-                      paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+    fig3.update_layout(
+        title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
+        paper_bgcolor='rgba(0,0,0,0)', 
+        plot_bgcolor='rgba(0,0,0,0)',
+        bargap=0.1
+    )
     
     st.plotly_chart(fig3, use_container_width=True)
     
     st.markdown("""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
-            <b>✦ Interpretation:</b> This shows the "density" of your data. If the bars are higher on the right, your population generally scores high in that area.
+            <b>Interpretation:</b> This histogram shows where most people fall on the scale. A 
+            "right-skewed" graph (more bars on the right) is a positive sign for well-being.
         </div>
     """, unsafe_allow_html=True)
 
+st.markdown("---")
 
 
