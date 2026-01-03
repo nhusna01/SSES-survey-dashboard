@@ -26,7 +26,7 @@ homepage = st.Page("pages/Homepage.py", title="Home", icon="🏠", default=True)
 husna = st.Page("pages/husna.py", title="Husna's Analysis", icon="👤")
 adawiyah = st.Page("pages/adawiyah.py", title="Adawiyah's Analysis", icon="👪")
 atiqah = st.Page("pages/Atiqah.py", title="Atiqah's Analysis", icon="📈")
-emotion_resilience = st.Page("pages/Emotion_Resilience.py", title="Emotion & Resilience", icon="🧠")
+hafizah = st.Page("pages/Hafizah.py", title="Hafizah's Analysis", icon="🧠")
 
 # NAVIGATION MENU DEFINITION
 pg = st.navigation({
@@ -35,7 +35,7 @@ pg = st.navigation({
         husna,
         adawiyah,
         atiqah,
-        emotion_resilience
+        hafizah
     ]
 })
 
