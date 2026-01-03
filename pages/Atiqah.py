@@ -59,6 +59,7 @@ col2.metric("Selangor Respondents", len(df[df['state'] == 'Selangor']))
 col3.metric("Pahang Respondents", len(df[df['state'] == 'Pahang']))
 st.divider()
 
+
 # ===============================
 # 1️⃣ RESPONDENT COUNT
 # ===============================
@@ -76,6 +77,14 @@ fig1 = px.bar(
 )
 st.plotly_chart(fig1, use_container_width=True)
 st.divider()
+
+st.markdown("""
+**Analysis:**  
+The bar chart illustrates the distribution of respondents across Selangor and Pahang.
+A relatively balanced number of respondents ensures that comparisons between states
+are fair and not overly influenced by sample size differences.
+""")
+
 
 # ===============================
 # 2️⃣ AVERAGE EMOTIONAL WELLBEING
@@ -95,6 +104,14 @@ fig2 = px.bar(
 st.plotly_chart(fig2, use_container_width=True)
 st.divider()
 
+st.markdown("""
+**Analysis:**  
+Selangor demonstrates slightly higher average scores for calmness under pressure and
+emotional control. This may reflect greater exposure to demanding work environments,
+which can strengthen emotional regulation skills over time.
+""")
+
+
 # ===============================
 # 3️⃣ CALM UNDER PRESSURE (STACKED)
 # ===============================
@@ -113,6 +130,14 @@ fig3 = px.histogram(
 )
 st.plotly_chart(fig3, use_container_width=True)
 st.divider()
+
+st.markdown("""
+**Analysis:**  
+A higher proportion of Selangor respondents fall within the **High** calmness category,
+while Pahang shows a larger concentration in the **Medium** category. This suggests
+differences in stress management and coping mechanisms between the two states.
+""")
+
 
 # ===============================
 # 4️⃣ VIOLIN PLOTS
@@ -144,6 +169,14 @@ fig_tw = px.violin(
 col2.plotly_chart(fig_tw, use_container_width=True)
 
 st.divider()
+
+st.markdown("""
+**Analysis:**  
+The violin plots reveal both the distribution and variability of task persistence and
+teamwork scores. Selangor shows a wider distribution with higher median values,
+indicating stronger work engagement and collaborative behaviour compared to Pahang.
+""")
+
 
 # ===============================
 # 5️⃣ OVERALL HEALTH (DONUT)
@@ -182,6 +215,14 @@ fig5.update_layout(title_text="Overall Health Comparison")
 st.plotly_chart(fig5, use_container_width=True)
 st.divider()
 
+st.markdown("""
+**Analysis:**  
+Selangor exhibits a higher proportion of respondents reporting **Good** health,
+whereas Pahang has more respondents in the **Moderate** category. This may be influenced
+by lifestyle, access to healthcare, and working conditions.
+""")
+
+
 # ===============================
 # 6️⃣ RADAR CHART
 # ===============================
@@ -214,6 +255,14 @@ fig6.update_layout(
 st.plotly_chart(fig6, use_container_width=True)
 st.divider()
 
+st.markdown("""
+**Analysis:**  
+The radar chart highlights consistent performance differences across multiple wellbeing
+dimensions. Selangor scores higher in emotional control, teamwork, and task persistence,
+suggesting stronger overall work functioning and emotional resilience.
+""")
+
+
 # ===============================
 # 7️⃣ HEATMAP
 # ===============================
@@ -228,3 +277,11 @@ fig7 = px.imshow(
     title="Heatmap of Mean Wellbeing Scores by State"
 )
 st.plotly_chart(fig7, use_container_width=True)
+
+st.markdown("""
+**Analysis:**  
+The heatmap provides a clear visual comparison of mean wellbeing scores across states.
+Darker shades for Selangor across most indicators reinforce earlier findings that
+Selangor respondents generally report higher wellbeing and work functioning.
+""")
+
