@@ -65,49 +65,52 @@ with st.expander("View Research Objective", expanded=True):
 
 st.markdown("---")
 
-# DATA LOADING & INTERACTIVE EXPLORATION 
-
-csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
-
-# DATA LOADING 
-
-@st.cache_data  # This prevents the spinner from showing every time you click a button
-def fetch_data(url):
-    return pd.read_csv(url)
-
-# The spinner shows up only during the actual download
-with st.spinner("Accessing Research Data..."):
-    try:
-        df = fetch_data(csv_url)
-    except Exception as e:
-        st.error(f"Connection Error: {e}")
-        df = pd.DataFrame()
-
-
-
-# Neat Interactive Data Section
+# INTERACTIVE EXPLORATION SECTION 
 if not df.empty:
-    st.markdown("### Data Exploration")
+    # Header and Methodology button
+    head_col, method_col = st.columns([3, 1])
     
-    # Using an expander to keep the layout tidy
-    with st.expander("Click to Preview & Filter Raw Dataset"):
-        
-        # Row 1: Search & Download
-        search_col, download_col = st.columns([3, 1])
-        
-        with search_col:
-            search_query = st.text_input("🔍 Search data by any value:", placeholder="Type to filter...")
-        
+    with head_col:
+        st.markdown("### Data Exploration")
+    
+    with method_col:
+        with st.popover("View Methodology"):
+            st.markdown("#### Indexing Logic")
+            st.write("To improve analysis, raw variables were grouped into indices:")
+            st.markdown("""
+            - **Social Support Index:** `social_support`, `social_time`, `community_care`
+            - **Emotion Management:** `calm_under_pressure`, `emotional_control`
+            - **Community Safety:** `neighborhood_safety`, `community_care`
+            """)
+            st.caption("Calculation: Arithmetic Mean of grouped variables.")
 
-        # Apply search filter if text is entered
+    # Using an expander for the actual data table
+    with st.expander("Preview & Filter Raw Dataset", expanded=False):
+        
+        # DATASET DESCRIPTION BOX  ---
+        st.markdown("""
+            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1; margin-bottom: 20px;">
+                <p style="margin: 0; color: #333; font-size: 15px;">
+                    <b>About this Dataset:</b> This cleaned dataset contains processed survey responses focused on 
+                    social-emotional well-being. It captures how individuals perceive their <b>social networks</b>, 
+                    <b>environmental safety</b>, and their internal ability to <b>manage emotions</b>. The data has been 
+                    cleaned to ensure statistical accuracy.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        # Search bar
+        search_query = st.text_input("🔍 Search data by any value:", placeholder="Search by score, category, or ID...")
+        
+        # Apply search filter
         if search_query:
             df_display = df[df.apply(lambda row: row.astype(str).str.contains(search_query, case=False).any(), axis=1)]
             st.write(f"Showing {len(df_display)} matching results:")
         else:
-            df_display = df.head(10) # Show first 10 rows by default
-            st.caption("Showing first 10 rows. Use the search bar above to find specific records.")
+            df_display = df.head(10)
+            st.caption("Showing first 10 rows. Use the search bar above to filter.")
 
-        # Display the interactive table
+        # Display the table
         st.dataframe(df_display, use_container_width=True)
 
 st.markdown("---")
@@ -181,14 +184,14 @@ if not df.empty:
     col3.metric(
         label="◈ Community Safety", 
         value=f"{avg_safety:.2f}",
-        help="Perceived safety of environment", 
+        help="Environmental safety perception", 
         border=True
     )
     
     col4.metric(
         label="◉ Emotion Management", 
         value=f"{avg_emotion:.2f}",
-        help="Internal ability to regulate stress", 
+        help="Internal ability to manage stress", 
         border=True
     )
 
