@@ -217,11 +217,11 @@ if not df.empty:
 
 st.markdown("---")
 
-## VISUALIZATION 1: CORRELATION HEATMAP 
+# VISUALIZATION 1: CORRELATION HEATMAP
 
-st.markdown("### Variable Relationship Analysis")
+st.markdown("### Visualization")
 
-# 1. Define the variables to include 
+# 1. Define the variables to include (No selection or toggle needed)
 viz1_cols = [
     'life_satisfaction', 
     'social_support_index', 
@@ -230,19 +230,17 @@ viz1_cols = [
     'overall_health'
 ]
 
-# Ensure variables exist in df
+# Ensure variables exist in the dataframe before plotting
 available_viz_cols = [col for col in viz1_cols if col in df.columns]
 
 if len(available_viz_cols) > 1:
-    
-
-    # Calculate Correlation
+    # 2. Calculate Correlation Matrix
     corr_matrix = df[available_viz_cols].corr()
 
-    # Create Heatmap
+    # 3. Create Heatmap (Numbers are forced to show with text_auto=".2f")
     fig1 = px.imshow(
         corr_matrix, 
-        text_auto=".2f" if show_nums else False, 
+        text_auto=".2f", 
         color_continuous_scale='RdBu_r', 
         aspect="auto",
         labels=dict(color="Strength"),
@@ -257,37 +255,40 @@ if len(available_viz_cols) > 1:
         paper_bgcolor='rgba(0,0,0,0)',
     )
 
-    # Display Chart & Interactive Popover
+    # 4. Display Chart & Methodology Popover
     col_chart, col_info = st.columns([4, 1])
     
     with col_chart:
-        st.plotly_chart(fig1, use_container_width=True)
+        # 2026 Update: Use width="stretch" for better container fitting
+        st.plotly_chart(fig1, key="heatmap_1")
     
     with col_info:
-        st.write("") # Spacer
+        st.write("") # Vertical spacer
         with st.popover("Guide"):
             st.markdown("""
-                **Interpret Scores:**
-                - **+1.0:** Strong Positive
-                - **0.0:** No Relation
-                - **-1.0:** Strong Negative
+                **Quick Guide:**
+                - **1.00:** Perfect match.
+                - **0.50+:** Strong positive link.
+                - **0.00:** No relationship.
                 
-                *Hover over squares for details.*
+                *Note: Values are calculated using Pearson's Correlation.*
             """)
 
-    # 5. Scientific Insight Box 
+    # 5. Scientific Insight Box (Matches your soft pink theme)
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> This matrix visualizes how strongly different life factors are linked. 
-                A high score between <b>Social Support</b> and <b>Life Satisfaction</b> suggests that interpersonal 
-                networks are a critical pillar of well-being in this study group.
+                <b>Interpretation:</b> The values inside each square represent the statistical 
+                relationship between factors. A higher score indicates that as one factor increases, the 
+                other likely increases as well—providing clear evidence for your <b>Problem Statement</b>.
             </p>
         </div>
     """, unsafe_allow_html=True)
 
 else:
-    st.warning("Index columns not found. Please ensure data loading and indexing are successful.")
+    st.warning("Insufficient data columns found to generate the heatmap.")
 
 st.markdown("---")
+
+
 
