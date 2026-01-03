@@ -345,51 +345,78 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
 
 st.markdown("---")
 
-# VISUALIZATION 4: HEALTH VS. SATISFACTION 
-with st.expander("Visualization 4: Impact of Health on Well-being", expanded=False):
+# VISUALIZATION 3: GROUP WELL-BEING PROFILE 
+with st.expander("Visualization 4: Group Psychological Profile", expanded=False):
     
-    # 1. Define the unified color sequence (Light Pink to Deep Red)
-    # This ensures consistency with your other charts
-    pink_red_palette = ['#FFB6C1', '#FF69B4', '#CD5C5C', '#B22222', '#8B0000']
+    # 1. Prepare Data
+    categories = ['Life Sat.', 'Social Support', 'Safety', 'Emotion Mgmt.']
+    values = [
+        df['life_satisfaction'].mean(), 
+        df['social_support_index'].mean(), 
+        df['community_safety_index'].mean(), 
+        df['emotion_management_index'].mean()
+    ]
+    
+    # Radar charts require the last point to connect back to the first point
+    categories_closed = categories + [categories[0]]
+    values_closed = values + [values[0]]
 
-    # 2. Create the Box Plot
-    fig4 = px.box(
-        df, 
-        x='overall_health', 
-        y='life_satisfaction', 
-        color='overall_health',
-        points="all", 
-        notched=True,
-        # Applying the unified color sequence
-        color_discrete_sequence=pink_red_palette,
-        title="<b>Satisfaction Variance by Health Category</b>",
-        labels={
-            'overall_health': 'Health Status',
-            'life_satisfaction': 'Satisfaction Score'
-        }
-    )
+    # 2. Create Radar Chart using graph_objects for more control
+    import plotly.graph_objects as go
+    
+    fig5 = go.Figure()
+
+    fig5.add_trace(go.Scatterpolar(
+        r=values_closed,
+        theta=categories_closed,
+        fill='toself',
+        # UNIFIED COLOURS: Deep pink line with a softer transparent fill
+        line=dict(color='#FF69B4', width=4),
+        fillcolor='rgba(255, 182, 193, 0.4)', 
+        name='Group Average'
+    ))
 
     # 3. Clean up the Layout
-    fig4.update_layout(
-        xaxis_title="Physical Health Status",
-        yaxis_title="Life Satisfaction (1-5)",
-        plot_bgcolor='rgba(0,0,0,0)',
+    fig5.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[0, 5],
+                gridcolor="#f0f0f0",
+                tickfont=dict(color="#666")
+            ),
+            angularaxis=dict(
+                gridcolor="#f0f0f0",
+                rotation=90, # Starts Life Sat at the top
+                direction="clockwise"
+            ),
+            bgcolor='rgba(0,0,0,0)'
+        ),
+        showlegend=False,
+        title={
+            'text': "<b>Average Dimensions of Well-being</b>",
+            'y': 0.95,
+            'x': 0.5,
+            'xanchor': 'center',
+            'yanchor': 'top'
+        },
         paper_bgcolor='rgba(0,0,0,0)',
-        showlegend=False # Legend is redundant since X-axis labels already exist
+        plot_bgcolor='rgba(0,0,0,0)'
     )
 
     # 4. Display Chart
-    st.plotly_chart(fig4, use_container_width=True, key="box_viz_4")
+    st.plotly_chart(fig5, use_container_width=True, key="radar_viz_5")
 
-    # 5. Scientific Insight Box (Matches your pink theme)
+    # 5. Scientific Insight Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The "notches" in the boxes represent the confidence interval. 
-                If the notches of two different health categories do not overlap, it provides strong 
-                statistical evidence that <b>Health Status</b> significantly influences <b>Life Satisfaction</b>.
+                <b>Interpretation:</b> The "shape" of this web reveals the strengths and weaknesses of the group. 
+                A balanced shape indicates holistic well-being. If the web is <b>pulled toward Social Support</b> 
+                but <b>indented at Emotion Management</b>, it suggests that while people feel connected, they 
+                may need more tools for stress regulation.
             </p>
         </div>
     """, unsafe_allow_html=True)
-
+    
 st.markdown("---")
