@@ -345,7 +345,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
 
 st.markdown("---")
 
-# VISUALIZATION 3: GROUP WELL-BEING PROFILE 
+# VISUALIZATION 4: GROUP WELL-BEING PROFILE ---
 with st.expander("Visualization 4: Group Psychological Profile", expanded=False):
     
     # 1. Prepare Data
@@ -357,11 +357,10 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
         df['emotion_management_index'].mean()
     ]
     
-    # Radar charts require the last point to connect back to the first point
+    # Close the loop
     categories_closed = categories + [categories[0]]
     values_closed = values + [values[0]]
 
-    # 2. Create Radar Chart using graph_objects for more control
     import plotly.graph_objects as go
     
     fig5 = go.Figure()
@@ -370,9 +369,10 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
         r=values_closed,
         theta=categories_closed,
         fill='toself',
-        # UNIFIED COLOURS: Deep pink line with a softer transparent fill
-        line=dict(color='#FF69B4', width=4),
-        fillcolor='rgba(255, 182, 193, 0.4)', 
+        # FIX: Darker, bolder line (Deep Pink)
+        line=dict(color='#FF1493', width=5),
+        # FIX: Increased opacity from 0.4 to 0.6 for better fill visibility
+        fillcolor='rgba(255, 182, 193, 0.6)', 
         name='Group Average'
     ))
 
@@ -382,26 +382,31 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
             radialaxis=dict(
                 visible=True,
                 range=[0, 5],
-                gridcolor="#f0f0f0",
-                tickfont=dict(color="#666")
+                # FIX: Darkened grid lines from #f0f0f0 to #BDBDBD
+                gridcolor="#BDBDBD", 
+                gridwidth=1,
+                tickfont=dict(color="#333", size=12),
+                angle=45, # Tilts labels for better reading
             ),
             angularaxis=dict(
-                gridcolor="#f0f0f0",
-                rotation=90, # Starts Life Sat at the top
-                direction="clockwise"
+                # FIX: Darkened outer grid lines
+                gridcolor="#BDBDBD",
+                rotation=90, 
+                direction="clockwise",
+                tickfont=dict(size=13, color="black")
             ),
             bgcolor='rgba(0,0,0,0)'
         ),
         showlegend=False,
         title={
             'text': "<b>Average Dimensions of Well-being</b>",
-            'y': 0.95,
+            'y': 0.98,
             'x': 0.5,
-            'xanchor': 'center',
-            'yanchor': 'top'
+            'xanchor': 'center'
         },
         paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)'
+        plot_bgcolor='rgba(0,0,0,0)',
+        margin=dict(t=80, b=40, l=40, r=40) # Adds space so labels aren't cut off
     )
 
     # 4. Display Chart
@@ -412,9 +417,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The "shape" of this web reveals the strengths and weaknesses of the group. 
-                A balanced shape indicates holistic well-being. If the web is <b>pulled toward Social Support</b> 
-                but <b>indented at Emotion Management</b>, it suggests that while people feel connected, they 
-                may need more tools for stress regulation.
+                A balanced shape indicates holistic well-being.
             </p>
         </div>
     """, unsafe_allow_html=True)
