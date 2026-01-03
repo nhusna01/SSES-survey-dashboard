@@ -423,3 +423,62 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
     """, unsafe_allow_html=True)
     
 st.markdown("---")
+
+# VISUALIZATION 5: COMMUNITY CARE IMPACT 
+with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", expanded=False):
+    
+    # 1. Prepare Data: Average satisfaction per Community Safety level
+    # We use community_safety_index which we know exists in your df
+    if 'community_safety_index' in df.columns:
+        # We group by safety and find the mean satisfaction for each level
+        safety_avg = df.groupby('community_safety_index')['life_satisfaction'].mean().reset_index()
+
+        # 2. Create Bar Chart
+        fig6 = px.bar(
+            safety_avg, 
+            x='community_safety_index', 
+            y='life_satisfaction',
+            color='life_satisfaction',
+            color_continuous_scale='Reds', # Unified Red/Pink theme
+            title="<b>How a Safe Community Drives Life Satisfaction</b>",
+            labels={
+                'community_safety_index': 'Community Safety Level (1-5)', 
+                'life_satisfaction': 'Average Satisfaction'
+            }
+        )
+
+        fig6.update_layout(
+            plot_bgcolor='rgba(0,0,0,0)',
+            paper_bgcolor='rgba(0,0,0,0)',
+            xaxis=dict(tickmode='linear'),
+            coloraxis_showscale=False # Keeps it neat by hiding the side color bar
+        )
+
+        # 3. Layout: Chart + Guide
+        col_chart6, col_info6 = st.columns([4, 1])
+        with col_chart6:
+            st.plotly_chart(fig6, use_container_width=True, key="bar_viz_6")
+        
+        with col_info6:
+            st.write("") 
+            with st.popover("Guide"):
+                st.markdown("""
+                    **What to look for:**
+                    If the bars get **taller and darker** as the safety level moves from 1 to 5, it proves that safety is a direct requirement for a happy life.
+                """)
+
+        # 4. Insight Box
+        st.markdown(f"""
+            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+                <p style="margin: 0; color: #333;">
+                    <b>Interpretation:</b> This chart shows the 'Average' satisfaction level at every 
+                    safety rank. If the climb is steady, it suggests that <b>Environmental Safety</b> is 
+                    not just a luxury, but a core <b>foundation</b> for individual well-being.
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.warning("Column 'community_safety_index' not found.")
+        
+st.markdown("---")
+
