@@ -112,24 +112,85 @@ if not df.empty:
 
 st.markdown("---")
 
-# Summary metrics (Summary Boxes)
+# INTERACTIVE METRICS SECTION 
+
 if not df.empty:
+    # 1. Sidebar Interactivity: Filtering the Data
+    st.sidebar.header("Filters")
+    st.sidebar.write("Adjust the range to update key metrics below.")
+    
+    # Example: Filtering by Overall Health Score to see how it impacts other metrics
+    if 'overall_health' in df.columns:
+        min_health = float(df['overall_health'].min())
+        max_health = float(df['overall_health'].max())
+        
+        health_range = st.sidebar.slider(
+            "Filter by Overall Health Score",
+            min_health, max_health, (min_health, max_health)
+        )
+        
+        # Apply the filter to the dataframe
+        df_filtered = df[(df['overall_health'] >= health_range[0]) & (df['overall_health'] <= health_range[1])]
+    else:
+        df_filtered = df
+
+    st.subheader("Key Performance Indicators")
+
+    # 2. Layout: Summary Metrics in clean columns
     col1, col2, col3, col4 = st.columns(4)
 
-    # Calculations
-    avg_life_sat = df['life_satisfaction'].mean() if 'life_satisfaction' in df else 0
-    avg_social = df['social_support_index'].mean() if 'social_support_index' in df else 0
-    avg_safety = df['community_safety_index'].mean() if 'community_safety_index' in df else 0
-    avg_emotion = df['emotion_management_index'].mean() if 'emotion_management_index' in df else 0
+    # Calculations based on FILTERED data
+    avg_life_sat = df_filtered['life_satisfaction'].mean() if 'life_satisfaction' in df_filtered else 0
+    avg_social = df_filtered['social_support_index'].mean() if 'social_support_index' in df_filtered else 0
+    avg_safety = df_filtered['community_safety_index'].mean() if 'community_safety_index' in df_filtered else 0
+    avg_emotion = df_filtered['emotion_management_index'].mean() if 'emotion_management_index' in df_filtered else 0
 
-    col1.metric(label="🎓 Avg. Life Satisfaction", value=f"{avg_life_sat:.2f}",
-                help="Average overall life satisfaction score", border=True)
-    col2.metric(label="🤝 Social Support Index", value=f"{avg_social:.2f}",
-                help="Average score for social support from family/friends", border=True)
-    col3.metric(label="🛡️ Community Safety", value=f"{avg_safety:.2f}",
-                help="Average perceived safety of the environment", border=True)
-    col4.metric(label="🧠 Emotion Management", value=f"{avg_emotion:.2f}",
-                help="Average ability to regulate and manage emotions", border=True)
+    # Custom CSS to make the metric boxes even neater
+    st.markdown("""
+        <style>
+        [data-testid="stMetric"] {
+            background-color: #ffffff;
+            border: 1px solid #e6e6e6;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease-in-out;
+        }
+        [data-testid="stMetric"]:hover {
+            transform: translateY(-2px);
+            border-color: #FFB6C1; /* Soft pink border on hover */
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+    # 3. Displaying Metrics with Black & White Icons
+    col1.metric(
+        label="✦ Avg. Life Satisfaction", 
+        value=f"{avg_life_sat:.2f}",
+        help="Overall fulfillment score", 
+        border=True
+    )
+    
+    col2.metric(
+        label="⚭ Social Support", 
+        value=f"{avg_social:.2f}",
+        help="Strength of family & friend networks", 
+        border=True
+    )
+    
+    col3.metric(
+        label="◈ Community Safety", 
+        value=f"{avg_safety:.2f}",
+        help="Perceived safety of environment", 
+        border=True
+    )
+    
+    col4.metric(
+        label="◉ Emotion Management", 
+        value=f"{avg_emotion:.2f}",
+        help="Internal ability to regulate stress", 
+        border=True
+    )
 
 st.markdown("---")
 
