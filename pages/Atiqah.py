@@ -23,15 +23,27 @@ focusing on emotional regulation, calmness under pressure, and overall health ou
 """)
 
 # ===============================
-# LOAD DATA
+# LOAD DATA FROM GITHUB
 # ===============================
-st.sidebar.header("📂 Load Dataset")
-uploaded_file = st.sidebar.file_uploader("https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Atiqah_SSES_cleaned.csv", type="csv")
+st.sidebar.header("📂 Dataset Source")
 
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
+csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
 
-    st.success("Dataset loaded successfully!")
+try:
+    df = pd.read_csv(csv_url)
+    st.sidebar.success("Dataset loaded successfully from GitHub!")
+except Exception as e:
+    st.sidebar.error(f"Error loading dataset: {e}")
+    df = pd.DataFrame()  # empty dataframe as fallback
+    
+# ===============================
+# CHECK DATA
+# ===============================
+if df.empty:
+    st.warning("No data available to display. Please check your GitHub link.")
+else:
+    st.subheader("Preview of Dataset")
+    st.dataframe(df.head())
 
     # ===============================
     # FILTER STATES
