@@ -8,28 +8,24 @@ import plotly.express as px
 st.markdown(
     """
     <div style="
-        padding: 1.2rem 1.5rem;
-        border-radius: 12px;
-        background: linear-gradient(90deg, #6a0dad, #9d4edd);
-        color: white;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
         margin-bottom: 2rem;
+        font-family: 'Inter', sans-serif;
     ">
         <h1 style="
-            margin-bottom: 0.3rem;
-            font-family: 'Inter', sans-serif;
             font-size: 32px;
             font-weight: 700;
+            color: #3A0CA3;
+            margin-bottom: 0.3rem;
         ">
             📌 Comparative Analysis Across Employment Status Groups
         </h1>
         <p style="
             font-size: 17px;
             font-weight: 400;
+            color: #555;
             line-height: 1.5;
-            color: #f0e6ff;
-            transition: color 0.3s ease-in-out;
-        " onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#f0e6ff'">
+        ">
             Exploring demographic characteristics, wellbeing, behavioral traits, and community participation
         </p>
     </div>
@@ -55,15 +51,15 @@ st.markdown(
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-    .main-objectives-box {
-        font-family: 'Inter', sans-serif;
-        border-left: 6px solid #6A0DAD;
-        background-color: #f6f1fb;
-        padding: 1.6rem 2.2rem;
-        border-radius: 14px;
-        margin-bottom: 2rem;
-        max-width: 900px;
-    }
+   .main-objectives-box {
+    font-family: 'Inter', sans-serif;
+    border-left: 6px solid #6A0DAD;
+    background-color: #f6f1fb;
+    padding: 1rem 1.5rem;   /* Reduced padding */
+    border-radius: 10px;     /* Slightly smaller rounded corners */
+    margin-bottom: 1.5rem;   /* Reduce spacing below */
+    max-width: 650px;         /* Reduce width */
+}
 
     .main-objectives-title {
         font-size: 26px;
