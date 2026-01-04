@@ -67,7 +67,7 @@ st.subheader("1 Average Emotional Wellbeing by State")
 emotion_vars = ['calm_under_pressure', 'emotional_control']
 state_emotion_mean = df_state.groupby('state')[emotion_vars].mean().reset_index()
 
-fig2 = px.bar(
+fig1 = px.bar(
     state_emotion_mean,
     x='state',
     y=emotion_vars,
@@ -94,7 +94,7 @@ df_state.loc[:, 'calm_cat'] = df_state['calm_under_pressure'].apply(
     lambda x: 'Low' if x <= 2 else 'Medium' if x == 3 else 'High'
 )
 
-fig3 = px.histogram(
+fig2 = px.histogram(
     df_state,
     x='state',
     color='calm_cat',
@@ -212,7 +212,7 @@ variables = [
 
 state_means = df_state.groupby('state')[variables].mean().reset_index()
 
-fig6 = go.Figure()
+fig5 = go.Figure()
 for state in ['Selangor', 'Pahang']:
     fig5.add_trace(go.Scatterpolar(
         r=state_means[state_means['state'] == state][variables].values.flatten(),
@@ -241,7 +241,7 @@ suggesting stronger overall work functioning and emotional resilience.
 # ===============================
 st.subheader("6 Heatmap of Wellbeing Scores")
 
-fig7 = px.imshow(
+fig6 = px.imshow(
     state_means[variables],
     x=variables,
     y=state_means['state'],
