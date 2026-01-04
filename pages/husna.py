@@ -19,15 +19,9 @@ if "df" not in st.session_state:
     st.stop()
 
 df = st.session_state.df
-
-# ===============================
-# 📄 DATASET PREVIEW (OPTIONAL)
-# ===============================
-with st.expander("📄 View Dataset Preview"):
-    st.dataframe(df, use_container_width=True)
     
 # ===============================
-# 🧩 PAGE HEADER
+# 🧩 MAIN OBJECTIVE
 # ===============================
 st.markdown(
     """
@@ -41,13 +35,16 @@ st.markdown(
         padding: 1.6rem 2.2rem;
         border-radius: 14px;
         margin-bottom: 2rem;
+        max-width: 900px;
     }
+
     .main-objectives-title {
         font-size: 26px;
         font-weight: 700;
         color: #4B0082;
         margin-bottom: 0.8rem;
     }
+
     .main-objectives-text {
         font-size: 17px;
         font-weight: 400;
@@ -57,7 +54,7 @@ st.markdown(
     </style>
 
     <div class="main-objectives-box">
-        <div class="main-objectives-title">🎯 Main Objective</div>
+        <div class="main-objectives-title">📌 Main Objective</div>
         <div class="main-objectives-text">
             To examine how demographic characteristics, wellbeing and life satisfaction,
             behavioral traits, and community participation vary across employment status
@@ -67,6 +64,89 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# ===============================
+# 📋 DATA SUMMARY
+# ===============================
+st.subheader("📋 Data Summary")
+
+summary_option = st.selectbox(
+    "Select summary type:",
+    [
+        "Overall Dataset Overview",
+        "Categorical Variables Summary",
+        "Numerical Variables Summary",
+        "Missing Values Summary"
+    ]
+)
+
+# ---------- OVERALL SUMMARY ----------
+if summary_option == "Overall Dataset Overview":
+    st.markdown("**Dataset Structure and Basic Information**")
+
+    summary_df = pd.DataFrame({
+        "Metric": [
+            "Number of Observations",
+            "Number of Variables",
+            "Number of Numerical Variables",
+            "Number of Categorical Variables"
+        ],
+        "Value": [
+            df.shape[0],
+            df.shape[1],
+            df.select_dtypes(include='number').shape[1],
+            df.select_dtypes(exclude='number').shape[1]
+        ]
+    })
+
+    st.dataframe(summary_df, use_container_width=True)
+
+# ---------- CATEGORICAL SUMMARY ----------
+elif summary_option == "Categorical Variables Summary":
+    st.markdown("**Frequency Distribution of Categorical Variables**")
+
+    categorical_cols = df.select_dtypes(exclude='number').columns
+
+    selected_cat = st.selectbox(
+        "Select a categorical variable:",
+        categorical_cols
+    )
+
+    st.write(df[selected_cat].value_counts())
+    st.bar_chart(df[selected_cat].value_counts())
+
+# ---------- NUMERICAL SUMMARY ----------
+elif summary_option == "Numerical Variables Summary":
+    st.markdown("**Descriptive Statistics for Numerical Variables**")
+
+    numerical_cols = df.select_dtypes(include='number').columns
+
+    selected_num = st.selectbox(
+        "Select a numerical variable:",
+        numerical_cols
+    )
+
+    st.dataframe(df[selected_num].describe().to_frame(name="Value"))
+
+    st.markdown("**Distribution**")
+    st.bar_chart(df[selected_num])
+
+# ---------- MISSING VALUES ----------
+elif summary_option == "Missing Values Summary":
+    st.markdown("**Missing Data Overview**")
+
+    missing_df = pd.DataFrame({
+        "Variable": df.columns,
+        "Missing Count": df.isnull().sum(),
+        "Missing Percentage (%)": (df.isnull().mean() * 100).round(2)
+    })
+
+    missing_df = missing_df[missing_df["Missing Count"] > 0]
+
+    if missing_df.empty:
+        st.success("No missing values detected in the dataset.")
+    else:
+        st.dataframe(missing_df, use_container_width=True)
 
 # ===============================
 #  SUMMARY BOXES
@@ -146,96 +226,107 @@ with col4:
         st.session_state.selected_objective = "community"
         st.rerun()
 
-# ===============================
-# 🎯 MAIN OBJECTIVES (CARDS)
-# ===============================
-st.subheader("🎯 Main Objectives")
+selected_group = st.segmented_control(
+    "Employment Status",
+    options=["Students", "Employed", "Unemployed"]
+)
 
-# Initialize session state
-if "selected_objective" not in st.session_state:
-    st.session_state.selected_objective = None
+status_mapping = {
+    "Students": 1,
+    "Employed": 0,
+    "Unemployed": 2
+}
 
-objectives = [
-    {"key": "demographics", "title": "Demographics", "icon": "👥"},
-    {"key": "wellbeing", "title": "Wellbeing & Life Satisfaction", "icon": "😊"},
-    {"key": "behavior", "title": "Behavioral Traits", "icon": "🧩"},
-    {"key": "community", "title": "Community Participation", "icon": "🏘️"},
-]
+if selected_group:
+    filtered_df = df[df["employment_status"] == status_mapping[selected_group]]
+    st.caption(f"Currently viewing data for: **{selected_group}**")
 
-cols = st.columns(4)
-for i, obj in enumerate(objectives):
-    with cols[i]:
-        if st.button(f"{obj['icon']}  {obj['title']}", key=obj["key"]):
-            st.session_state.selected_objective = obj["key"]
-
-# Reset button
-if st.session_state.selected_objective:
-    if st.button("🔄 Reset selection"):
-        st.session_state.selected_objective = None
-        st.rerun()
 
 # ===============================
 # 🔽 OBJECTIVE-BASED ANALYSIS
 # ===============================
-selected = st.session_state.selected_objective
-
-if selected is None:
-    st.info("⬆️ Select a main objective above to view its analysis")
-
-# ---------- DEMOGRAPHICS ----------
 elif selected == "demographics":
     st.subheader("👥 Demographic Analysis")
 
     demo_cols = ["gender", "age", "location", "education_level"]
+    demo_cols = [c for c in demo_cols if c in df.columns]
 
-    for col in demo_cols:
-        if col in df.columns:
-            st.markdown(f"### {col.replace('_',' ').title()}")
-            fig = px.pie(
-                df,
-                names=col,
-                hole=0.4,
-                color_discrete_sequence=px.colors.qualitative.Pastel
-            )
-            st.plotly_chart(fig, use_container_width=True)
-            st.dataframe(df[col].value_counts(), use_container_width=True)
+    selected_demo = st.selectbox(
+        "Select a demographic variable:",
+        demo_cols
+    )
+
+    st.markdown(f"### {selected_demo.replace('_',' ').title()}")
+
+    # 🔹 Single visualization label
+    st.markdown("**① Visualization: Demographic Distribution by Employment Status**")
+
+    fig = px.pie(
+        df,
+        names=selected_demo,
+        hole=0.4,
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
 
 # ---------- WELLBEING ----------
 elif selected == "wellbeing":
     st.subheader("😊 Wellbeing & Life Satisfaction")
 
-    cols = [c for c in df.columns if "wellbeing" in c.lower() or "satisfaction" in c.lower()]
+    wellbeing_cols = [
+        c for c in df.columns
+        if "wellbeing" in c.lower() or "satisfaction" in c.lower()
+    ]
 
-    if not cols:
-        st.warning("No wellbeing or life satisfaction variables found.")
-    else:
-        for col in cols:
-            st.markdown(f"### {col.replace('_',' ').title()}")
-            st.bar_chart(df[col])
+    selected_wellbeing = st.selectbox(
+        "Select a wellbeing variable:",
+        wellbeing_cols
+    )
+
+    st.markdown(f"### {selected_wellbeing.replace('_',' ').title()}")
+    st.markdown("**② Visualization: Wellbeing Level Across Employment Status**")
+
+    st.bar_chart(df[selected_wellbeing])
+
 
 # ---------- BEHAVIOR ----------
 elif selected == "behavior":
     st.subheader("🧩 Behavioral Traits")
 
-    cols = [c for c in df.columns if "behavior" in c.lower()]
+    behavior_cols = [
+        c for c in df.columns
+        if any(k in c.lower() for k in ["task", "adapt", "belief", "persistence"])
+    ]
 
-    if not cols:
-        st.warning("No behavioral trait variables found.")
-    else:
-        for col in cols:
-            st.markdown(f"### {col.replace('_',' ').title()}")
-            st.bar_chart(df[col])
+    selected_behavior = st.selectbox(
+        "Select a behavioral trait:",
+        behavior_cols
+    )
+
+    st.markdown(f"### {selected_behavior.replace('_',' ').title()}")
+    st.markdown("**③ Visualization: Behavioral Trait Comparison by Employment Status**")
+
+    st.bar_chart(df[selected_behavior])
+
 
 # ---------- COMMUNITY ----------
 elif selected == "community":
     st.subheader("🏘️ Community Participation")
 
-    cols = [c for c in df.columns if "community" in c.lower() or "participation" in c.lower()]
+    community_cols = [
+        c for c in df.columns
+        if "community" in c.lower() or "participation" in c.lower()
+    ]
 
-    if not cols:
-        st.warning("No community participation variables found.")
-    else:
-        for col in cols:
-            st.markdown(f"### {col.replace('_',' ').title()}")
-            st.bar_chart(df[col])
+    selected_community = st.selectbox(
+        "Select a community-related variable:",
+        community_cols
+    )
+
+    st.markdown(f"### {selected_community.replace('_',' ').title()}")
+    st.markdown("**④ Visualization: Community Participation Across Employment Status**")
+
+    st.bar_chart(df[selected_community])
 
