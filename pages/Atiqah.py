@@ -33,6 +33,12 @@ try:
 except Exception as e:
     st.error(f"Error loading dataset: {e}")
     st.stop()
+    
+# ===============================
+# DATA PREVIEW
+# ===============================
+st.subheader("📄 Dataset Preview")
+st.dataframe(df.head())
 
 # ===============================
 # FILTER STATES (SAFE COPY)
