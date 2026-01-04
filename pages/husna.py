@@ -3,13 +3,40 @@ import pandas as pd
 import plotly.express as px
 
 # ===============================
-# 🌟 PAGE CONFIG (MUST BE FIRST)
+# 🧠 PAGE TITLE (UPGRADED FOR VISUAL APPEAL)
 # ===============================
-st.set_page_config(
-    page_title="🧩 Analysis of SSES",
-    page_icon="👤",
-    layout="wide"
+st.markdown(
+    """
+    <div style="
+        padding: 1.2rem 1.5rem;
+        border-radius: 12px;
+        background: linear-gradient(90deg, #6a0dad, #9d4edd);
+        color: white;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    ">
+        <h1 style="
+            margin-bottom: 0.3rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+        ">
+            📌 Comparative Analysis Across Employment Status Groups
+        </h1>
+        <p style="
+            font-size: 17px;
+            font-weight: 400;
+            line-height: 1.5;
+            color: #f0e6ff;
+            transition: color 0.3s ease-in-out;
+        " onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='#f0e6ff'">
+            Exploring demographic characteristics, wellbeing, behavioral traits, and community participation
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
 )
+
 
 # ===============================
 # ✅ LOAD DATA FROM SESSION STATE
