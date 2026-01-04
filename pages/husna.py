@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # ===============================
-# 🧠 PAGE TITLE (UPGRADED FOR VISUAL APPEAL)
+# 🧠 PAGE TITLE CONFIGURATION
 # ===============================
 st.markdown(
     """
@@ -269,91 +269,76 @@ if selected_group:
     st.caption(f"Currently viewing data for: **{selected_group}**")
 
 
+
 # ===============================
-# 🔽 OBJECTIVE-BASED ANALYSIS
+# 🔹 Sub-Objectives Dropdown
 # ===============================
-elif selected == "demographics":
-    st.subheader("👥 Demographic Analysis")
+subobjectives = {
+    "Demographics": "① Visualization: Demographic Distribution by Employment Status",
+    "Wellbeing & Life Satisfaction": "② Visualization: Wellbeing Across Employment Status",
+    "Behavioral Traits": "③ Visualization: Behavioral Traits Across Employment Status",
+    "Community Participation": "④ Visualization: Community Participation Across Employment Status"
+}
 
-    demo_cols = ["gender", "age", "location", "education_level"]
-    demo_cols = [c for c in demo_cols if c in df.columns]
+selected_sub = st.selectbox(
+    "Select a sub-objective to explore:",
+    list(subobjectives.keys())
+)
 
-    selected_demo = st.selectbox(
-        "Select a demographic variable:",
-        demo_cols
-    )
+st.markdown(f"### {selected_sub}")
+st.markdown(f"**{subobjectives[selected_sub]}**")
 
-    st.markdown(f"### {selected_demo.replace('_',' ').title()}")
+# ===============================
+# 🔹 Filter and plot visualizations per sub-objective
+# ===============================
 
-    # 🔹 Single visualization label
-    st.markdown("**① Visualization: Demographic Distribution by Employment Status**")
-
+if selected_sub == "Demographics":
+    demo_cols = ["gender", "age", "education_level", "location"]
+    selected_demo = st.selectbox("Select demographic variable:", [c for c in demo_cols if c in df.columns])
+    
     fig = px.pie(
         df,
         names=selected_demo,
         hole=0.4,
         color_discrete_sequence=px.colors.qualitative.Pastel
     )
-
     st.plotly_chart(fig, use_container_width=True)
 
-
-# ---------- WELLBEING ----------
-elif selected == "wellbeing":
-    st.subheader("😊 Wellbeing & Life Satisfaction")
-
-    wellbeing_cols = [
-        c for c in df.columns
-        if "wellbeing" in c.lower() or "satisfaction" in c.lower()
-    ]
-
-    selected_wellbeing = st.selectbox(
-        "Select a wellbeing variable:",
-        wellbeing_cols
+elif selected_sub == "Wellbeing & Life Satisfaction":
+    wellbeing_cols = [c for c in df.columns if "wellbeing" in c.lower() or "satisfaction" in c.lower()]
+    selected_wellbeing = st.selectbox("Select wellbeing variable:", wellbeing_cols)
+    
+    fig = px.bar(
+        df,
+        x="employment_status",
+        y=selected_wellbeing,
+        color="employment_status",
+        color_discrete_sequence=px.colors.sequential.Viridis
     )
+    st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown(f"### {selected_wellbeing.replace('_',' ').title()}")
-    st.markdown("**② Visualization: Wellbeing Level Across Employment Status**")
-
-    st.bar_chart(df[selected_wellbeing])
-
-
-# ---------- BEHAVIOR ----------
-elif selected == "behavior":
-    st.subheader("🧩 Behavioral Traits")
-
-    behavior_cols = [
-        c for c in df.columns
-        if any(k in c.lower() for k in ["task", "adapt", "belief", "persistence"])
-    ]
-
-    selected_behavior = st.selectbox(
-        "Select a behavioral trait:",
-        behavior_cols
+elif selected_sub == "Behavioral Traits":
+    behavior_cols = [c for c in df.columns if any(k in c.lower() for k in ["task", "adapt", "belief", "persistence", "learning"])]
+    selected_behavior = st.selectbox("Select behavioral trait:", behavior_cols)
+    
+    fig = px.bar(
+        df,
+        x="employment_status",
+        y=selected_behavior,
+        color="employment_status",
+        color_discrete_sequence=px.colors.sequential.Viridis
     )
+    st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown(f"### {selected_behavior.replace('_',' ').title()}")
-    st.markdown("**③ Visualization: Behavioral Trait Comparison by Employment Status**")
-
-    st.bar_chart(df[selected_behavior])
-
-
-# ---------- COMMUNITY ----------
-elif selected == "community":
-    st.subheader("🏘️ Community Participation")
-
-    community_cols = [
-        c for c in df.columns
-        if "community" in c.lower() or "participation" in c.lower()
-    ]
-
-    selected_community = st.selectbox(
-        "Select a community-related variable:",
-        community_cols
+elif selected_sub == "Community Participation":
+    community_cols = [c for c in df.columns if "community" in c.lower() or "participation" in c.lower()]
+    selected_community = st.selectbox("Select community variable:", community_cols)
+    
+    fig = px.bar(
+        df,
+        x="employment_status",
+        y=selected_community,
+        color="employment_status",
+        color_discrete_sequence=px.colors.sequential.Viridis
     )
-
-    st.markdown(f"### {selected_community.replace('_',' ').title()}")
-    st.markdown("**④ Visualization: Community Participation Across Employment Status**")
-
-    st.bar_chart(df[selected_community])
-
+    st.plotly_chart(fig, use_container_width=True)
