@@ -17,8 +17,8 @@ st.set_page_config(
 # ===============================
 st.title("🌟 Emotional Wellbeing & Work Functioning Comparison")
 st.markdown("""
-### **Main Objective**
-To compare emotional wellbeing, health, and work functioning between **Selangor** and **Pahang**,  
+### *Main Objective*
+To compare emotional wellbeing, health, and work functioning between *Selangor* and *Pahang*,  
 focusing on emotional regulation, calmness under pressure, and overall health outcomes.
 """)
 
@@ -39,30 +39,70 @@ if df.empty:
     st.stop()
 
 # ===============================
-# DATA PREVIEW
-# ===============================
-st.subheader("📄 Dataset Preview")
-st.dataframe(df.head())
-
-# ===============================
 # FILTER STATES (SAFE COPY)
 # ===============================
 df_state = df[df['state'].isin(['Selangor', 'Pahang'])].copy()
 
 # ===============================
-# SUMMARY METRICS
+# 📊 SUMMARY OVERVIEW (IMPROVED)
 # ===============================
-st.subheader("📊 Summary Overview")
-col1, col2, col3 = st.columns(3)
-col1.metric("Total Respondents", len(df))
-col2.metric("Selangor Respondents", len(df[df['state'] == 'Selangor']))
-col3.metric("Pahang Respondents", len(df[df['state'] == 'Pahang']))
+st.subheader("📊 Overall Summary Overview")
+
+# ---- ONE BOX: TOTAL RESPONDENTS ----
+total_respondents = len(df_state)
+sel_count = len(df_state[df_state['state'] == 'Selangor'])
+pah_count = len(df_state[df_state['state'] == 'Pahang'])
+
+st.metric(
+    label="Total Respondents (Selangor + Pahang)",
+    value=total_respondents,
+    delta=f"Selangor: {sel_count} | Pahang: {pah_count}"
+)
+
+st.caption("Scores range from 1 (Low) to 5 (High)")
 st.divider()
 
+# ---- MEAN SCORE SUMMARY ----
+summary_vars = [
+    'calm_under_pressure',
+    'emotional_control',
+    'task_persistence',
+    'teamwork',
+    'overall_health'
+]
+
+mean_summary = (
+    df_state.groupby('state')[summary_vars]
+    .mean()
+    .round(2)
+)
+
+st.subheader("📌 Mean Score Comparison by State")
+
+for var in summary_vars:
+    st.markdown(f"### {var.replace('_', ' ').title()}")
+
+    col1, col2, col3 = st.columns(3)
+
+    sel_mean = mean_summary.loc['Selangor', var]
+    pah_mean = mean_summary.loc['Pahang', var]
+    diff = sel_mean - pah_mean
+
+    col1.metric("Selangor", sel_mean)
+    col2.metric("Pahang", pah_mean)
+    col3.metric("Difference", f"{diff:.2f}")
+
+    if diff > 0:
+        st.success("Selangor shows a higher average score.")
+    else:
+        st.info("Pahang shows a higher average score.")
+
+    st.divider()
+
 # ===============================
-# 1 AVERAGE EMOTIONAL WELLBEING
+# 1️⃣ AVERAGE EMOTIONAL WELLBEING
 # ===============================
-st.subheader("1 Average Emotional Wellbeing by State")
+st.subheader("1️⃣ Average Emotional Wellbeing by State")
 
 emotion_vars = ['calm_under_pressure', 'emotional_control']
 state_emotion_mean = df_state.groupby('state')[emotion_vars].mean().reset_index()
@@ -75,22 +115,21 @@ fig1 = px.bar(
     title='Average Emotional Wellbeing Scores'
 )
 st.plotly_chart(fig1, use_container_width=True)
-st.divider()
 
 st.markdown("""
-**Analysis:**  
-Selangor demonstrates slightly higher average scores for calmness under pressure and
-emotional control. This may reflect greater exposure to demanding work environments,
-which can strengthen emotional regulation skills over time.
+*Analysis:*  
+Selangor demonstrates slightly higher average emotional regulation scores,
+suggesting stronger coping abilities under work-related pressure.
 """)
 
+st.divider()
 
 # ===============================
-# 2 CALM UNDER PRESSURE (STACKED)
+# 2️⃣ CALM UNDER PRESSURE (STACKED)
 # ===============================
-st.subheader("2 Calm Under Pressure Category Distribution")
+st.subheader("2️⃣ Calm Under Pressure Category Distribution")
 
-df_state.loc[:, 'calm_cat'] = df_state['calm_under_pressure'].apply(
+df_state['calm_cat'] = df_state['calm_under_pressure'].apply(
     lambda x: 'Low' if x <= 2 else 'Medium' if x == 3 else 'High'
 )
 
@@ -102,20 +141,19 @@ fig2 = px.histogram(
     title='Calm Under Pressure Categories by State'
 )
 st.plotly_chart(fig2, use_container_width=True)
-st.divider()
 
 st.markdown("""
-**Analysis:**  
-A higher proportion of Selangor respondents fall within the **High** calmness category,
-while Pahang shows a larger concentration in the **Medium** category. This suggests
-differences in stress management and coping mechanisms between the two states.
+*Analysis:*  
+Selangor respondents are more concentrated in the *High* calmness category,
+while Pahang shows a stronger presence in the *Medium* category.
 """)
 
+st.divider()
 
 # ===============================
-# 3 VIOLIN PLOTS
+# 3️⃣ VIOLIN PLOTS
 # ===============================
-st.subheader("3 Distribution of Work Functioning by State")
+st.subheader("3️⃣ Distribution of Work Functioning by State")
 
 col1, col2 = st.columns(2)
 
@@ -126,7 +164,7 @@ fig_tp = px.violin(
     color='state',
     box=True,
     points='all',
-    title='Distribution of Task Persistence by State'
+    title='Task Persistence Distribution'
 )
 col1.plotly_chart(fig_tp, use_container_width=True)
 
@@ -137,34 +175,26 @@ fig_tw = px.violin(
     color='state',
     box=True,
     points='all',
-    title='Distribution of Teamwork by State'
+    title='Teamwork Distribution'
 )
 col2.plotly_chart(fig_tw, use_container_width=True)
 
-st.divider()
-
 st.markdown("""
-**Analysis:**  
-The violin plots reveal both the distribution and variability of task persistence and
-teamwork scores. Selangor shows a wider distribution with higher median values,
-indicating stronger work engagement and collaborative behaviour compared to Pahang.
+*Analysis:*  
+Selangor shows higher medians and wider score distributions, indicating stronger
+engagement and collaborative tendencies compared to Pahang.
 """)
 
+st.divider()
 
 # ===============================
-# 4 OVERALL HEALTH (DONUT)
+# 4️⃣ OVERALL HEALTH (DONUT)
 # ===============================
-st.subheader("4 Overall Health Distribution")
+st.subheader("4️⃣ Overall Health Distribution")
 
-def health_category(x):
-    if x <= 2:
-        return 'Poor'
-    elif x == 3:
-        return 'Moderate'
-    else:
-        return 'Good'
-
-df_state.loc[:, 'overall_health_cat'] = df_state['overall_health'].apply(health_category)
+df_state['overall_health_cat'] = df_state['overall_health'].apply(
+    lambda x: 'Poor' if x <= 2 else 'Moderate' if x == 3 else 'Good'
+)
 
 health_counts = (
     df_state.groupby(['state', 'overall_health_cat'])
@@ -172,44 +202,30 @@ health_counts = (
     .reset_index(name='count')
 )
 
-sel = health_counts[health_counts['state'] == 'Selangor']
-pah = health_counts[health_counts['state'] == 'Pahang']
-
 fig4 = make_subplots(
     rows=1, cols=2,
     specs=[[{'type': 'domain'}, {'type': 'domain'}]],
     subplot_titles=['Selangor', 'Pahang']
 )
 
-fig4.add_trace(go.Pie(labels=sel['overall_health_cat'], values=sel['count'], hole=0.4), 1, 1)
-fig4.add_trace(go.Pie(labels=pah['overall_health_cat'], values=pah['count'], hole=0.4), 1, 2)
+for i, state in enumerate(['Selangor', 'Pahang'], start=1):
+    data = health_counts[health_counts['state'] == state]
+    fig4.add_trace(
+        go.Pie(labels=data['overall_health_cat'], values=data['count'], hole=0.4),
+        1, i
+    )
 
-fig.update_layout(title_text="Overall Health Comparison")
+fig4.update_layout(title_text="Overall Health Comparison")
 st.plotly_chart(fig4, use_container_width=True)
+
 st.divider()
 
-st.markdown("""
-**Analysis:**  
-Selangor exhibits a higher proportion of respondents reporting **Good** health,
-whereas Pahang has more respondents in the **Moderate** category. This may be influenced
-by lifestyle, access to healthcare, and working conditions.
-""")
-
-
 # ===============================
-# 5 RADAR CHART
+# 5️⃣ RADAR CHART
 # ===============================
-st.subheader("5 Radar Chart: Emotional & Work Functioning")
+st.subheader("5️⃣ Radar Chart: Overall Wellbeing Profile")
 
-variables = [
-    'calm_under_pressure',
-    'emotional_control',
-    'well_rested',
-    'overall_health',
-    'task_persistence',
-    'teamwork'
-]
-
+variables = summary_vars + ['well_rested']
 state_means = df_state.groupby('state')[variables].mean().reset_index()
 
 fig5 = go.Figure()
@@ -226,20 +242,13 @@ fig5.update_layout(
     title="Radar Comparison of Wellbeing Indicators"
 )
 st.plotly_chart(fig5, use_container_width=True)
+
 st.divider()
 
-st.markdown("""
-**Analysis:**  
-The radar chart highlights consistent performance differences across multiple wellbeing
-dimensions. Selangor scores higher in emotional control, teamwork, and task persistence,
-suggesting stronger overall work functioning and emotional resilience.
-""")
-
-
 # ===============================
-# 6 HEATMAP
+# 6️⃣ HEATMAP
 # ===============================
-st.subheader("6 Heatmap of Wellbeing Scores")
+st.subheader("6️⃣ Heatmap of Mean Wellbeing Scores")
 
 fig6 = px.imshow(
     state_means[variables],
@@ -247,14 +256,6 @@ fig6 = px.imshow(
     y=state_means['state'],
     text_auto=".2f",
     color_continuous_scale='RdBu',
-    title="Heatmap of Mean Wellbeing Scores by State"
+    title="Heatmap of Mean Scores by State"
 )
 st.plotly_chart(fig6, use_container_width=True)
-
-st.markdown("""
-**Analysis:**  
-The heatmap provides a clear visual comparison of mean wellbeing scores across states.
-Darker shades for Selangor across most indicators reinforce earlier findings that
-Selangor respondents generally report higher wellbeing and work functioning.
-""")
-
