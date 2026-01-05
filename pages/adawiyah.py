@@ -324,52 +324,37 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
     selected_dist = st.selectbox(
         "Select Dimension to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
-        key="dist_selector"
+        key="dist_selector_v3"
     )
     
-    # 2. Define Dynamic Interpretations
-    # This dictionary maps the selection to a specific scientific insight
-    interpretations = {
-        'life_satisfaction': """
-            <b>Analysis:</b> This spread shows the group's overall happiness. Bars clustered on the 
-            right (4-5) indicate a high-wellbeing population, while a peak in the middle suggests 
-            neutral or 'stagnant' life satisfaction.
-        """,
-        'social_support_index': """
-            <b>Analysis:</b> This reveals the strength of community ties. If the distribution is 
-            'right-skewed', it confirms that most respondents feel they have a reliable safety net 
-            to lean on during crises.
-        """,
-        'emotion_management_index': """
-            <b>Analysis:</b> This measures internal resilience. A wide spread here suggests that 
-            emotional regulation varies significantly across the group, potentially indicating 
-            a need for more personalized mental health support.
-        """
-    }
+    # 2. Define Dynamic Interpretation Text
+    if selected_dist == 'life_satisfaction':
+        text = "This spread shows the group's overall happiness. Bars clustered on the right indicate a high-wellbeing population, confirming positive life outcomes."
+    elif selected_dist == 'social_support_index':
+        text = "This reveals the strength of community ties. A right-skewed graph proves that respondents feel they have a reliable safety net to lean on."
+    else:
+        text = "This measures internal resilience. A wide spread suggests that emotional regulation varies significantly, indicating areas for personalized support."
 
-    # 3. Create the Histogram (Research Red Theme)
+    # 3. Create the Histogram (Research Red)
     fig3 = px.histogram(
         df, x=selected_dist, nbins=15, 
-        color_discrete_sequence=['#D32F2F'] # Research Red
+        color_discrete_sequence=['#D32F2F'] 
     ) 
     
     fig3.update_layout(
         title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        bargap=0.1,
-        xaxis_title=selected_dist.replace('_', ' ').title(),
-        yaxis_title="Number of Respondents"
+        bargap=0.1
     )
     
-    st.plotly_chart(fig3, use_container_width=True, key="dist_chart_dynamic")
+    st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
     
-    # 4. Dynamic Insight Box
-    # Pulls the text from our dictionary based on the 'selected_dist' variable
+    # 4. Dynamic Interpretation Box (Formatted exactly as you requested)
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
-            <p style="margin: 0; color: #333; font-size: 14px;">
-                {interpretations[selected_dist]}
+            <p style="margin: 0; color: #333;">
+                <b>Interpretation:</b> {text}
             </p>
         </div>
     """, unsafe_allow_html=True)
