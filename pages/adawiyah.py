@@ -219,7 +219,7 @@ st.markdown("---")
 
 # RESEARCH VISUALIZATIONS (UNIFIED PINK THEME) 
 
-st.markdown("## Research Visualizations")
+st.markdown("### Research Visualizations")
 
 # VISUALIZATION 1: CORRELATION HEATMAP 
 with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
