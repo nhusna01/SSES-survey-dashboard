@@ -317,29 +317,60 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
         </div>
     """, unsafe_allow_html=True)
 
-# VISUALIZATION 3: DISTRIBUTION
+# VISUALIZATION 3: DYNAMIC DISTRIBUTION 
 with st.expander("Visualization 3: Distribution of Scores", expanded=False):
-    selected_dist = st.selectbox("Select Dimension:", ['life_satisfaction', 'social_support_index', 'emotion_management_index'])
     
+    # 1. Selection Menu
+    selected_dist = st.selectbox(
+        "Select Dimension to View Distribution:", 
+        ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
+        key="dist_selector"
+    )
     
+    # 2. Define Dynamic Interpretations
+    # This dictionary maps the selection to a specific scientific insight
+    interpretations = {
+        'life_satisfaction': """
+            <b>Analysis:</b> This spread shows the group's overall happiness. Bars clustered on the 
+            right (4-5) indicate a high-wellbeing population, while a peak in the middle suggests 
+            neutral or 'stagnant' life satisfaction.
+        """,
+        'social_support_index': """
+            <b>Analysis:</b> This reveals the strength of community ties. If the distribution is 
+            'right-skewed', it confirms that most respondents feel they have a reliable safety net 
+            to lean on during crises.
+        """,
+        'emotion_management_index': """
+            <b>Analysis:</b> This measures internal resilience. A wide spread here suggests that 
+            emotional regulation varies significantly across the group, potentially indicating 
+            a need for more personalized mental health support.
+        """
+    }
+
+    # 3. Create the Histogram (Research Red Theme)
     fig3 = px.histogram(
         df, x=selected_dist, nbins=15, 
-        color_discrete_sequence=['#D32F2F'] 
+        color_discrete_sequence=['#D32F2F'] # Research Red
     ) 
     
     fig3.update_layout(
         title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        bargap=0.1
+        bargap=0.1,
+        xaxis_title=selected_dist.replace('_', ' ').title(),
+        yaxis_title="Number of Respondents"
     )
     
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, use_container_width=True, key="dist_chart_dynamic")
     
-    st.markdown("""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
-            <b>Interpretation:</b> This histogram shows where most people fall on the scale. A 
-            "right-skewed" graph (more bars on the right) is a positive sign for well-being.
+    # 4. Dynamic Insight Box
+    # Pulls the text from our dictionary based on the 'selected_dist' variable
+    st.markdown(f"""
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+            <p style="margin: 0; color: #333; font-size: 14px;">
+                {interpretations[selected_dist]}
+            </p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -414,7 +445,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
 
     # 5. Scientific Insight Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #B22222;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The "shape" of this web reveals the strengths and weaknesses of the group. 
                 A balanced shape indicates holistic well-being.
@@ -520,7 +551,7 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
 
     # 3. Insight Box
     st.markdown(f"""
-        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> This chart reveals the <b>consistency</b> of emotional management. 
                 If the 'Excellent' health category has a very thin, tall violin, it means their emotional 
