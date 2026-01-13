@@ -42,7 +42,7 @@ dataset_option = st.selectbox(
 
 if dataset_option == "Cleaned Dataset":
     # Cleaned dataset from GitHub raw URL
-    cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/cleaned_group_survey_data.csv"
+    cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/cleaned_group_survey_data.csv"
     try:
         df_current = pd.read_csv(cleaned_url)
     except Exception as e:
