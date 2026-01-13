@@ -306,7 +306,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
 
     # Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
+        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The distribution demonstrates that life satisfaction generally rises in line with social support.
                 Furthermore, the concentration of darker red dots at greater satisfaction levels indicates that overall well-being is significantly strengthened by community safety.
