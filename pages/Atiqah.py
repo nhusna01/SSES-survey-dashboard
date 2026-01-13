@@ -18,8 +18,8 @@ st.set_page_config(
 st.title("🌟 Emotional Wellbeing & Work Functioning Comparison")
 st.markdown("""
 ### *Main Objective*
-To compare emotional wellbeing, health, and work functioning between *Selangor* and *Pahang*,  
-focusing on emotional regulation, calmness under pressure, and overall health outcomes.
+To compare factors that affect working sector between *Selangor* and *Pahang*,  
+focusing on healthcare and working style.
 """)
 
 # ===============================
