@@ -369,8 +369,9 @@ if selected_group:
     st.caption(f"Currently viewing data for: **{selected_group}**")
 
 
+
 # ===============================
-# 🔹 Sub-Objectives Dropdown
+# 🔹 Sub-Objectives Definition
 # ===============================
 subobjectives = {
     "Correlation Between Likert Variables": 
@@ -404,12 +405,6 @@ subobjectives = {
     "and unemployed individuals."
 }
 
-selected_sub = st.selectbox(
-    "Select a sub-objective to explore:",
-    list(subobjectives.keys())
-)
-
-# Icon mapping for visual cue
 objective_icons = {
     "Correlation Between Likert Variables": "📊",
     "Emotional Regulation": "🧠",
@@ -419,6 +414,17 @@ objective_icons = {
     "Wellbeing and Life Satisfaction": "😊"
 }
 
+# ===============================
+# 🔹 Sub-Objective Dropdown
+# ===============================
+selected_sub = st.selectbox(
+    "Select a sub-objective to explore:",
+    list(subobjectives.keys())
+)
+
+# ===============================
+# 🔹 Display Sub-Objective Statement
+# ===============================
 st.markdown(
     f"""
     <div style="
@@ -441,58 +447,72 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+st.markdown("---")
 
 # ===============================
-# 🔹 Filter and plot visualizations per sub-objective
+# 🔹 Visualizations per Sub-Objective
 # ===============================
 
-if selected_sub == "Demographics":
-    demo_cols = ["gender", "age", "education_level", "location"]
-    selected_demo = st.selectbox("Select demographic variable:", [c for c in demo_cols if c in df.columns])
-    
-    fig = px.pie(
-        df,
-        names=selected_demo,
-        hole=0.4,
-        color_discrete_sequence=px.colors.qualitative.Pastel
+# 1️⃣ Correlation Heatmap
+if selected_sub == "Correlation Between Likert Variables":
+
+    likert_cols = [
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
+        'social_support', 'helping_others', 'community_participation',
+        'community_impact', 'life_satisfaction', 'overall_health'
+    ]
+
+    corr_df = df[['employment_status'] + likert_cols].corr()
+
+    fig = px.imshow(
+        corr_df,
+        text_auto=True,
+        aspect="auto",
+        color_continuous_scale=px.colors.sequential.Viridis,
+        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
     )
+
+    fig.update_layout(height=800)
     st.plotly_chart(fig, use_container_width=True)
 
-elif selected_sub == "Wellbeing & Life Satisfaction":
-    wellbeing_cols = [c for c in df.columns if "wellbeing" in c.lower() or "satisfaction" in c.lower()]
-    selected_wellbeing = st.selectbox("Select wellbeing variable:", wellbeing_cols)
-    
+# 6️⃣ Wellbeing & Life Satisfaction
+elif selected_sub == "Wellbeing and Life Satisfaction":
+
+    wellbeing_var = st.selectbox(
+        "Select wellbeing indicator:",
+        ['life_satisfaction', 'overall_health']
+    )
+
     fig = px.bar(
         df,
         x="employment_status",
-        y=selected_wellbeing,
+        y=wellbeing_var,
         color="employment_status",
+        barmode="group",
         color_discrete_sequence=px.colors.sequential.Viridis
     )
+
     st.plotly_chart(fig, use_container_width=True)
 
-elif selected_sub == "Behavioral Traits":
-    behavior_cols = [c for c in df.columns if any(k in c.lower() for k in ["task", "adapt", "belief", "persistence", "learning"])]
-    selected_behavior = st.selectbox("Select behavioral trait:", behavior_cols)
-    
+# 5️⃣ Community Participation
+elif selected_sub == "Community Participation and Social Responsibility":
+
+    community_var = st.selectbox(
+        "Select community indicator:",
+        ['community_participation', 'community_impact']
+    )
+
     fig = px.bar(
         df,
         x="employment_status",
-        y=selected_behavior,
+        y=community_var,
         color="employment_status",
+        barmode="group",
         color_discrete_sequence=px.colors.sequential.Viridis
     )
+
     st.plotly_chart(fig, use_container_width=True)
 
-elif selected_sub == "Community Participation":
-    community_cols = [c for c in df.columns if "community" in c.lower() or "participation" in c.lower()]
-    selected_community = st.selectbox("Select community variable:", community_cols)
-    
-    fig = px.bar(
-        df,
-        x="employment_status",
-        y=selected_community,
-        color="employment_status",
-        color_discrete_sequence=px.colors.sequential.Viridis
-    )
-    st.plotly_chart(fig, use_container_width=True)
+# Placeholder for remaining objectives
+else:
+    st.info("📌 Visualization for this sub-objective will be added next.")
