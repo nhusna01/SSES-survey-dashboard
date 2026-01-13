@@ -107,26 +107,75 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 # ===============================
-# 🔗 Streamlit Interactivity
+# 🔗 Streamlit Interactive Section
 # ===============================
+st.markdown("## 📊 Interactive Data Tools")
+st.markdown("---")
 
 col1, col2, col3 = st.columns(3)
 
+# ------------------------------
+# 1️⃣ View Responses
+# ------------------------------
 with col1:
     if st.button("📋 View Responses"):
-        st.info("Showing dataset preview")
-        st.dataframe(df, use_container_width=True)
+        st.info("Choose which dataset to preview:")
 
+        dataset_option = st.selectbox(
+            "Select Dataset:",
+            options=["Cleaned Dataset", "Raw Dataset"]
+        )
+
+        if dataset_option == "Cleaned Dataset":
+            cleaned_path = "data/cleaned_data.csv"
+            if os.path.exists(cleaned_path):
+                df_cleaned = pd.read_csv(cleaned_path)
+                st.dataframe(df_cleaned, use_container_width=True, height=400)
+            else:
+                st.warning(f"Cleaned dataset not found at {cleaned_path}")
+
+        else:  # Raw Dataset
+            raw_path = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/cleaned_group_survey_data.csv"
+            if os.path.exists(raw_path):
+                df_raw = pd.read_csv(raw_path)
+                st.dataframe(df_raw, use_container_width=True, height=400)
+            else:
+                st.warning(f"Raw dataset not found at {raw_path}")
+
+# ------------------------------
+# 2️⃣ Explore Variables
+# ------------------------------
 with col2:
     if st.button("🧩 Explore Variables"):
-        st.info("Showing variable list")
-        st.write(df.columns.tolist())
+        st.info("Interactive variable table")
+        if "df" in st.session_state:
+            # Show variable names in a dataframe to make it interactive
+            var_df = pd.DataFrame({"Variable Name": st.session_state.df.columns})
+            st.dataframe(var_df, use_container_width=True, height=400)
+        else:
+            st.warning("Dataset not loaded yet!")
 
+# ------------------------------
+# 3️⃣ Inspect Missing Values
+# ------------------------------
 with col3:
     if st.button("⚠️ Inspect Missing Data"):
-        st.info("Showing missing values summary")
-        st.write(df.isna().sum())
+        st.info("Missing values in the cleaned dataset")
+        cleaned_path = "data/cleaned_data.csv"
+        if os.path.exists(cleaned_path):
+            df_cleaned = pd.read_csv(cleaned_path)
+            missing_df = df_cleaned.isna().sum().reset_index()
+            missing_df.columns = ["Variable", "Missing Values"]
+            # Show only variables with missing values > 0
+            missing_df = missing_df[missing_df["Missing Values"] > 0]
+            if missing_df.empty:
+                st.success("No missing values found in cleaned dataset!")
+            else:
+                st.dataframe(missing_df, use_container_width=True, height=400)
+        else:
+            st.warning(f"Cleaned dataset not found at {cleaned_path}")
 
 
 
