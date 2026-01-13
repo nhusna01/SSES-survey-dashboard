@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import pandas as pd
 
 # Check if data exists in session state before proceeding
 if "df" not in st.session_state:
