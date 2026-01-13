@@ -320,7 +320,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
     
     # 1. Selection Menu
     selected_dist = st.selectbox(
-        "Select Dimension to View Distribution:", 
+        "Select Index to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
         key="dist_selector_v3"
     )
