@@ -59,7 +59,6 @@ st.markdown("""
 /* ===== Animated Gradient Divider ===== */
 st.markdown("""
 <style>
-/* Animated gradient divider */
 .animated-divider {
     width: 100%;
     height: 5px;          /* must be inside the string */
