@@ -120,30 +120,30 @@ col1, col2, col3 = st.columns(3)
 # ------------------------------
 # 1️⃣ View Responses
 # ------------------------------
-with col1:
-    if st.button("📋 View Responses"):
-        st.info("Choose which dataset to preview:")
+st.markdown("## 📋 Select Dataset to Work With")
+dataset_option = st.selectbox(
+    "Select Dataset:",
+    options=["Cleaned Dataset", "Raw Dataset"]
+)
 
-        dataset_option = st.selectbox(
-            "Select Dataset:",
-            options=["Cleaned Dataset", "Raw Dataset"]
-        )
+# Load dataset based on selection
+if dataset_option == "Cleaned Dataset":
+    cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/cleaned_group_survey_data.csv"
+    try:
+        st.session_state.selected_df = pd.read_csv(cleaned_url)
+    except Exception as e:
+        st.error(f"Error loading cleaned dataset from GitHub: {e}")
+        st.stop()
+else:  # Raw Dataset from Google Sheet
+    try:
+        st.session_state.selected_df = pd.read_csv(GOOGLE_SHEET_URL)
+    except Exception as e:
+        st.error(f"Error loading raw dataset from Google Sheet: {e}")
+        st.stop()
 
-        if dataset_option == "Cleaned Dataset":
-            # Local cleaned dataset path
-            cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/cleaned_group_survey_data.csv"
-            try:
-                df_cleaned = pd.read_csv(cleaned_url)
-                st.dataframe(df_cleaned, use_container_width=True, height=400)
-            except Exception as e:
-                st.error(f"Error loading cleaned dataset from GitHub: {e}")
+# Shortcut for current dataset
+df_current = st.session_state.selected_df
 
-        else:  # Raw Dataset from Google Sheet
-            try:
-                df_raw = pd.read_csv(GOOGLE_SHEET_URL)
-                st.dataframe(df_raw, use_container_width=True, height=400)
-            except Exception as e:
-                st.error(f"Error loading raw dataset from Google Sheet: {e}")
 
 # ------------------------------
 # 2️⃣ Explore Variables
@@ -178,27 +178,30 @@ with col3:
         else:
             st.warning(f"Cleaned dataset not found at {cleaned_path}")
 
-
 with st.expander("🔍 View Dataset Preview"):
-    st.dataframe(df, use_container_width=True)
+    st.dataframe(df_current, use_container_width=True)
+
     
 with st.expander("📈 View Summary Statistics"):
-    st.write(df.describe(include="all"))
+    st.write(df_current.describe(include="all"))
 
-# Demographics
 st.subheader("👥 Demographic Analysis")
+demo_options = ['gender', 'age', 'location', 'education_level']
+demo_options = [col for col in demo_options if col in df_current.columns]
 demo_col = st.selectbox(
     "Select Demographic Variable to Visualize",
-    options=['gender', 'age', 'location', 'education_level'] if 'gender' in df.columns else df.columns
+    options=demo_options if demo_options else df_current.columns
 )
+
 col1, col2 = st.columns([2, 1])
 with col1:
-    fig = px.pie(df, names=demo_col, hole=0.4,
+    fig = px.pie(df_current, names=demo_col, hole=0.4,
                 title=f"Distribution of {demo_col.replace('_',' ').title()}",
                 color_discrete_sequence=px.colors.qualitative.Pastel)
     st.plotly_chart(fig, use_container_width=True)
+
 with col2:
-    st.dataframe(df[demo_col].value_counts(), use_container_width=True)
+    st.dataframe(df_current[demo_col].value_counts(), use_container_width=True)
 
 
 
