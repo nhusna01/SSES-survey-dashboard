@@ -239,7 +239,8 @@ employment_mapping = {
 }
 
 attribute_cols = [
-    "calm_under_pressure", "cheerful", "task_persistence",
+    "calm_under_pressure", "cheerful", 
+    "enjoy_learning", "task_persistence",
     "social_support", "helping_others",
     "community_participation", "community_impact",
     "life_satisfaction", "overall_health"
@@ -369,31 +370,23 @@ if selected_group:
     st.caption(f"Currently viewing data for: **{selected_group}**")
 
 
-
-# ===============================
-# Streamlit App: Chapters 1-6
-# ===============================
-import streamlit as st
-import pandas as pd
-import plotly.express as px
-
 # -----------------------------
 # 🔹 Sub-Objectives Definition
 # -----------------------------
 subobjectives = {
     "Correlation Between Likert Variables": 
     "1️⃣ **Correlation Between Likert Variables**\n\n"
-    "To examine the relationships among Likert-scale variables related to social, emotional, wellbeing, "
+    "To examine the relationships among Likert-scale variables related to social, emotional, well-being, "
     "and community attributes across different employment status groups.",
 
     "Social & Emotional Skills": 
     "2️⃣ **Social & Emotional Skills**\n\n"
-    "To compare emotional regulation skills (including emotional control, calmness under pressure, "
-    "cheerfulness, and restfulness) among students, employed, and unemployed individuals.",
+    "To compare emotional regulation skills (including emotional regulation, personal, "
+    "social skills, and interaction) among students, employed, and unemployed individuals.",
 
     "Task Persistence & Enjoy Learning": 
     "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
-    "To examine variations in self-management and personal development skills, such as task persistence "
+    "To examine variations in self-management and personal development skills, such as task persistence, "
     "and enjoyment of learning, across different employment status groups.",
 
     "Social Skills Grouped Bar Chart": 
@@ -408,7 +401,7 @@ subobjectives = {
 
     "Wellbeing and Life Satisfaction": 
     "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-    "To assess differences in overall wellbeing and life satisfaction across students, employed, "
+    "To assess differences in overall well-being and life satisfaction across students, employed, "
     "and unemployed individuals."
 }
 
@@ -457,11 +450,11 @@ df['employment_status_label'] = df['employment_status'].map({
     'UNEMPLOYED': 'Unemployed'
 })
 
-# Consistent bright color map
+# Consistent bright Viridis-style color map
 color_map = {
-    'EMPLOYED': '#1f77b4',   # Blue
-    'STUDENT': '#ff7f0e',    # Orange
-    'UNEMPLOYED': '#2ca02c'  # Green
+    'EMPLOYED': '#440154',   # Dark purple
+    'STUDENT': '#21918c',    # Bright teal
+    'UNEMPLOYED': '#fde725'  # Bright yellow
 }
 
 # ===============================
@@ -489,8 +482,8 @@ if selected_sub == "Correlation Between Likert Variables":
 
     st.markdown("""
     **Interpretation:**
-    - Strong positive correlations exist between certain social and emotional skills, e.g., `social_support` and `helping_others`.
-    - Community engagement variables are moderately correlated with overall wellbeing.
+    - Strong positive correlations exist between certain social and emotional skills, including, `social_support` and `helping_others`.
+    - Community engagement variables are moderately correlated with overall well-being.
     - Correlation heatmap helps identify relationships for further statistical modeling or interventions.
     """)
 
