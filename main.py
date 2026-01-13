@@ -5,6 +5,13 @@ import base64
 from pathlib import Path
 from preprocess import load_data
 
+# Path to your local dataset
+DATA_PATH = Path("/content/cleaned_group_survey_data.csv")
+
+@st.cache_data(ttl=15)   # refresh every 15 seconds
+def load_data():
+    df = pd.read_csv(DATA_PATH)
+    return df
 
 
 # SET PAGE CONFIG 
