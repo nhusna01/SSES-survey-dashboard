@@ -30,24 +30,9 @@ st.markdown("""
 <img class="top-right-logo" src="https://img.icons8.com/color/64/000000/brain.png">
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
-.animated-divider {
-    height: 4px;
-    width: 100%;
-    background: linear-gradient(90deg, #6a5acd, #9370db, #6a5acd);
-    background-size: 200% 100%;
-    animation: shimmer 2.5s linear infinite;
-    border-radius: 10px;
-    margin: 32px 0;
-}
-
-@keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-}
-</style>
-""", unsafe_allow_html=True)
+st.markdown("### Divider Test Below")
+st.markdown('<div class="animated-divider"></div>', unsafe_allow_html=True)
+st.markdown("### Divider Test Above")
 
 # ------------------------------
 # 🔗 Dataset Selector (Cleaned / Raw)
