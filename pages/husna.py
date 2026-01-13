@@ -269,29 +269,38 @@ st.markdown("""
     box-shadow: 0 10px 24px rgba(106,13,173,0.25);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;     /* CENTER vertically */
+    align-items: center;         /* CENTER horizontally */
+    text-align: center;
 }
+
+.icon-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: center;     /* CENTER icons */
+    margin-bottom: 6px;
+}
+
+.summary-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2E0854;
+    margin: 4px 0;
+}
+
 .summary-title {
     font-size: 15px;
     font-weight: 600;
     color: #4B0082;
 }
-.summary-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #2E0854;
-}
-.icon-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+
 .info-icon {
     font-size: 15px;
     cursor: help;
 }
 </style>
-""", unsafe_allow_html=True)
+
 
 # -------------------- LAYOUT --------------------
 col1, col2, col3, col4 = st.columns(4)
