@@ -268,11 +268,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
 # VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT 
 with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     
-    sc_col1, sc_col2 = st.columns([2, 2])
-    with sc_col1:
-        show_trend = st.toggle("Show Analysis Trendline", value=True)
-    with sc_col2:
-        point_size = st.slider("Point Size", 5, 20, 10)
+    
 
     # UPDATED: color_continuous_scale set to 'Reds' for consistency
     fig2 = px.scatter(
