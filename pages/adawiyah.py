@@ -259,9 +259,8 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
         st.markdown(f"""
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
-                    <b>Interpretation:</b> Darker squares indicate a stronger relationship. For example, a dark 
-                    connection between <b>Social Support</b> and <b>Satisfaction</b> confirms that community 
-                    is a key driver of well-being.
+                    <b>Interpretation:</b> Health, emotional control, and social safety are all factors that contribute to life satisfaction. 
+                    Safety and support have a strong 0.68 correlation, which shows that community-level actions could set the basis to increase happiness levels.
                 </p>
             </div>
         """, unsafe_allow_html=True)
@@ -311,8 +310,8 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The rising trendline (in dark red) mathematically proves that as 
-                <b>Social Support</b> increases, <b>Life Satisfaction</b> follows.
+                <b>Interpretation:</b> The increasing trendline quantitatively demonstrates that life satisfaction rises in line with social support.
+                Furthermore, the concentration of darker red dots at greater satisfaction levels indicates that overall well-being is significantly multiplied by community safety.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -329,11 +328,11 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=False):
     
     # 2. Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
-        text = "This spread shows the group's overall happiness. Bars clustered on the right indicate a high-wellbeing population, confirming positive life outcomes."
+        text = "The distribution skews to the right, indicating that most respondents have moderate-to-high life satisfaction, with levels 3 and 4 being the highest. Only a small percentage of the studied population reported poor levels of satisfaction, indicating a generally pleasant psychological state."
     elif selected_dist == 'social_support_index':
-        text = "This reveals the strength of community ties. A right-skewed graph proves that respondents feel they have a reliable safety net to lean on."
+        text = "With a dominant peak at the 3.5 index level, the majority of respondents fell into the middle-to-high range of social support. This suggests a fairly consistent, mid-high level of perceived support across the group, even while the community feels generally supported and there are few people at the ends of the scale."
     else:
-        text = "This measures internal resilience. A wide spread suggests that emotional regulation varies significantly, indicating areas for personalized support."
+        text = "The group as a whole have a wide range of emotional regulation abilities, with level 3 having the highest concentration of respondents. There is a significant cluster of people at the lower end of the scale who would benefit from further psychological help, even if a significant percentage of the group exhibits great resilience (levels 4 and 5)."
 
     # 3. Create the Histogram (Research Red)
     fig3 = px.histogram(
@@ -432,8 +431,8 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The "shape" of this web reveals the strengths and weaknesses of the group. 
-                A balanced shape indicates holistic well-being.
+                <b>Interpretation:</b> A balanced psychological profile is shown by the radar chart, with all dimensions regularly averaging between 3.5 and 4.0. 
+                The group's overall well-being is shown by this symmetrical diamond shape, which indicates internal emotional regulation and external environmental factors like safety and support are in balance.
             </p>
         </div>
     """, unsafe_allow_html=True)
@@ -487,9 +486,8 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
         st.markdown(f"""
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
-                    <b>Interpretation:</b> This chart shows the 'Average' satisfaction level at every 
-                    safety rank. If the climb is steady, it suggests that <b>Environmental Safety</b> is 
-                    not just a luxury, but a core <b>foundation</b> for individual well-being.
+                    <b>Interpretation:</b> The bar chat clearly shows a positive trend, with the Average Satisfaction rising steadily as the Community Safety Level goes from 2 to 5. 
+                    Although the anomaly at safety level 2 demonstrates that a tiny segment of the population may still report high satisfaction despite decreased perceived safety, this suggests that a secure environment serves as a crucial basis for individual happiness.
                 </p>
             </div>
         """, unsafe_allow_html=True)
@@ -538,9 +536,8 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> This chart reveals the <b>consistency</b> of emotional management. 
-                If the 'Excellent' health category has a very thin, tall violin, it means their emotional 
-                control is highly stable and high-performing.
+                <b>Interpretation:</b> This graph shows that as health improves, emotional regulation becomes more reliable. 
+                The respondents with "Excellent" health (Level 5) have the most steady and effective emotional resilience, as evidenced by the violins' changing fatness.
             </p>
         </div>
     """, unsafe_allow_html=True)
