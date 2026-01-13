@@ -32,7 +32,7 @@ st.markdown("""
 /* Bottom-right floating icon */
 .bottom-right-logo {
     position: absolute;
-    bottom: 10px;
+    bottom: 20px;
     right: 20px;
     height: 60px;
 }
