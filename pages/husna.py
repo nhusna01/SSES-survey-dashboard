@@ -53,7 +53,7 @@ st.markdown("""
 
 /* ---------- Animated Divider ---------- */
 .divider {
-    height: 2px;
+    height: 4px;
     width: 100%;
     background: linear-gradient(
         90deg,
@@ -63,7 +63,7 @@ st.markdown("""
         #7C3AED
     );
     background-size: 300% 100%;
-    border-radius: 6px;
+    border-radius: 3px;
     animation: gradientMove 6s ease infinite;
     margin: 1.4rem 0 2.2rem 0;
 }
