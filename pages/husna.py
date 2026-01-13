@@ -94,20 +94,22 @@ df = load_data(DATA_URL)
 # ===============================
 # 🧩 MAIN OBJECTIVE
 # ===============================
+import streamlit as st
+
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-   .main-objectives-box {
-    font-family: 'Inter', sans-serif;
-    border-left: 6px solid #6A0DAD;
-    background-color: #f6f1fb;
-    padding: 1rem 1.5rem;   /* Reduced padding */
-    border-radius: 10px;     /* Slightly smaller rounded corners */
-    margin-bottom: 1.5rem;   /* Reduce spacing below */
-    max-width: 650px;         /* Reduce width */
-}
+    .main-objectives-box {
+        font-family: 'Inter', sans-serif;
+        border-left: 6px solid #6A0DAD;
+        background-color: #f6f1fb;
+        padding: 1rem 1.5rem;   /* Reduced padding */
+        border-radius: 10px;     /* Slightly smaller rounded corners */
+        margin-bottom: 1.5rem;   /* Reduce spacing below */
+        max-width: 650px;         /* Reduce width */
+    }
 
     .main-objectives-title {
         font-size: 26px;
@@ -135,6 +137,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 
 # ===============================
 # 📋 DATA SUMMARY
