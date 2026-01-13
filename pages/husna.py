@@ -93,7 +93,6 @@ df = load_data(DATA_URL)
 # ===============================
 # 🧩 MAIN OBJECTIVE
 # ===============================
-import streamlit as st
 
 st.markdown(
     """
@@ -399,6 +398,9 @@ selected_sub = st.sidebar.selectbox(
     list(subobjectives.keys())
 )
 
+# Add space
+st.markdown("<br><br>", unsafe_allow_html=True)
+        
 # -----------------------------
 # Employment Status Filter
 # -----------------------------
@@ -671,9 +673,47 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 # ===============================
 # Overall Conclusion
 # ===============================
-st.markdown(f"""
-<div style='background-color:{color_map['EMPLOYED']}; padding: 15px; border-radius: 10px;'>
-<b style='color:white;'>Overall Conclusion:</b><br>
-After reviewing all visualizations, the Grouped Bar Chart and Radar Chart are most effective for comparing skill levels across employment status. Social skills variables such as `social_support` and `helping_others` are most strongly correlated with overall wellbeing outcomes. These charts allow rapid identification of key areas for interventions and clearly show differences among EMPLOYED, STUDENT, and UNEMPLOYED participants.
-</div>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <style>
+    .conclusion-box {
+        font-family: 'Inter', sans-serif;
+        border-left: 6px solid #6A0DAD;        /* Same purple */
+        background-color: #f6f1fb;             /* Same light background */
+        padding: 1.5rem 2rem;
+        border-radius: 15px;
+        margin-top: 3rem;
+        max-width: 1000px;
+    }
+
+    .conclusion-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #4B0082;
+        margin-bottom: 0.8rem;
+    }
+
+    .conclusion-text {
+        font-size: 17px;
+        font-weight: 400;
+        color: #2f2f2f;
+        line-height: 1.7;
+    }
+    </style>
+
+    <div class="conclusion-box">
+        <div class="conclusion-title">📌 Overall Conclusion</div>
+        <div class="conclusion-text">
+            The analysis demonstrates that social and emotional skills, task persistence, 
+            community participation, and wellbeing show meaningful variation across employment 
+            status groups. Correlation analysis indicates that social support, helping others, 
+            and community participation are most strongly associated with life satisfaction 
+            and overall health, directly supporting the main research objective. Among the 
+            visualizations, the correlation heatmap and grouped bar charts are the most suitable 
+            for identifying key relationships and group differences, as they clearly reveal 
+            both strength of associations and comparative patterns across employment categories.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
