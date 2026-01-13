@@ -5,33 +5,78 @@ import plotly.express as px
 # ===============================
 # 🧠 PAGE TITLE CONFIGURATION
 # ===============================
+import streamlit as st
+
+# --------------------
+# Streamlit UI - Enhanced Title
+# --------------------
 st.markdown(
-    """
-    <div style="
-        text-align: center;
-        margin-bottom: 2rem;
-        font-family: 'Inter', sans-serif;
-    ">
-        <h1 style="
-            font-size: 32px;
-            font-weight: 700;
-            color: #3A0CA3;
-            margin-bottom: 0.3rem;
-        ">
-            📌 Comparative Analysis Across Employment Status Groups
-        </h1>
-        <p style="
-            font-size: 17px;
-            font-weight: 400;
-            color: #555;
-            line-height: 1.5;
-        ">
-            Exploring demographic characteristics, wellbeing, behavioral traits, and community participation
-        </p>
-    </div>
-    """,
+    '<div class="center-title">📌 Comparative Analysis Across Employment Status Groups</div>',
     unsafe_allow_html=True
 )
+
+st.markdown(
+    '<div class="subtitle">Exploring demographic characteristics, wellbeing, behavioral traits, and community participation</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
+
+# ---------- Enhanced Custom CSS ----------
+st.markdown("""
+<style>
+
+/* ---------- Main Title ---------- */
+.center-title {
+    text-align: center;
+    font-size: 2.6rem;
+    font-weight: 900;
+    margin-bottom: 0.4rem;
+    background: linear-gradient(90deg, #2563EB, #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.3s ease;
+}
+
+.center-title:hover {
+    transform: scale(1.02);
+}
+
+/* ---------- Subtitle ---------- */
+.subtitle {
+    text-align: center;
+    font-size: 1.15rem;
+    color: #64748B;
+    margin-bottom: 1.6rem;
+    letter-spacing: 0.3px;
+}
+
+/* ---------- Animated Divider ---------- */
+.divider {
+    height: 4px;
+    width: 100%;
+    background: linear-gradient(
+        90deg,
+        #2563EB,
+        #22C55E,
+        #F97316,
+        #7C3AED
+    );
+    background-size: 300% 100%;
+    border-radius: 6px;
+    animation: gradientMove 6s ease infinite;
+    margin: 1.4rem 0 2.2rem 0;
+}
+
+/* Divider animation */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 
 # -------------------------------
