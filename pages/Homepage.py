@@ -55,10 +55,14 @@ st.markdown("""
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
 """, unsafe_allow_html=True)
 
+
 /* ===== Animated Gradient Divider ===== */
+st.markdown("""
+<style>
+/* Animated gradient divider */
 .animated-divider {
     width: 100%;
-    height: 5px;
+    height: 5px;          /* must be inside the string */
     border-radius: 8px;
     margin: 1.8rem 0 2.4rem 0;
     background: linear-gradient(
@@ -73,13 +77,14 @@ st.markdown("""
     animation: dividerFlow 5s linear infinite;
 }
 
-/* Animation */
+/* Animation keyframes */
 @keyframes dividerFlow {
     0% { background-position: 0% 50%; }
     100% { background-position: 400% 50%; }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 st.markdown('<div class="animated-divider"></div>', unsafe_allow_html=True)
 
