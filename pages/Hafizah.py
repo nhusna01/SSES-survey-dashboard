@@ -107,9 +107,11 @@ st.plotly_chart(fig1, use_container_width=True)
 st.markdown("### 📋 Key Findings: Likert Distribution")
 st.dataframe((likert_dist * 100).round(2), use_container_width=True)
 
-st.success("""
-Most respondents selected higher agreement levels (4–5),
-indicating generally positive emotional resilience across attributes.
+st.info("""
+**Interpretation:**  
+The distribution shows a strong concentration of responses at agreement levels 4 and 5
+across all attributes, indicating generally high emotional resilience and positive
+personal development tendencies among respondents.
 """)
 
 # ======================================
@@ -143,6 +145,13 @@ desc_table = pd.DataFrame({
 
 st.dataframe(desc_table, use_container_width=True)
 
+st.info("""
+**Interpretation:**  
+The radar chart highlights relative strengths and weaknesses across attributes.
+Attributes with larger radial values represent stronger perceived competencies,
+allowing multidimensional comparison in a single visual.
+""")
+
 # ======================================
 # 3️⃣ CORRELATION HEATMAP
 # ======================================
@@ -170,6 +179,13 @@ corr_pairs["Attribute 2"] = corr_pairs["Attribute 2"].str.replace("_"," ").str.t
 
 st.table(corr_pairs.sort_values(by="Correlation", ascending=False).head(5))
 
+st.info("""
+**Interpretation:**  
+Positive correlations indicate that improvements in one emotional resilience attribute
+are associated with improvements in others, suggesting interdependence among personal
+development factors.
+""")
+
 # ======================================
 # 4️⃣ VARIABILITY (BOXPLOT)
 # ======================================
@@ -187,6 +203,12 @@ variability_table = pd.DataFrame({
     "Std Dev": df[attributes].std().round(2).values
 })
 st.dataframe(variability_table, use_container_width=True)
+
+st.info("""
+**Interpretation:**  
+Attributes with narrower interquartile ranges indicate greater response consistency,
+while wider spreads suggest variation in individual emotional resilience experiences.
+""")
 
 # ======================================
 # 5️⃣ SENTIMENT ANALYSIS
@@ -219,6 +241,12 @@ st.plotly_chart(fig5, use_container_width=True)
 st.markdown("### 📋 Key Findings: Sentiment Breakdown")
 st.dataframe(sentiment_df.round(2), use_container_width=True)
 
+st.info("""
+**Interpretation:**  
+The dominance of agreement over disagreement confirms overall positive emotional
+resilience perceptions, while neutral responses indicate areas where opinions are mixed.
+""")
+
 # ======================================
 # 6️⃣ ATTRIBUTE PRIORITY (TREEMAP)
 # ======================================
@@ -243,6 +271,12 @@ st.markdown("### 📋 Key Findings: Attribute Ranking")
 priority_df.index += 1
 st.table(priority_df.rename_axis("Rank"))
 
+st.info("""
+**Interpretation:**  
+Higher-ranked attributes represent strengths within the respondent group, while
+lower-ranked attributes highlight potential areas for targeted personal development.
+""")
+
 # ======================================
 # CONCLUSION
 # ======================================
@@ -250,10 +284,11 @@ st.markdown("---")
 st.subheader("🏁 Conclusion")
 
 st.success(f"""
-The findings indicate that respondents generally demonstrate strong emotional
-resilience, particularly in **{strongest_attr}**. However, **{weakest_attr}**
-represents an area requiring targeted development.
+The analysis demonstrates generally strong emotional resilience among respondents,
+with **{strongest_attr}** emerging as the most prominent strength. In contrast,
+**{weakest_attr}** represents a comparatively weaker area that may benefit from
+focused developmental interventions.
 
-Correlation analysis suggests emotional regulation plays a foundational role,
-influencing adaptability, motivation, and teamwork skills.
+Overall, the findings support the importance of emotional regulation as a foundational
+component influencing adaptability, motivation, and teamwork skills.
 """)
