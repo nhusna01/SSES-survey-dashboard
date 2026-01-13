@@ -4,6 +4,7 @@ import os
 import base64
 from pathlib import Path
 from preprocess import load_data
+from configuration import GOOGLE_SHEET_URL
 
 GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1_7nl2F8Vfd90h8ce2TreDW5D_m3WHr6vEFtg10xz3BI/export?format=csv&gid=1821075619"
 
