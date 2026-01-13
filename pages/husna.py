@@ -516,6 +516,13 @@ elif selected_sub == "Social & Emotional Skills":
     - UNEMPLOYED participants have lower scores, highlighting areas for support.  
     - Radar chart efficiently visualizes multiple skills at once for quick comparison.
     """)
+    st.markdown(f"""
+    **Interpretation:**
+    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
+    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
+    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+    - {interpretations[selected_var][3]}
+    """, unsafe_allow_html=True)
 
 # ===============================
 # 3️⃣ Task Persistence & Enjoy Learning
@@ -556,6 +563,13 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         - UNEMPLOYED participants have more outliers, indicating individual differences.  
         - Box plot highlights distribution and spread for task persistence and enjoyment.
         """)
+        st.markdown(f"""
+        **Interpretation:**
+        - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
+        - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
+        - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+        - {interpretations[selected_var][3]}
+        """, unsafe_allow_html=True)
 
 # ===============================
 # 4️⃣ Social Skills Grouped Bar Chart
@@ -588,6 +602,13 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
     - UNEMPLOYED participants score lower, highlighting areas for potential interventions.  
     - Grouped bar chart provides clear side-by-side comparison of multiple skills.
     """)
+    st.markdown(f"""
+    **Interpretation:**
+    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
+    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
+    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+    - {interpretations[selected_var][3]}
+    """, unsafe_allow_html=True)
 
 # ===============================
 # 5️⃣ Community Participation
@@ -621,6 +642,13 @@ elif selected_sub == "Community Participation":
     - UNEMPLOYED participants have the lowest participation scores.  
     - Sunburst chart visually emphasizes contribution to each community skill.
     """)
+    st.markdown(f"""
+    **Interpretation:**
+    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
+    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
+    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+    - {interpretations[selected_var][3]}
+    """, unsafe_allow_html=True)
 
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction
@@ -704,14 +732,12 @@ st.markdown(
     <div class="conclusion-box">
         <div class="conclusion-title">📌 Overall Conclusion</div>
         <div class="conclusion-text">
-            The analysis demonstrates that social and emotional skills, task persistence, 
-            community participation, and wellbeing show meaningful variation across employment 
-            status groups. Correlation analysis indicates that social support, helping others, 
-            and community participation are most strongly associated with life satisfaction 
-            and overall health, directly supporting the main research objective. Among the 
-            visualizations, the correlation heatmap and grouped bar charts are the most suitable 
-            for identifying key relationships and group differences, as they clearly reveal 
-            both strength of associations and comparative patterns across employment categories.
+            The findings indicate that social and emotional skills, community participation,
+            and well-being differ across employment status groups. Variables such as social support,
+            helping others, and community participation show strong associations with life satisfaction
+            and overall health, aligning with the study’s main objective. The correlation heatmap and grouped 
+            bar charts are particularly effective in highlighting key relationships and comparative patterns 
+            among employment categories.
         </div>
     </div>
     """,
