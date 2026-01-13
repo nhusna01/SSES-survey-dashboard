@@ -108,7 +108,7 @@ st.markdown(
         padding: 1.5rem 2rem;   /* Original padding */
         border-radius: 15px;     /* Original rounded corners */
         margin-bottom: 8rem;   /* Original spacing below */
-        max-width: 800px;         /* Original width */
+        max-width: 1000px;         /* Original width */
     }
 
     .main-objectives-title {
