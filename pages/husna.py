@@ -229,6 +229,14 @@ elif summary_option == "Missing Values Summary":
 
 st.subheader("📊 Performance Metrics")
 
+import streamlit as st
+import pandas as pd
+
+# Example: assume df is already loaded
+# df = pd.read_csv("your_dataset.csv")
+
+st.subheader("📊 Summary Metrics Across Key Attributes")
+
 # Ensure session state exists
 if "selected_objective" not in st.session_state:
     st.session_state.selected_objective = None
@@ -238,7 +246,7 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-.summary-card {
+div.stButton > button {
     height: 140px;
     width: 100%;
     font-family: 'Inter', sans-serif;
@@ -250,14 +258,10 @@ st.markdown("""
     border-radius: 18px;
     box-shadow: 0 8px 22px rgba(106,13,173,0.18);
     transition: all 0.25s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
+    white-space: pre-line;
     text-align: center;
 }
-.summary-card:hover {
+div.stButton > button:hover {
     transform: translateY(-5px);
     box-shadow: 0 14px 30px rgba(106,13,173,0.35);
     background: linear-gradient(145deg, #ede3ff, #e0d3ff);
@@ -270,51 +274,54 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Compute summary metrics ---
-total_participants = len(df)
+# --- Define metrics ---
 
-# Employment
+# 1️⃣ Employment Groups
 employment_col = next((c for c in df.columns if "employment" in c.lower() or "status" in c.lower()), None)
-employment_groups = df[employment_col].nunique() if employment_col else "N/A"
-employment_details = df[employment_col].unique().tolist() if employment_col else []
+employment_count = df[employment_col].nunique() if employment_col else "N/A"
+employment_details = ", ".join(df[employment_col].unique().astype(str)) if employment_col else "N/A"
 
-# Wellbeing
-wellbeing_cols = [c for c in df.columns if "wellbeing" in c.lower() or "satisfaction" in c.lower()]
-avg_wellbeing = round(df[wellbeing_cols].mean().mean(), 2) if wellbeing_cols else "N/A"
-wellbeing_details = wellbeing_cols
+# 2️⃣ Total Attributes
+attribute_cols = [
+    "calm_under_pressure", "cheerful", "task_persistence", "social_support",
+    "helping_others", "community_participation", "community_impact",
+    "life_satisfaction", "overall_health"
+]
+total_attributes = len(attribute_cols)
+attributes_details = ", ".join(attribute_cols)
 
-# Community Participation
-community_cols = [c for c in df.columns if "community" in c.lower() or "participation" in c.lower()]
-community_rate = (
-    f"{round(df[community_cols].notna().mean().mean() * 100, 1)}%" if community_cols else "N/A"
-)
-community_details = community_cols
+# 3️⃣ Average Overall Health
+overall_health_col = "overall_health"
+avg_health = round(df[overall_health_col].mean(), 2) if overall_health_col in df.columns else "N/A"
+health_details = f"Average of column: {overall_health_col}"
 
-# --- Render summary cards ---
+# 4️⃣ Average Community Participation
+community_cols = ["community_participation", "community_impact"]
+avg_community = round(df[community_cols].mean().mean(), 2) if all(c in df.columns for c in community_cols) else "N/A"
+community_details = f"Average of columns: {', '.join(community_cols)}"
+
+# --- Render clickable summary cards ---
 col1, col2, col3, col4 = st.columns(4)
 
-def render_card(value, title, details):
-    """Render a summary card with hoverable tooltip for details."""
-    tooltip_text = ", ".join([str(d) for d in details])
-    st.markdown(f"""
-    <div class="summary-card">
-        <div style="font-size:28px;">{value}</div>
-        <div>{title} <span style="font-size:14px;">&#x2753;</span></div>
-        <div class="summary-tooltip" title="{tooltip_text}">Hover for details</div>
-    </div>
-    """, unsafe_allow_html=True)
-
 with col1:
-    render_card(total_participants, "Total Participants", ["All respondents in dataset"])
+    st.button(f"👥\n{employment_count}\nEmployment Groups", key="employment")
+    st.markdown(f"<div class='summary-tooltip' title='{employment_details}'>Hover for details</div>",
+                unsafe_allow_html=True)
 
 with col2:
-    render_card(employment_groups, "Employment Groups", employment_details)
+    st.button(f"🧩\n{total_attributes}\nTotal Attributes", key="attributes")
+    st.markdown(f"<div class='summary-tooltip' title='{attributes_details}'>Hover for details</div>",
+                unsafe_allow_html=True)
 
 with col3:
-    render_card(avg_wellbeing, "Average Wellbeing Score", wellbeing_details)
+    st.button(f"❤️\n{avg_health}\nAvg Overall Health", key="health")
+    st.markdown(f"<div class='summary-tooltip' title='{health_details}'>Hover for details</div>",
+                unsafe_allow_html=True)
 
 with col4:
-    render_card(community_rate, "Community Participation Rate", community_details)
+    st.button(f"🏘️\n{avg_community}\nAvg Community Participation", key="community")
+    st.markdown(f"<div class='summary-tooltip' title='{community_details}'>Hover for details</div>",
+                unsafe_allow_html=True)
 
 
 selected_group = st.segmented_control(
@@ -333,7 +340,6 @@ if selected_group:
     st.caption(f"Currently viewing data for: **{selected_group}**")
 
 
-
 # ===============================
 # 🔹 Sub-Objectives Dropdown
 # ===============================
@@ -343,7 +349,6 @@ subobjectives = {
     "Behavioral Traits": "③ Visualization: Behavioral Traits Across Employment Status",
     "Community Participation": "④ Visualization: Community Participation Across Employment Status"
 }
-
 selected_sub = st.selectbox(
     "Select a sub-objective to explore:",
     list(subobjectives.keys())
