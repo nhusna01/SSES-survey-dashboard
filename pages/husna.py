@@ -105,10 +105,10 @@ st.markdown(
         font-family: 'Inter', sans-serif;
         border-left: 6px solid #6A0DAD;
         background-color: #f6f1fb;
-        padding: 1rem 1.5rem;   /* Reduced padding */
-        border-radius: 10px;     /* Slightly smaller rounded corners */
-        margin-bottom: 1.5rem;   /* Reduce spacing below */
-        max-width: 650px;         /* Reduce width */
+        padding: 1.5rem 2rem;   /* Original padding */
+        border-radius: 15px;     /* Original rounded corners */
+        margin-bottom: 2rem;   /* Original spacing below */
+        max-width: 700px;         /* Original width */
     }
 
     .main-objectives-title {
