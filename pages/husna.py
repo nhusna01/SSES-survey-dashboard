@@ -381,7 +381,7 @@ subobjectives = {
 
     "Social & Emotional Skills": 
     "2️⃣ **Social & Emotional Skills**\n\n"
-    "To compare emotional regulation skills (including emotional regulation, personal, "
+    "To compare emotional regulation skills (including emotional regulation, personal development, "
     "social skills, and interaction) among students, employed, and unemployed individuals.",
 
     "Task Persistence & Enjoy Learning": 
@@ -392,12 +392,12 @@ subobjectives = {
     "Social Skills Grouped Bar Chart": 
     "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
     "To analyze differences in social and interpersonal skills, including teamwork, social support, "
-    "helping others, and time spent on social interaction, among students, employed, and unemployed respondents.",
+    "and helping others, during social interaction, among students, employed, and unemployed respondents.",
 
     "Community Participation": 
     "5️⃣ **Community Participation and Social Responsibility**\n\n"
-    "To investigate how community participation and civic engagement—such as community involvement, "
-    "care for others, perceived community impact, and neighborhood safety—vary across employment status groups.",
+    "To investigate how community participation and civic engagement, such as community involvement, "
+    "and perceived community impact varies across employment status groups.",
 
     "Wellbeing and Life Satisfaction": 
     "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
