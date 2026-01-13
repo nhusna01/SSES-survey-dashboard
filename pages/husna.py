@@ -434,6 +434,42 @@ selected_sub = st.sidebar.selectbox(
 # -----------------------------
 st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 
+# ===============================
+# 1️⃣ Correlation Heatmap
+# ===============================
+if selected_sub == "Correlation Between Likert Variables":
+
+    # Likert variables
+    likert_cols = [
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
+        'social_support', 'helping_others', 'community_participation',
+        'community_impact', 'life_satisfaction', 'overall_health'
+    ]
+
+    # Ensure numeric for correlation
+    df_corr = df[likert_cols + ['employment_status']].apply(pd.to_numeric, errors='coerce')
+
+    # Compute correlation
+    corr_df = df_corr.corr()
+
+    # Heatmap
+    fig = px.imshow(
+        corr_df,
+        text_auto=True,
+        aspect="auto",
+        color_continuous_scale=px.colors.sequential.Viridis,
+        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
+    )
+    fig.update_layout(height=800)
+    st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("""
+    **Interpretation:**
+    - Strong positive correlations exist between social and emotional skills, e.g., `social_support` & `helping_others`.
+    - Community participation variables are moderately correlated with overall wellbeing.
+    - Numeric employment status allows correlation with other metrics to check how status relates to wellbeing and social skills.
+    """)
+
 # -----------------------------
 # Prepare Data
 # -----------------------------
@@ -456,36 +492,6 @@ color_map = {
     'STUDENT': '#21918c',    # Bright teal
     'UNEMPLOYED': '#fde725'  # Bright yellow
 }
-
-# ===============================
-# 1️⃣ Correlation Heatmap
-# ===============================
-if selected_sub == "Correlation Between Likert Variables":
-
-    likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
-        'social_support', 'helping_others', 'community_participation',
-        'community_impact', 'life_satisfaction', 'overall_health'
-    ]
-
-    corr_df = df[likert_cols].corr()
-
-    fig = px.imshow(
-        corr_df,
-        text_auto=True,
-        aspect="auto",
-        color_continuous_scale=px.colors.sequential.Viridis,
-        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
-    )
-    fig.update_layout(height=800)
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("""
-    **Interpretation:**
-    - Strong positive correlations exist between certain social and emotional skills, including, `social_support` and `helping_others`.
-    - Community engagement variables are moderately correlated with overall well-being.
-    - Correlation heatmap helps identify relationships for further statistical modeling or interventions.
-    """)
 
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
@@ -585,15 +591,18 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         value_name='Average Score'
     )
 
+    # Map employment status to color using color_map
+    df_melt['color'] = df_melt['employment_status_label'].map(color_map)
+
     fig_groupbar = px.bar(
         df_melt,
         x='employment_status_label',
         y='Average Score',
-        color='Variable',
+        color='employment_status_label',  # use the mapped colors
         barmode='group',
         title='Average Scores of Selected Social Skills by Employment Status',
         labels={'employment_status_label':'Employment Status'},
-        color_discrete_sequence=px.colors.sequential.Viridis
+        color_discrete_map=color_map  # This ensures the colors match your palette
     )
     fig_groupbar.update_layout(template='plotly_white', font=dict(family="Arial", size=12))
     st.plotly_chart(fig_groupbar, use_container_width=True)
