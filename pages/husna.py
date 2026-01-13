@@ -173,10 +173,8 @@ if summary_option == "Overall Dataset Overview":
     })
 
     st.dataframe(summary_df, use_container_width=True)
-
-# ---------- DATASET SUMMARY ----------
-st.markdown("**Full Dataset Summary**")
-st.dataframe(df, use_container_width=True)
+    st.markdown("**Full Dataset Summary**")
+    st.dataframe(df, use_container_width=True)
 
 # ---------- CATEGORICAL SUMMARY ----------
 elif summary_option == "Categorical Variables Summary":
