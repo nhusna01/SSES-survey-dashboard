@@ -4,12 +4,12 @@ import pandas as pd
 import os
 
 # Check if data exists in session state before proceeding
-if "df" not in st.session_state:
-    st.error("Data not found! Please ensure the data is loaded in the main app.")
-    st.stop() 
+# Ensure df_current exists in session or loaded
+if "df_current" not in st.session_state:
+    st.error("Dataset not loaded. Please select a dataset first in the main app.")
+    st.stop()
 
-df = st.session_state.df
-
+df_current = st.session_state.df_current
 
 # Header + logo
 st.markdown("""
@@ -186,25 +186,43 @@ else:
 st.markdown("---")
 st.subheader("👥 Demographic Analysis")
 
-demo_options = ['gender', 'age', 'employment_status', 'education_level', 'marital_status', 'state', 'home_language']
-demo_options = [col for col in demo_options if col in df_current.columns]
+# Define demographic columns explicitly
+demographic_columns = [
+    'gender', 
+    'age', 
+    'employment_status', 
+    'education_level', 
+    'marital_status', 
+    'state', 
+    'home_language'
+]
 
+# Filter only columns that exist in current dataset
+demo_options = [col for col in demographic_columns if col in df_current.columns]
+
+# Demographic column selector
 demo_col = st.selectbox(
     "Select Demographic Variable to Visualize",
-    options=demo_options if demo_options else df_current.columns
+    options=demo_options
 )
 
 # Automatically bin numeric columns (like age) for pie charts
 if df_current[demo_col].dtype in ['int64','float64']:
     df_current[demo_col] = pd.cut(df_current[demo_col], bins=10).astype(str)
 
-col1, col2 = st.columns([2,1])
+# Layout: pie chart + value counts
+col1, col2 = st.columns([2, 1])
 
 with col1:
-    fig = px.pie(df_current, names=demo_col, hole=0.4,
-                 title=f"Distribution of {demo_col.replace('_',' ').title()}",
-                 color_discrete_sequence=px.colors.qualitative.Pastel)
+    fig = px.pie(
+        df_current,
+        names=demo_col,
+        hole=0.4,
+        title=f"Distribution of {demo_col.replace('_',' ').title()}",
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
     st.plotly_chart(fig, use_container_width=True)
 
 with col2:
     st.dataframe(df_current[demo_col].value_counts(), use_container_width=True)
+
