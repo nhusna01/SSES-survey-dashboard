@@ -229,8 +229,6 @@ elif summary_option == "Missing Values Summary":
 
 st.subheader("📊 Performance Metrics")
 
-import streamlit as st
-import pandas as pd
 
 # -------------------- DATA --------------------
 # df assumed already loaded
@@ -269,8 +267,8 @@ st.markdown("""
     box-shadow: 0 10px 24px rgba(106,13,173,0.25);
     display: flex;
     flex-direction: column;
-    justify-content: center;     /* CENTER vertically */
-    align-items: center;         /* CENTER horizontally */
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
@@ -278,7 +276,7 @@ st.markdown("""
     display: flex;
     gap: 6px;
     align-items: center;
-    justify-content: center;     /* CENTER icons */
+    justify-content: center;
     margin-bottom: 6px;
 }
 
@@ -300,6 +298,8 @@ st.markdown("""
     cursor: help;
 }
 </style>
+""", unsafe_allow_html=True)
+
 
 
 # -------------------- LAYOUT --------------------
