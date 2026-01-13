@@ -229,91 +229,120 @@ elif summary_option == "Missing Values Summary":
 
 st.subheader("📊 Performance Metrics")
 
-# Ensure session state exists
-if "selected_objective" not in st.session_state:
-    st.session_state.selected_objective = None
+import streamlit as st
+import pandas as pd
 
-# --- Custom card styling ---
+# -------------------- DATA --------------------
+# df assumed already loaded
+
+employment_mapping = {
+    0: "Employed",
+    1: "Student",
+    2: "Unemployed"
+}
+
+attribute_cols = [
+    "calm_under_pressure", "cheerful", "task_persistence",
+    "social_support", "helping_others",
+    "community_participation", "community_impact",
+    "life_satisfaction", "overall_health"
+]
+
+# -------------------- METRICS --------------------
+employment_groups = df["employment_status"].map(employment_mapping).nunique()
+avg_overall_health = round(df["overall_health"].mean(), 2)
+avg_community_participation = round(
+    df[["community_participation", "community_impact"]].mean().mean(), 2
+)
+total_attributes = len(attribute_cols)
+
+# -------------------- STYLING --------------------
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-div.stButton > button {
-    height: 140px;
-    width: 100%;
+.summary-card {
     font-family: 'Inter', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: #4B0082;
+    height: 150px;
+    border-radius: 18px;
+    padding: 1.2rem;
     background: linear-gradient(145deg, #f6f1ff, #ede3ff);
     border: 1px solid #c7b2ff;
-    border-radius: 18px;
-    box-shadow: 0 8px 22px rgba(106,13,173,0.18);
-    transition: all 0.25s ease-in-out;
-    white-space: pre-line;
-    text-align: center;
+    box-shadow: 0 10px 24px rgba(106,13,173,0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
-div.stButton > button:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 14px 30px rgba(106,13,173,0.35);
-    background: linear-gradient(145deg, #ede3ff, #e0d3ff);
+.summary-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #4B0082;
 }
-.summary-tooltip {
-    font-size: 12px;
-    color: #444;
-    margin-top: 5px;
+.summary-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2E0854;
+}
+.icon-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.info-icon {
+    font-size: 15px;
+    cursor: help;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# --- Define metrics ---
-
-# 1️⃣ Employment Groups
-employment_col = next((c for c in df.columns if "employment" in c.lower() or "status" in c.lower()), None)
-employment_count = df[employment_col].nunique() if employment_col else "N/A"
-employment_details = ", ".join(df[employment_col].unique().astype(str)) if employment_col else "N/A"
-
-# 2️⃣ Total Attributes
-attribute_cols = [
-    "calm_under_pressure", "cheerful", "task_persistence", "social_support",
-    "helping_others", "community_participation", "community_impact",
-    "life_satisfaction", "overall_health"
-]
-total_attributes = len(attribute_cols)
-attributes_details = ", ".join(attribute_cols)
-
-# 3️⃣ Average Overall Health
-overall_health_col = "overall_health"
-avg_health = round(df[overall_health_col].mean(), 2) if overall_health_col in df.columns else "N/A"
-health_details = f"Average of column: {overall_health_col}"
-
-# 4️⃣ Average Community Participation
-community_cols = ["community_participation", "community_impact"]
-avg_community = round(df[community_cols].mean().mean(), 2) if all(c in df.columns for c in community_cols) else "N/A"
-community_details = f"Average of columns: {', '.join(community_cols)}"
-
-# --- Render clickable summary cards ---
+# -------------------- LAYOUT --------------------
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.button(f"👥\n{employment_count}\nEmployment Groups", key="employment")
-    st.markdown(f"<div class='summary-tooltip' title='{employment_details}'>Hover for details</div>",
-                unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="icon-row">
+            <span>👥</span>
+            <span class="info-icon" title="Employment categories include: Student, Employed, and Unemployed">❓</span>
+        </div>
+        <div class="summary-value">{employment_groups}</div>
+        <div class="summary-title">Employment Groups</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col2:
-    st.button(f"🧩\n{total_attributes}\nTotal Attributes", key="attributes")
-    st.markdown(f"<div class='summary-tooltip' title='{attributes_details}'>Hover for details</div>",
-                unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="icon-row">
+            <span>🧩</span>
+            <span class="info-icon" title="Total number of key attributes analysed, including social, emotional, and wellbeing indicators">❓</span>
+        </div>
+        <div class="summary-value">{total_attributes}</div>
+        <div class="summary-title">Total Attributes</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col3:
-    st.button(f"❤️\n{avg_health}\nAvg Overall Health", key="health")
-    st.markdown(f"<div class='summary-tooltip' title='{health_details}'>Hover for details</div>",
-                unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="icon-row">
+            <span>❤️</span>
+            <span class="info-icon" title="Average score representing respondents’ overall perceived health status">❓</span>
+        </div>
+        <div class="summary-value">{avg_overall_health}</div>
+        <div class="summary-title">Average Overall Health</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 with col4:
-    st.button(f"🏘️\n{avg_community}\nAvg Community Participation", key="community")
-    st.markdown(f"<div class='summary-tooltip' title='{community_details}'>Hover for details</div>",
-                unsafe_allow_html=True)
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="icon-row">
+            <span>🏘️</span>
+            <span class="info-icon" title="Average level of participation and impact within community-related activities">❓</span>
+        </div>
+        <div class="summary-value">{avg_community_participation}</div>
+        <div class="summary-title">Avg Community Participation</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 selected_group = st.segmented_control(
