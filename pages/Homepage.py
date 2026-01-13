@@ -52,7 +52,7 @@ st.markdown("""
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
 
 <!-- Bottom-right icon -->
-<img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
+<img class="bottom-right-logo" src="https://img.icons8.com/color/64/mood.png">
 """, unsafe_allow_html=True)
 
 # ------------------------------
