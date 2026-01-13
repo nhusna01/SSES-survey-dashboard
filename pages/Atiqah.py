@@ -109,9 +109,13 @@ fig1 = px.bar(
 st.plotly_chart(fig1, use_container_width=True)
 
 st.markdown("""
-*Analysis:*  
+**Analysis:**  
 Selangor shows slightly higher average emotional regulation scores, suggesting greater
 adaptability to demanding environments.
+
+**Interpretation:**  
+This may indicate that respondents in Selangor are more accustomed to regulating
+emotions in demanding environments.
 """)
 
 st.divider()
@@ -135,7 +139,7 @@ fig2 = px.histogram(
 st.plotly_chart(fig2, use_container_width=True)
 
 st.markdown("""
-*Analysis:*  
+**Analysis:**  
 Selangor respondents are more concentrated in the *High* calmness category,
 while Pahang respondents are more evenly distributed.
 
@@ -177,9 +181,13 @@ fig_tw = px.violin(
 col2.plotly_chart(fig_tw, use_container_width=True)
 
 st.markdown("""
-*Analysis:*  
+**Analysis:**  
 Selangor exhibits higher medians and greater variability in task persistence and teamwork,
 indicating stronger engagement and collaboration.
+
+**Interpretation:**  
+This implies stronger work engagement and collaborative behaviour among Selangor
+respondents.
 """)
 
 st.divider()
@@ -223,6 +231,10 @@ st.plotly_chart(fig4, use_container_width=True)
 st.markdown("""
 *Analysis:*  
 Selangor shows a higher proportion of respondents reporting *Good* health compared to Pahang.
+
+**Interpretation:**
+This visualization highlights differences in perceived health status across states 
+and supports the findings observed in emotional and work functioning indicators.
 """)
 
 st.divider()
@@ -254,6 +266,11 @@ st.markdown("""
 *Analysis:*  
 The radar chart highlights consistently higher wellbeing scores for Selangor,
 particularly in emotional control and work-related indicators.
+
+*Interpretation:*
+This suggests that Selangor respondents score higher across multiple aspects of wellbeing simultaneously. 
+The radar chart effectively summarizes complex, multivariate data in a single visualization, reinforcing the 
+overall comparison between states.
 """)
 
 st.divider()
