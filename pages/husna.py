@@ -360,7 +360,7 @@ with col4:
 subobjectives = {
     "Correlation Between Likert Variables": 
         "1️⃣ **Correlation Between Likert Variables**\n\n"
-        "To examine the relationships among Likert-scale variables related to social, emotional, wellbeing, "
+        "To examine the relationships among Likert-scale variables related to social, emotional, well-being, "
         "and community attributes across different employment status groups.",
     "Social & Emotional Skills": 
         "2️⃣ **Social & Emotional Skills**\n\n"
@@ -378,7 +378,7 @@ subobjectives = {
         "To investigate how community participation and civic engagement vary across employment status groups.",
     "Wellbeing and Life Satisfaction": 
         "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-        "To assess differences in overall wellbeing and life satisfaction across students, employed, and unemployed individuals."
+        "To assess differences in overall well-being and life satisfaction across students, employed, and unemployed individuals."
 }
 
 objective_icons = {
@@ -397,6 +397,10 @@ selected_sub = st.sidebar.selectbox(
     "Select Objective / Chapter:",
     list(subobjectives.keys())
 )
+
+
+# Add space
+st.markdown("<br><br>", unsafe_allow_html=True)
 
 # -----------------------------
 # Employment Status Filter
