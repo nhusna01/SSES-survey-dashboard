@@ -186,7 +186,7 @@ else:
 st.markdown("---")
 st.subheader("👥 Demographic Analysis")
 
-demo_options = ['gender', 'age', 'location', 'education_level']
+demo_options = ['gender', 'age', 'employment_status', 'education_level', 'marital_status', 'state', 'home_language']
 demo_options = [col for col in demo_options if col in df_current.columns]
 
 demo_col = st.selectbox(
