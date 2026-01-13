@@ -32,31 +32,32 @@ st.markdown("""
 
 st.markdown("""
 <style>
-/* ---------- Animated Divider ---------- */
-.divider {
-    height: 4px;
+/* ===== Animated Gradient Divider ===== */
+.animated-divider {
     width: 100%;
+    height: 5px;
+    border-radius: 8px;
+    margin: 1.8rem 0 2.4rem 0;
     background: linear-gradient(
         90deg,
-        #2563EB,
+        #6366F1,
         #22C55E,
         #F97316,
-        #7C3AED
+        #EC4899,
+        #6366F1
     );
-    background-size: 300% 100%;
-    border-radius: 6px;
-    animation: gradientMove 6s ease infinite;
-    margin: 1.4rem 0 2.2rem 0;
+    background-size: 400% 100%;
+    animation: dividerFlow 5s linear infinite;
 }
 
-/* Divider animation */
-@keyframes gradientMove {
+/* Animation */
+@keyframes dividerFlow {
     0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
+    100% { background-position: 400% 50%; }
 }
 </style>
 """, unsafe_allow_html=True)
+
 
 # ------------------------------
 # 🔗 Dataset Selector (Cleaned / Raw)
