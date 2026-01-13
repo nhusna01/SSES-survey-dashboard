@@ -374,18 +374,57 @@ if selected_group:
 # 🔹 Sub-Objectives Dropdown
 # ===============================
 subobjectives = {
-    "Demographics": "① Visualization: Demographic Distribution by Employment Status",
-    "Wellbeing & Life Satisfaction": "② Visualization: Wellbeing Across Employment Status",
-    "Behavioral Traits": "③ Visualization: Behavioral Traits Across Employment Status",
-    "Community Participation": "④ Visualization: Community Participation Across Employment Status"
+    "Correlation Between Likert Variables": 
+    "1️⃣ **Correlation Between Likert Variables**\n\n"
+    "To examine the relationships among Likert-scale variables related to social, emotional, wellbeing, "
+    "and community attributes across different employment status groups.",
+
+    "Emotional Regulation": 
+    "2️⃣ **Emotional Regulation**\n\n"
+    "To compare emotional regulation skills (including emotional control, calmness under pressure, "
+    "cheerfulness, and restfulness) among students, employed, and unemployed individuals.",
+
+    "Self-Management and Personal Skills": 
+    "3️⃣ **Self-Management and Personal Skills**\n\n"
+    "To examine variations in self-management and personal development skills, such as self-motivation, "
+    "task persistence, adaptability, and enjoyment of learning, across different employment status groups.",
+
+    "Social Skills and Interpersonal Interaction": 
+    "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
+    "To analyze differences in social and interpersonal skills, including teamwork, social support, "
+    "helping others, and time spent on social interaction, among students, employed, and unemployed respondents.",
+
+    "Community Participation and Social Responsibility": 
+    "5️⃣ **Community Participation and Social Responsibility**\n\n"
+    "To investigate how community participation and civic engagement—such as community involvement, "
+    "care for others, perceived community impact, and neighborhood safety—vary across employment status groups.",
+
+    "Wellbeing and Life Satisfaction": 
+    "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
+    "To assess differences in overall wellbeing and life satisfaction across students, employed, "
+    "and unemployed individuals."
 }
+
 selected_sub = st.selectbox(
     "Select a sub-objective to explore:",
     list(subobjectives.keys())
 )
 
-st.markdown(f"### {selected_sub}")
-st.markdown(f"**{subobjectives[selected_sub]}**")
+st.markdown(
+    f"""
+    <div style="
+        background-color:#f6f1fb;
+        border-left:6px solid #6A0DAD;
+        padding:1.2rem 1.5rem;
+        border-radius:12px;
+        font-family:'Inter', sans-serif;
+        margin-top:1rem;
+    ">
+        {subobjectives[selected_sub]}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # ===============================
 # 🔹 Filter and plot visualizations per sub-objective
