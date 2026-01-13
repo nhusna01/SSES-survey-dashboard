@@ -474,22 +474,55 @@ if selected_sub == "Correlation Between Likert Variables":
 
     fig.update_layout(height=800)
     st.plotly_chart(fig, use_container_width=True)
+    
 
-# 6️⃣ Wellbeing & Life Satisfaction
-elif selected_sub == "Wellbeing and Life Satisfaction":
+elif selected_sub == "Emotional Regulation":
 
-    wellbeing_var = st.selectbox(
-        "Select wellbeing indicator:",
-        ['life_satisfaction', 'overall_health']
+    if 'employment_status_label' not in df.columns:
+        status_mapping = {0: 'EMPLOYED', 1: 'STUDENT', 2: 'UNEMPLOYED'}
+        df['employment_status_label'] = df['employment_status'].map(status_mapping)
+
+    independent_vars = [
+        'calm_under_pressure', 'cheerful', 'task_persistence',
+        'social_support', 'enjoy_learning', 'helping_others'
+    ]
+
+    df[independent_vars] = df[independent_vars].apply(pd.to_numeric, errors='coerce')
+
+    radar_data = df.groupby('employment_status_label')[independent_vars].mean().reset_index()
+
+    radar_data = radar_data.melt(
+        id_vars='employment_status_label',
+        var_name='Skill Dimension',
+        value_name='Average Score'
     )
 
-    fig = px.bar(
-        df,
-        x="employment_status",
-        y=wellbeing_var,
-        color="employment_status",
-        barmode="group",
-        color_discrete_sequence=px.colors.sequential.Viridis
+    color_map = {
+        'EMPLOYED': '#1f77b4',
+        'STUDENT': '#ff7f0e',
+        'UNEMPLOYED': '#2ca02c'
+    }
+
+    fig = px.line_polar(
+        radar_data,
+        r='Average Score',
+        theta='Skill Dimension',
+        color='employment_status_label',
+        line_close=True,
+        color_discrete_map=color_map,
+        title='Emotional Regulation and Personal Skills by Employment Status'
+    )
+
+    fig.update_traces(fill='toself', opacity=0.7)
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 5],
+                tickvals=[1, 2, 3, 4, 5]
+            )
+        ),
+        legend_title_text='Employment Status'
     )
 
     st.plotly_chart(fig, use_container_width=True)
@@ -516,3 +549,30 @@ elif selected_sub == "Community Participation and Social Responsibility":
 # Placeholder for remaining objectives
 else:
     st.info("📌 Visualization for this sub-objective will be added next.")
+
+
+# 6️⃣ Wellbeing & Life Satisfaction
+elif selected_sub == "Wellbeing and Life Satisfaction":
+elif selected_sub == "Wellbeing and Life Satisfaction":
+
+    wellbeing_vars = ['life_satisfaction', 'overall_health', 'wellbeing_belief']
+
+    selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
+
+    fig = px.violin(
+        df,
+        x='employment_status',
+        y=selected_var,
+        color='employment_status',
+        box=True,
+        points='all',
+        color_discrete_map={
+            0: '#1f77b4',  # EMPLOYED
+            1: '#ff7f0e',  # STUDENT
+            2: '#2ca02c'   # UNEMPLOYED
+        },
+        title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
+    )
+
+    st.plotly_chart(fig, use_container_width=True)
+
