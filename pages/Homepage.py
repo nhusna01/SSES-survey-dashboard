@@ -27,7 +27,7 @@ st.markdown("""
     </p>
 </div>
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
-""",
+""", unsafe_allow_html=True)
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
 """, unsafe_allow_html=True)
 
