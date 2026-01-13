@@ -1,6 +1,5 @@
 import streamlit as st
 import plotly.express as px
-import os
 
 # Check if data exists in session state before proceeding
 if "df" not in st.session_state:
@@ -131,12 +130,12 @@ with col1:
 
         if dataset_option == "Cleaned Dataset":
             # Local cleaned dataset path
-            cleaned_path = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/cleaned_group_survey_data.csv"
-            if os.path.exists(cleaned_path):
-                df_cleaned = pd.read_csv(cleaned_path)
+            cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/cleaned_group_survey_data.csv"
+            try:
+                df_cleaned = pd.read_csv(cleaned_url)
                 st.dataframe(df_cleaned, use_container_width=True, height=400)
-            else:
-                st.warning(f"Cleaned dataset not found at {cleaned_path}")
+            except Exception as e:
+                st.error(f"Error loading cleaned dataset from GitHub: {e}")
 
         else:  # Raw Dataset from Google Sheet
             try:
