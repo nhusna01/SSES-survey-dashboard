@@ -175,7 +175,7 @@ numeric_cols = df_current.select_dtypes(include=['int64', 'float64']).columns
 if len(numeric_cols) == 0:
     st.warning("No numeric columns available in this dataset.")
 else:
-    with st.expander("Click to expand summary statistics (numeric variables only)"):
+    with st.expander("Click to expand summary statistics"):
         st.write(df_current[numeric_cols].describe().transpose())
 
 
@@ -185,43 +185,35 @@ else:
 st.markdown("---")
 st.subheader("👥 Demographic Analysis")
 
-# Define demographic columns explicitly
-demographic_columns = [
-    'gender', 
-    'age', 
-    'employment_status', 
-    'education_level', 
-    'marital_status', 
-    'state', 
-    'home_language'
-]
+demo_options = ['gender', 'age', 'employment_status', 'education_level', 'marital_status', 'state', 'home_language']
+demo_options = [col for col in demo_options if col in df_current.columns]
 
-# Filter only columns that exist in current dataset
-demo_options = [col for col in demographic_columns if col in df_current.columns]
-
-# Demographic column selector
-demo_col = st.selectbox(
-    "Select Demographic Variable to Visualize",
-    options=demo_options
-)
-
-# Automatically bin numeric columns (like age) for pie charts
-if df_current[demo_col].dtype in ['int64','float64']:
-    df_current[demo_col] = pd.cut(df_current[demo_col], bins=10).astype(str)
-
-# Layout: pie chart + value counts
-col1, col2 = st.columns([2, 1])
-
-with col1:
-    fig = px.pie(
-        df_current,
-        names=demo_col,
-        hole=0.4,
-        title=f"Distribution of {demo_col.replace('_',' ').title()}",
-        color_discrete_sequence=px.colors.qualitative.Pastel
+if demo_options:
+    demo_col = st.selectbox(
+        "Select Demographic Variable to Visualize",
+        options=demo_options
     )
-    st.plotly_chart(fig, use_container_width=True)
 
-with col2:
-    st.dataframe(df_current[demo_col].value_counts(), use_container_width=True)
+    # Only proceed if the column exists
+    if demo_col in df_current.columns:
+        # Automatically bin numeric columns (like age) for pie charts
+        if df_current[demo_col].dtype in ['int64','float64']:
+            df_current[demo_col] = pd.cut(df_current[demo_col], bins=10).astype(str)
 
+        col1, col2 = st.columns([2,1])
+
+        with col1:
+            fig = px.pie(
+                df_current,
+                names=demo_col,
+                hole=0.4,
+                title=f"Distribution of {demo_col.replace('_',' ').title()}",
+                color_discrete_sequence=px.colors.qualitative.Pastel
+            )
+            st.plotly_chart(fig, use_container_width=True)
+
+        with col2:
+            st.dataframe(df_current[demo_col].value_counts(), use_container_width=True)
+
+else:
+    st.warning("No demographic columns available in the current dataset.")
