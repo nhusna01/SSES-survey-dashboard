@@ -4,12 +4,11 @@ import pandas as pd
 import os
 
 # Check if data exists in session state before proceeding
-# Ensure df_current exists in session or loaded
-if "df_current" not in st.session_state:
+if "df" not in st.session_state:
     st.error("Dataset not loaded. Please select a dataset first in the main app.")
     st.stop()
 
-df_current = st.session_state.df_current
+df = st.session_state.df
 
 # Header + logo
 st.markdown("""
