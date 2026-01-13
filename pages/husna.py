@@ -79,9 +79,9 @@ st.markdown(
     <div class="main-objectives-box">
         <div class="main-objectives-title">📌 Main Objective</div>
         <div class="main-objectives-text">
-            To examine how demographic characteristics, wellbeing and life satisfaction,
-            behavioral traits, and community participation vary across employment status
-            groups, namely students, employed, and unemployed individuals.
+            To examine how social and emotional skills, well-being, and life satisfaction,
+            and community engagement differ across employment status groups, namely students,
+            employed and unemployed individuals.
         </div>
     </div>
     """,
