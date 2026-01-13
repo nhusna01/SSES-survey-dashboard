@@ -60,12 +60,12 @@ df[attributes] = df[attributes].fillna(df[attributes].median())
 st.markdown("### 📊 Dataset Overview")
 st.info(f"""
 The dataset used in this study was derived from a self-administered survey designed
-to assess **emotional resilience and personal development characteristics** among respondents.
+to assess emotional resilience and personal development characteristics among respondents.
 It captures individuals’ self-perceived ability to manage emotional pressure, regulate emotions,
 adapt to change, remain motivated, persist in challenging tasks, and collaborate effectively
 with others.
 
-All attributes were measured using a **5-point Likert scale**, allowing respondents to indicate
+All attributes were measured using a 5-point Likert scale, allowing respondents to indicate
 their level of agreement with each statement. This structure enables quantitative comparison,
 distribution analysis, and relationship exploration between key emotional resilience factors.
 
