@@ -354,22 +354,6 @@ with col4:
     """, unsafe_allow_html=True)
 
 
-selected_group = st.segmented_control(
-    "Employment Status",
-    options=["Students", "Employed", "Unemployed"]
-)
-
-status_mapping = {
-    "Students": 1,
-    "Employed": 0,
-    "Unemployed": 2
-}
-
-if selected_group:
-    filtered_df = df[df["employment_status"] == status_mapping[selected_group]]
-    st.caption(f"Currently viewing data for: **{selected_group}**")
-
-
 # -----------------------------
 # 🔹 Sub-Objectives Definition
 # -----------------------------
@@ -689,6 +673,8 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
     - {interpretations[selected_var][3]}
     """, unsafe_allow_html=True)
+
+st.info("📌 Visualization for this sub-objective will be added next.")
 
 # ===============================
 # Overall Conclusion
