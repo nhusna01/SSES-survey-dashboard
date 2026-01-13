@@ -106,12 +106,32 @@ with st.expander("Click to expand dataset preview"):
     st.dataframe(df_current, use_container_width=True, height=400)
 
 # ------------------------------
+# 🧩 View Variables Available 
+# ------------------------------
+st.markdown("---")
+st.subheader("🧩 View Variables Available")
+
+with st.expander("Click to expand and view all variables"):
+    # Create a DataFrame of variable names only
+    var_df = pd.DataFrame({"Variable Name": df_current.columns})
+    st.dataframe(var_df, use_container_width=True, height=300)
+
+
+# ------------------------------
 # 📈 View Summary Statistics
 # ------------------------------
 st.markdown("---")
 st.subheader("📈 View Summary Statistics")
-with st.expander("Click to expand summary statistics"):
-    st.write(df_current.describe(include="all"))
+
+# Select only numeric columns
+numeric_cols = df_current.select_dtypes(include=['int64', 'float64']).columns
+
+if len(numeric_cols) == 0:
+    st.warning("No numeric columns available in this dataset.")
+else:
+    with st.expander("Click to expand summary statistics (numeric variables only)"):
+        st.write(df_current[numeric_cols].describe().transpose())
+
 
 # ------------------------------
 # 👥 Demographic Analysis
