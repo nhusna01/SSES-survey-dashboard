@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import os
 
 # Check if data exists in session state before proceeding
 if "df" not in st.session_state:
@@ -129,20 +130,20 @@ with col1:
         )
 
         if dataset_option == "Cleaned Dataset":
-            cleaned_path = "data/cleaned_data.csv"
+            # Local cleaned dataset path
+            cleaned_path = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/cleaned_group_survey_data.csv"
             if os.path.exists(cleaned_path):
                 df_cleaned = pd.read_csv(cleaned_path)
                 st.dataframe(df_cleaned, use_container_width=True, height=400)
             else:
                 st.warning(f"Cleaned dataset not found at {cleaned_path}")
 
-        else:  # Raw Dataset
-            raw_path = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/cleaned_group_survey_data.csv"
-            if os.path.exists(raw_path):
-                df_raw = pd.read_csv(raw_path)
+        else:  # Raw Dataset from Google Sheet
+            try:
+                df_raw = pd.read_csv(GOOGLE_SHEET_URL)
                 st.dataframe(df_raw, use_container_width=True, height=400)
-            else:
-                st.warning(f"Raw dataset not found at {raw_path}")
+            except Exception as e:
+                st.error(f"Error loading raw dataset from Google Sheet: {e}")
 
 # ------------------------------
 # 2️⃣ Explore Variables
@@ -176,9 +177,6 @@ with col3:
                 st.dataframe(missing_df, use_container_width=True, height=400)
         else:
             st.warning(f"Cleaned dataset not found at {cleaned_path}")
-
-
-
 
 
 with st.expander("🔍 View Dataset Preview"):
