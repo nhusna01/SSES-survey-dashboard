@@ -34,14 +34,17 @@ st.markdown(
 )
 
 
-# ===============================
-# ✅ LOAD DATA FROM SESSION STATE
-# ===============================
-if "df" not in st.session_state:
-    st.error("❌ Dataset not loaded. Please check main.py")
-    st.stop()
+# -------------------------------
+# Load dataset from GitHub
+# -------------------------------
+DATA_URL = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Husna_SSES_cleaned.csv"
 
-df = st.session_state.df
+@st.cache_data
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+
+df = load_data(DATA_URL)
     
 # ===============================
 # 🧩 MAIN OBJECTIVE
