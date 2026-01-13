@@ -5,7 +5,6 @@ import plotly.express as px
 # ===============================
 # 🧠 PAGE TITLE CONFIGURATION
 # ===============================
-import streamlit as st
 
 # --------------------
 # Streamlit UI - Enhanced Title
@@ -404,26 +403,43 @@ subobjectives = {
     "To assess differences in overall wellbeing and life satisfaction across students, employed, "
     "and unemployed individuals."
 }
-
 selected_sub = st.selectbox(
     "Select a sub-objective to explore:",
     list(subobjectives.keys())
 )
 
+# Icon mapping for visual cue
+objective_icons = {
+    "Correlation Between Likert Variables": "📊",
+    "Emotional Regulation": "🧠",
+    "Self-Management and Personal Skills": "🎯",
+    "Social Skills and Interpersonal Interaction": "🤝",
+    "Community Participation and Social Responsibility": "🏘️",
+    "Wellbeing and Life Satisfaction": "😊"
+}
+
 st.markdown(
     f"""
     <div style="
-        background-color:#f6f1fb;
-        border-left:6px solid #6A0DAD;
-        padding:1.2rem 1.5rem;
-        border-radius:12px;
-        font-family:'Inter', sans-serif;
-        margin-top:1rem;
+        background: linear-gradient(145deg, #f6f1fb, #ede3ff);
+        border-left: 6px solid #6A0DAD;
+        padding: 1.4rem 1.6rem;
+        border-radius: 14px;
+        font-family: 'Inter', sans-serif;
+        margin-top: 1.2rem;
+        box-shadow: 0 8px 20px rgba(106,13,173,0.18);
     ">
-        {subobjectives[selected_sub]}
+        <div style="font-size:20px; font-weight:700; margin-bottom:0.6rem;">
+            {objective_icons[selected_sub]} {selected_sub}
+        </div>
+        <div style="font-size:16px; line-height:1.7; color:#2f2f2f;">
+            {subobjectives[selected_sub]}
+        </div>
     </div>
     """,
     unsafe_allow_html=True
+)
+
 )
 
 # ===============================
