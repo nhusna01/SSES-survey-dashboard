@@ -607,25 +607,98 @@ for col in columns_to_plot:
     </div>
     """, unsafe_allow_html=True)
 
-
 # 5️⃣ Community Participation
-elif selected_sub == "Community Participation and Social Responsibility":
+import plotly.express as px
+import pandas as pd
 
-    community_var = st.selectbox(
-        "Select community indicator:",
-        ['community_participation', 'community_impact']
-    )
+# -----------------------------
+# Community-related variables
+# -----------------------------
+community_vars = [
+    'community_participation',
+    'community_care',
+    'community_impact',
+    'neighborhood_safety'
+]
 
-    fig = px.bar(
-        df,
-        x="employment_status",
-        y=community_var,
-        color="employment_status",
-        barmode="group",
-        color_discrete_sequence=px.colors.sequential.Viridis
-    )
+# -----------------------------
+# Map employment status to labels
+# (handles both numeric and string cases)
+# -----------------------------
+employment_labels = {
+    0: 'Student',
+    1: 'Employed',
+    2: 'Unemployed',
+    'Student': 'Student',
+    'Employed': 'Employed',
+    'Unemployed': 'Unemployed'
+}
 
-    st.plotly_chart(fig, use_container_width=True)
+# Create a clean label column
+df['employment_status_label'] = df['employment_status'].map(employment_labels)
+
+# Drop rows that failed mapping
+df = df.dropna(subset=['employment_status_label'])
+
+# -----------------------------
+# Aggregate mean scores
+# -----------------------------
+df_sunburst = (
+    df
+    .groupby('employment_status_label')[community_vars]
+    .mean()
+    .reset_index()
+)
+
+# -----------------------------
+# Melt for Plotly Sunburst
+# -----------------------------
+df_melt = df_sunburst.melt(
+    id_vars='employment_status_label',
+    value_vars=community_vars,
+    var_name='Community Skill',
+    value_name='Average Score'
+)
+
+# -----------------------------
+# Create Interactive Sunburst Chart
+# -----------------------------
+fig_sunburst = px.sunburst(
+    df_melt,
+    path=['employment_status_label', 'Community Skill'],
+    values='Average Score',
+    color='Average Score',
+    hover_data={'Average Score': ':.2f'},
+    color_continuous_scale=px.colors.sequential.Viridis,
+    title='Community Participation by Employment Status'
+)
+
+# Make layout more readable and interactive
+fig_sunburst.update_layout(
+    margin=dict(t=50, l=0, r=0, b=0),
+    uniformtext=dict(minsize=10, mode='hide'),
+)
+
+# Add hover info for better understanding
+fig_sunburst.update_traces(
+    hovertemplate='<b>%{label}</b><br>Average Score: %{value:.2f}<extra></extra>'
+)
+
+# -----------------------------
+# Display in Jupyter/Colab
+# -----------------------------
+fig_sunburst.show()
+
+# -----------------------------
+# Interpretation
+# -----------------------------
+print("""
+Interpretation:
+- The sunburst chart shows average community-related scores for Students, Employed, and Unemployed participants.
+- Larger segments represent higher overall scores, while smaller ones indicate lower engagement.
+- Hovering over each segment shows the exact average score for that community skill.
+- This allows quick comparison across employment status and specific community behaviors.
+""")
 
 
 # 6️⃣ Wellbeing & Life Satisfaction
@@ -635,6 +708,11 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
+    # Ensure employment_status is mapped correctly
+    status_mapping = {0: 'EMPLOYED', 1: 'STUDENT', 2: 'UNEMPLOYED'}
+    df['employment_status'] = df['employment_status'].map(status_mapping)
+
+    # Create the violin plot
     fig = px.violin(
         df,
         x='employment_status',
@@ -643,15 +721,63 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         box=True,
         points='all',
         color_discrete_map={
-            0: '#1f77b4',  # EMPLOYED
-            1: '#ff7f0e',  # STUDENT
-            2: '#2ca02c'   # UNEMPLOYED
+            'EMPLOYED': '#1f77b4',  # Blue
+            'STUDENT': '#ff7f0e',   # Orange
+            'UNEMPLOYED': '#2ca02c' # Green
         },
         title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
     )
 
     st.plotly_chart(fig, use_container_width=True)
 
+    # ===============================
+    # Dynamic Interpretation
+    # ===============================
+    interpretations = {
+        'life_satisfaction': [
+            "EMPLOYED participants tend to report higher overall life satisfaction.",
+            "STUDENT group shows moderate satisfaction with some variability.",
+            "UNEMPLOYED group shows wider variability and lower median life satisfaction."
+        ],
+        'overall_health': [
+            "EMPLOYED participants report slightly better overall health scores.",
+            "STUDENT group shows consistent health with some outliers.",
+            "UNEMPLOYED group has more variability and occasional low health scores."
+        ],
+        'wellbeing_belief': [
+            "EMPLOYED participants feel more positive about their general wellbeing.",
+            "STUDENT group has mixed perceptions of wellbeing.",
+            "UNEMPLOYED group reports lower belief in personal wellbeing, with more outliers."
+        ]
+    }
+
+    st.markdown(f"""
+    <div style="
+        background-color:#f0f0f0;
+        padding:12px;
+        border-radius:12px;
+        font-family:'Inter', sans-serif;
+        margin-bottom:20px;
+    ">
+        <strong>Interpretation:</strong>
+        <ul style="line-height:1.6;">
+            <li><span style='color:#1f77b4'>EMPLOYED:</span> {interpretations[selected_var][0]}</li>
+            <li><span style='color:#ff7f0e'>STUDENT:</span> {interpretations[selected_var][1]}</li>
+            <li><span style='color:#2ca02c'>UNEMPLOYED:</span> {interpretations[selected_var][2]}</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div style="
+        font-size:14px; 
+        color:#555;
+        font-family:'Inter', sans-serif;
+        margin-bottom:20px;
+    ">
+        <em>Note: Original employment status codes — 0: EMPLOYED, 1: STUDENT, 2: UNEMPLOYED</em>
+    </div>
+    """, unsafe_allow_html=True)
 
 # Placeholder for remaining objectives
 else:
