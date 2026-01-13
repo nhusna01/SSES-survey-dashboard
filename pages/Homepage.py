@@ -20,12 +20,6 @@ st.markdown("""
     right: 20px;
     height: 60px;
 }
-.bottom-right-logo {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-    height: 60px;
-}
 </style>
 
 <div class="center-title">
@@ -39,6 +33,7 @@ st.markdown("""
 
 <!-- Top-right icon -->
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
+""", unsafe_allow_html=True)
 
 st.markdown("""
 <style>
