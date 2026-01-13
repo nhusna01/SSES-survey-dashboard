@@ -57,27 +57,6 @@ else:
         st.error(f"Error loading raw dataset from Google Sheet: {e}")
         st.stop()
 
-# ------------------------------
-# 🏠 Dashboard Header
-# ------------------------------
-st.markdown("---")
-st.markdown("""
-<style>
-.center-title { text-align: center; }
-.top-right-logo { position: absolute; top: 10px; right: 20px; height: 60px; }
-</style>
-
-<div class="center-title">
-    <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
-        🏠 SSES Survey Dashboard
-    </h1>
-    <p style="color:#555; font-size:20px;">
-        Interactive dashboard for Emotional Resilience & Personal Development
-    </p>
-</div>
-
-<img class="top-right-logo" src="https://img.icons8.com/color/64/000000/brain.png">
-""", unsafe_allow_html=True)
 
 # ------------------------------
 # 📌 Dashboard Overview (Summary Boxes)
