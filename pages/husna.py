@@ -227,18 +227,18 @@ elif summary_option == "Missing Values Summary":
 #  SUMMARY BOXES
 # ===============================
 
-st.subheader("📊 Dataset Summary")
+st.subheader("📊 Performance Metrics")
 
-# Ensure routing state exists
+# Ensure session state exists
 if "selected_objective" not in st.session_state:
     st.session_state.selected_objective = None
 
-# --- Custom purple card styling ---
+# --- Custom card styling ---
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
-div.stButton > button {
+.summary-card {
     height: 140px;
     width: 100%;
     font-family: 'Inter', sans-serif;
@@ -250,56 +250,72 @@ div.stButton > button {
     border-radius: 18px;
     box-shadow: 0 8px 22px rgba(106,13,173,0.18);
     transition: all 0.25s ease-in-out;
-    white-space: pre-line;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-align: center;
 }
-div.stButton > button:hover {
+.summary-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 14px 30px rgba(106,13,173,0.35);
     background: linear-gradient(145deg, #ede3ff, #e0d3ff);
 }
+.summary-tooltip {
+    font-size: 12px;
+    color: #444;
+    margin-top: 5px;
+}
 </style>
 """, unsafe_allow_html=True)
 
-# --- Metrics ---
+# --- Compute summary metrics ---
 total_participants = len(df)
 
-employment_col = next(
-    (c for c in df.columns if "employment" in c.lower() or "status" in c.lower()),
-    None
-)
+# Employment
+employment_col = next((c for c in df.columns if "employment" in c.lower() or "status" in c.lower()), None)
 employment_groups = df[employment_col].nunique() if employment_col else "N/A"
+employment_details = df[employment_col].unique().tolist() if employment_col else []
 
+# Wellbeing
 wellbeing_cols = [c for c in df.columns if "wellbeing" in c.lower() or "satisfaction" in c.lower()]
 avg_wellbeing = round(df[wellbeing_cols].mean().mean(), 2) if wellbeing_cols else "N/A"
+wellbeing_details = wellbeing_cols
 
+# Community Participation
 community_cols = [c for c in df.columns if "community" in c.lower() or "participation" in c.lower()]
 community_rate = (
-    f"{round(df[community_cols].notna().mean().mean() * 100, 1)}%"
-    if community_cols else "N/A"
+    f"{round(df[community_cols].notna().mean().mean() * 100, 1)}%" if community_cols else "N/A"
 )
+community_details = community_cols
 
-# --- Render clickable cards ---
+# --- Render summary cards ---
 col1, col2, col3, col4 = st.columns(4)
 
+def render_card(value, title, details):
+    """Render a summary card with hoverable tooltip for details."""
+    tooltip_text = ", ".join([str(d) for d in details])
+    st.markdown(f"""
+    <div class="summary-card">
+        <div style="font-size:28px;">{value}</div>
+        <div>{title} <span style="font-size:14px;">&#x2753;</span></div>
+        <div class="summary-tooltip" title="{tooltip_text}">Hover for details</div>
+    </div>
+    """, unsafe_allow_html=True)
+
 with col1:
-    if st.button(f"👥\n{total_participants}\nTotal Participants"):
-        st.session_state.selected_objective = "demographics"
-        st.rerun()
+    render_card(total_participants, "Total Participants", ["All respondents in dataset"])
 
 with col2:
-    if st.button(f"🎓\n{employment_groups}\nEmployment Groups"):
-        st.session_state.selected_objective = "demographics"
-        st.rerun()
+    render_card(employment_groups, "Employment Groups", employment_details)
 
 with col3:
-    if st.button(f"😊\n{avg_wellbeing}\nAvg Wellbeing"):
-        st.session_state.selected_objective = "wellbeing"
-        st.rerun()
+    render_card(avg_wellbeing, "Average Wellbeing Score", wellbeing_details)
 
 with col4:
-    if st.button(f"🏘️\n{community_rate}\nCommunity Participation"):
-        st.session_state.selected_objective = "community"
-        st.rerun()
+    render_card(community_rate, "Community Participation Rate", community_details)
+
 
 selected_group = st.segmented_control(
     "Employment Status",
