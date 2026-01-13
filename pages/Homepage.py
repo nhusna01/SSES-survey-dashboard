@@ -32,6 +32,7 @@ st.markdown("""
 
 st.markdown("""
 <style>
+/* ===== Animated Divider ===== */
 .animated-divider {
     height: 4px;
     width: 100%;
@@ -42,18 +43,20 @@ st.markdown("""
         #6a5acd
     );
     background-size: 200% 100%;
-    animation: shimmer 2s linear infinite;
+    animation: shimmer 2.5s linear infinite;
     border-radius: 10px;
-    margin: 30px 0;
+    margin: 32px 0;
 }
 
 @keyframes shimmer {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
 }
 </style>
-
-<div class="animated-divider"></div>
 """, unsafe_allow_html=True)
 
 # ------------------------------
