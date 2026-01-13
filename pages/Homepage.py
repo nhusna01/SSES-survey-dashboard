@@ -40,10 +40,19 @@ st.markdown("""
 <!-- Top-right icon -->
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
 
+st.markdown("""
+<style>
+.bottom-right-logo {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    height: 60px;
+}
+</style>
+
 <!-- Bottom-right icon -->
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
 """, unsafe_allow_html=True)
-
 
 st.markdown("""
 <style>
