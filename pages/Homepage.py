@@ -14,14 +14,31 @@ df = st.session_state.df
 # Header + logo
 st.markdown("""
 <style>
+/* Center the title and subtitle */
+.center-title {
+    text-align: center;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+/* Top-right floating icon */
 .top-right-logo {
     position: absolute;
     top: 10px;
     right: 20px;
     height: 60px;
 }
+
+/* Bottom-right floating icon */
+.bottom-right-logo {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    height: 60px;
+}
 </style>
 
+<!-- Header title & subtitle -->
 <div class="center-title">
     <h1 style="color:#4B0082; font-size:48px; font-weight:bold;">
         🏠 SSES Survey Dashboard
@@ -33,24 +50,11 @@ st.markdown("""
 
 <!-- Top-right icon -->
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
-.bottom-right-logo {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-    height: 60px;
-}
-</style>
 
 <!-- Bottom-right icon -->
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
 """, unsafe_allow_html=True)
 
-st.markdown("""
-<style>
 /* ===== Animated Gradient Divider ===== */
 .animated-divider {
     width: 100%;
