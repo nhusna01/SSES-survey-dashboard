@@ -5,29 +5,16 @@ import base64
 from pathlib import Path
 
 # ------------------------------
-# Load dataset into session_state if not already loaded
+# Load dataset into session_state w
 # ------------------------------
-if "df_current" not in st.session_state:
-    st.markdown("## 📋 Select Dataset to Work With")
-    dataset_option = st.selectbox(
-        "Choose dataset:",
-        options=["Cleaned Dataset", "Raw Dataset"]
-    )
 
-    if dataset_option == "Cleaned Dataset":
-        cleaned_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/main/dataset/cleaned_group_survey_data.csv"
-        try:
-            st.session_state.df_current = pd.read_csv(cleaned_url)
-            st.success("Cleaned dataset loaded successfully!")
-        except Exception as e:
-            st.error(f"Error loading cleaned dataset: {e}")
-    else:
-        GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1_7nl2F8Vfd90h8ce2TreDW5D_m3WHr6vEFtg10xz3BI/export?format=csv&gid=1821075619"
-        try:
-            st.session_state.df_current = pd.read_csv(GOOGLE_SHEET_URL)
-            st.success("Raw dataset loaded successfully!")
-        except Exception as e:
-            st.error(f"Error loading raw dataset: {e}")
+
+GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1_7nl2F8Vfd90h8ce2TreDW5D_m3WHr6vEFtg10xz3BI/export?format=csv&gid=1821075619"
+
+@st.cache_data(ttl=15)   # refresh every 15 seconds
+def load_data():
+    df = pd.read_csv(GOOGLE_SHEET_URL)
+    return df
 
 # SET PAGE CONFIG 
 st.set_page_config(
