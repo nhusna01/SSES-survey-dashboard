@@ -14,8 +14,18 @@ df = st.session_state.df
 # Header + logo
 st.markdown("""
 <style>
-.center-title { text-align: center; }
-.top-right-logo { position: absolute; top: 10px; right: 20px; height: 60px; }
+.top-right-logo {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    height: 60px;
+}
+.bottom-right-logo {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    height: 60px;
+}
 </style>
 
 <div class="center-title">
@@ -26,10 +36,14 @@ st.markdown("""
         Interactive dashboard for Emotional Resilience & Personal Development
     </p>
 </div>
+
+<!-- Top-right icon -->
+<img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
+
+<!-- Bottom-right icon -->
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
 """, unsafe_allow_html=True)
-<img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
-""", unsafe_allow_html=True)
+
 
 st.markdown("""
 <style>
