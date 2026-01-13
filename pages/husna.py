@@ -516,13 +516,17 @@ elif selected_sub == "Social & Emotional Skills":
     - UNEMPLOYED participants have lower scores, highlighting areas for support.  
     - Radar chart efficiently visualizes multiple skills at once for quick comparison.
     """)
-    st.markdown(f"""
-    **Interpretation:**
-    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
-    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
-    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
-    - {interpretations[selected_var][3]}
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        **Interpretation:**
+        - <span style="color:{color_map['EMPLOYED']}; font-weight:600;">EMPLOYED:</span> {interpretations[selected_var][0]}  
+        - <span style="color:{color_map['STUDENT']}; font-weight:600;">STUDENT:</span> {interpretations[selected_var][1]}  
+        - <span style="color:{color_map['UNEMPLOYED']}; font-weight:600;">UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+        - {interpretations[selected_var][3]}
+        """,
+        unsafe_allow_html=True
+    )
+    
 
 # ===============================
 # 3️⃣ Task Persistence & Enjoy Learning
@@ -563,13 +567,16 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         - UNEMPLOYED participants have more outliers, indicating individual differences.  
         - Box plot highlights distribution and spread for task persistence and enjoyment.
         """)
-        st.markdown(f"""
-        **Interpretation:**
-        - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
-        - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
-        - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
-        - {interpretations[selected_var][3]}
-        """, unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            **Interpretation:**
+            - <span style="color:{color_map['EMPLOYED']}; font-weight:600;">EMPLOYED:</span> {interpretations[selected_var][0]}  
+            - <span style="color:{color_map['STUDENT']}; font-weight:600;">STUDENT:</span> {interpretations[selected_var][1]}  
+            - <span style="color:{color_map['UNEMPLOYED']}; font-weight:600;">UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+            - {interpretations[selected_var][3]}
+            """,
+            unsafe_allow_html=True
+        )
 
 # ===============================
 # 4️⃣ Social Skills Grouped Bar Chart
@@ -602,13 +609,16 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
     - UNEMPLOYED participants score lower, highlighting areas for potential interventions.  
     - Grouped bar chart provides clear side-by-side comparison of multiple skills.
     """)
-    st.markdown(f"""
-    **Interpretation:**
-    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
-    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
-    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
-    - {interpretations[selected_var][3]}
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        **Interpretation:**
+        - <span style="color:{color_map['EMPLOYED']}; font-weight:600;">EMPLOYED:</span> {interpretations[selected_var][0]}  
+        - <span style="color:{color_map['STUDENT']}; font-weight:600;">STUDENT:</span> {interpretations[selected_var][1]}  
+        - <span style="color:{color_map['UNEMPLOYED']}; font-weight:600;">UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+        - {interpretations[selected_var][3]}
+        """,
+        unsafe_allow_html=True
+    )
 
 # ===============================
 # 5️⃣ Community Participation
@@ -642,13 +652,17 @@ elif selected_sub == "Community Participation":
     - UNEMPLOYED participants have the lowest participation scores.  
     - Sunburst chart visually emphasizes contribution to each community skill.
     """)
-    st.markdown(f"""
-    **Interpretation:**
-    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
-    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
-    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
-    - {interpretations[selected_var][3]}
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f"""
+        **Interpretation:**
+        - <span style="color:{color_map['EMPLOYED']}; font-weight:600;">EMPLOYED:</span> {interpretations[selected_var][0]}  
+        - <span style="color:{color_map['STUDENT']}; font-weight:600;">STUDENT:</span> {interpretations[selected_var][1]}  
+        - <span style="color:{color_map['UNEMPLOYED']}; font-weight:600;">UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+        - {interpretations[selected_var][3]}
+        """,
+        unsafe_allow_html=True
+    )
+
 
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction
