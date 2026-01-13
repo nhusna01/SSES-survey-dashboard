@@ -8,8 +8,8 @@ GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1_7nl2F8Vfd90h8ce2Tre
 
 @st.cache_data(ttl=15)   # refresh every 15 seconds
 def load_data():
-    df = pd.read_csv(GOOGLE_SHEET_URL)
-    return df
+    df_current = pd.read_csv(GOOGLE_SHEET_URL)
+    return df_current
 
 # SET PAGE CONFIG 
 st.set_page_config(
