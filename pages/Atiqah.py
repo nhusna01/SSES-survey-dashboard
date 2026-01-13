@@ -114,8 +114,10 @@ Selangor shows slightly higher average emotional regulation scores, suggesting g
 adaptability to demanding environments.
 
 **Interpretation:**  
-This may indicate that respondents in Selangor are more accustomed to regulating
-emotions in demanding environments.
+The visualization shows that Selangor has slightly higher mean values for both indicators. This suggests that respondents from Selangor report stronger 
+emotional regulation abilities compared to those from Pahang. The bar chart effectively highlights these differences by allowing direct comparison across 
+states for multiple variables simultaneously. This may indicate that respondents in Selangor are more accustomed to regulating
+emotions in demanding environments from workplace. 
 """)
 
 st.divider()
@@ -144,6 +146,8 @@ Selangor respondents are more concentrated in the *High* calmness category,
 while Pahang respondents are more evenly distributed.
 
 **Interpretation:**  
+The stacked histogram illustrates how respondents in each state are distributed across low, medium, and high levels of calmness under pressure. 
+Selangor has a higher concentration of respondents in the high category, whereas Pahang shows a more balanced distribution across all three categories.
 This pattern suggests that individuals in Selangor may have stronger stress
 management capabilities, potentially influenced by workplace demands, lifestyle,
 and access to coping resources.
@@ -186,7 +190,10 @@ Selangor exhibits higher medians and greater variability in task persistence and
 indicating stronger engagement and collaboration.
 
 **Interpretation:**  
-This implies stronger work engagement and collaborative behaviour among Selangor
+The violin plots display the distribution of task persistence and teamwork scores for both states. 
+Selangor shows higher median values and a wider spread of responses, indicating stronger overall work functioning and greater variability among respondents. 
+Pahang’s distributions are more concentrated around moderate values. These patterns suggest that respondents from Selangor generally report higher engagement and 
+collaboration, although individual experiences vary within the state. This implies stronger work engagement and collaborative behaviour among Selangor
 respondents.
 """)
 
@@ -233,8 +240,10 @@ st.markdown("""
 Selangor shows a higher proportion of respondents reporting *Good* health compared to Pahang.
 
 **Interpretation:**    
-This visualization highlights differences in perceived health status across states 
-and supports the findings observed in emotional and work functioning indicators.
+The donut charts compare the proportions of overall health categories like poor, moderate, and good between Selangor and Pahang. Selangor has a 
+larger proportion of respondents reporting good health, while Pahang shows a higher share of moderate health responses. This visualization highlights 
+differences in perceived health status across states and supports the findings observed in emotional and work functioning indicators.
+This visualization highlights differences in perceived health status across states and supports the findings observed in emotional and work functioning indicators.
 """)
 
 st.divider()
@@ -268,9 +277,9 @@ The radar chart highlights consistently higher wellbeing scores for Selangor,
 particularly in emotional control and work-related indicators.
 
 **Interpretation:**    
-This suggests that Selangor respondents score higher across multiple aspects of wellbeing simultaneously. 
-The radar chart effectively summarizes complex, multivariate data in a single visualization, reinforcing the 
-overall comparison between states.
+The radar chart presents a multidimensional comparison of wellbeing indicators across both states. Selangor consistently extends further along most dimensions, 
+particularly emotional control, task persistence, and teamwork. This suggests that Selangor respondents score higher across multiple aspects of wellbeing simultaneously. 
+The radar chart effectively summarizes complex, multivariate data in a single visualization, reinforcing the overall comparison between states.
 """)
 
 st.divider()
