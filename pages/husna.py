@@ -546,10 +546,6 @@ elif selected_sub == "Community Participation and Social Responsibility":
 
     st.plotly_chart(fig, use_container_width=True)
 
-# Placeholder for remaining objectives
-else:
-    st.info("📌 Visualization for this sub-objective will be added next.")
-
 
 # 6️⃣ Wellbeing & Life Satisfaction
 elif selected_sub == "Wellbeing and Life Satisfaction":
@@ -574,4 +570,9 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     )
 
     st.plotly_chart(fig, use_container_width=True)
+
+
+# Placeholder for remaining objectives
+else:
+    st.info("📌 Visualization for this sub-objective will be added next.")
 
