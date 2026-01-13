@@ -553,7 +553,6 @@ else:
 
 # 6️⃣ Wellbeing & Life Satisfaction
 elif selected_sub == "Wellbeing and Life Satisfaction":
-elif selected_sub == "Wellbeing and Life Satisfaction":
 
     wellbeing_vars = ['life_satisfaction', 'overall_health', 'wellbeing_belief']
 
