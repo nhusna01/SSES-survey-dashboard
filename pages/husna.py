@@ -63,7 +63,7 @@ st.markdown("""
         #7C3AED
     );
     background-size: 300% 100%;
-    border-radius: 3px;
+    border-radius: 8px;
     animation: gradientMove 6s ease infinite;
     margin: 1.4rem 0 2.2rem 0;
 }
