@@ -138,6 +138,11 @@ st.markdown("""
 *Analysis:*  
 Selangor respondents are more concentrated in the *High* calmness category,
 while Pahang respondents are more evenly distributed.
+
+**Interpretation:**  
+This pattern suggests that individuals in Selangor may have stronger stress
+management capabilities, potentially influenced by workplace demands, lifestyle,
+and access to coping resources.
 """)
 
 st.divider()
