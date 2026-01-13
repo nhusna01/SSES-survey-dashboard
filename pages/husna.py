@@ -229,14 +229,6 @@ elif summary_option == "Missing Values Summary":
 
 st.subheader("📊 Performance Metrics")
 
-import streamlit as st
-import pandas as pd
-
-# Example: assume df is already loaded
-# df = pd.read_csv("your_dataset.csv")
-
-st.subheader("📊 Summary Metrics Across Key Attributes")
-
 # Ensure session state exists
 if "selected_objective" not in st.session_state:
     st.session_state.selected_objective = None
