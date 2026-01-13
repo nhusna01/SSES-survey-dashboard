@@ -232,7 +232,7 @@ st.markdown("""
 **Analysis:**  
 Selangor shows a higher proportion of respondents reporting *Good* health compared to Pahang.
 
-**Interpretation:**
+**Interpretation:**    
 This visualization highlights differences in perceived health status across states 
 and supports the findings observed in emotional and work functioning indicators.
 """)
@@ -267,7 +267,7 @@ st.markdown("""
 The radar chart highlights consistently higher wellbeing scores for Selangor,
 particularly in emotional control and work-related indicators.
 
-**Interpretation:**
+**Interpretation:**    
 This suggests that Selangor respondents score higher across multiple aspects of wellbeing simultaneously. 
 The radar chart effectively summarizes complex, multivariate data in a single visualization, reinforcing the 
 overall comparison between states.
