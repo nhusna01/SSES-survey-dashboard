@@ -107,8 +107,8 @@ st.markdown(
         background-color: #f6f1fb;
         padding: 1.5rem 2rem;   /* Original padding */
         border-radius: 15px;     /* Original rounded corners */
-        margin-bottom: 2rem;   /* Original spacing below */
-        max-width: 700px;         /* Original width */
+        margin-bottom: 1rem;   /* Original spacing below */
+        max-width: 500px;         /* Original width */
     }
 
     .main-objectives-title {
