@@ -140,7 +140,7 @@ st.markdown("---")
 if not df.empty:
     # 1. Sidebar Interactivity: Filtering the Data
     st.sidebar.header("Filters")
-    st.sidebar.write("Adjust the range to update key metrics below.")
+    st.sidebar.write("Adjust the range to update the key metrics")
     
     # Example: Filtering by Overall Health Score to see how it impacts other metrics
     if 'overall_health' in df.columns:
