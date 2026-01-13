@@ -54,30 +54,11 @@ elif problem_option == "Why Survey-Based Data is Suitable":
 # OBJECTIVE (INTERACTIVE)
 # ======================================
 st.markdown("### 🎯 Objective")
-
-objective_option = st.radio(
-    "View objective perspective:",
-    ["Primary Objective", "Analytical Focus", "Expected Outcome"]
-)
-
-if objective_option == "Primary Objective":
-    st.success("""
-    To investigate the relationship between emotional resilience and personal development
-    attributes, including motivation, adaptability, emotional control, task persistence,
-    and teamwork skills.
-    """)
-
-elif objective_option == "Analytical Focus":
-    st.success("""
-    The analysis focuses on identifying response patterns, attribute strength,
-    inter-attribute relationships, and variability across respondents.
-    """)
-
-elif objective_option == "Expected Outcome":
-    st.success("""
-    The results are expected to highlight dominant resilience traits, weaker development
-    areas, and key emotional attributes that influence overall resilience.
-    """)
+st.success("""
+The objective of this study is to investigate the relationship between emotional resilience
+and personal development attributes, including motivation, adaptability, emotional control,
+task persistence, and teamwork skills.
+""")
 
 # ======================================
 # DATA LOADING
