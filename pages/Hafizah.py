@@ -59,11 +59,21 @@ df[attributes] = df[attributes].fillna(df[attributes].median())
 # ======================================
 st.markdown("### 📊 Dataset Overview")
 st.info(f"""
-• **Dataset Name:** Hafizah_SSES_Cleaned.csv  
-• **Total Respondents:** {df.shape[0]}  
-• **Total Variables:** {df.shape[1]}  
-• **Measurement Scale:** 5-point Likert scale  
-• **Focus Area:** Emotional resilience & personal development
+The dataset used in this study was derived from a self-administered survey designed
+to assess **emotional resilience and personal development characteristics** among respondents.
+It captures individuals’ self-perceived ability to manage emotional pressure, regulate emotions,
+adapt to change, remain motivated, persist in challenging tasks, and collaborate effectively
+with others.
+
+All attributes were measured using a **5-point Likert scale**, allowing respondents to indicate
+their level of agreement with each statement. This structure enables quantitative comparison,
+distribution analysis, and relationship exploration between key emotional resilience factors.
+
+**Dataset Summary:**
+• Total Respondents: {df.shape[0]}  
+• Total Variables: {df.shape[1]}  
+• Core Focus: Emotional regulation, adaptability, motivation, persistence, and teamwork  
+• Data Type: Survey-based, cross-sectional
 """)
 
 with st.expander("🔍 Dataset Preview"):
