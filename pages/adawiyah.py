@@ -265,27 +265,27 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
             </div>
         """, unsafe_allow_html=True)
 
-# VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT 
+# --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT (Simplified) ---
 with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     
-    
+    # Ensure indices are calculated (if not already done at the top of the script)
+    df['social_support_index'] = df[['social_support', 'social_time', 'community_care']].mean(axis=1)
+    df['community_safety_index'] = df[['neighborhood_safety', 'community_care']].mean(axis=1)
 
-    # UPDATED: color_continuous_scale set to 'Reds' for consistency
+    # Simplified Scatter Plot
     fig2 = px.scatter(
         df,
         x='social_support_index',
         y='life_satisfaction',
         color='community_safety_index',
-        trendline="ols" if show_trend else None,
         opacity=0.8,
-        size_max=point_size,
         color_continuous_scale='Reds', 
-        labels={'social_support_index': 'Support Score', 'life_satisfaction': 'Satisfaction', 'community_safety_index': 'Safety'}
+        labels={
+            'social_support_index': 'Support Score', 
+            'life_satisfaction': 'Satisfaction', 
+            'community_safety_index': 'Safety'
+        }
     )
-
-    # UPDATED: Set trendline color to a darker red/maroon for visibility
-    if show_trend:
-        fig2.update_traces(line=dict(color='#8B0000'))
 
     fig2.update_layout(
         title="<b>Impact of Support & Safety</b>",
@@ -294,6 +294,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
         plot_bgcolor='rgba(0,0,0,0)',
     )
 
+    # Layout: Chart + Guide
     sc_chart_col, sc_guide_col = st.columns([4, 1])
     with sc_chart_col:
         st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
@@ -303,14 +304,16 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
         with st.popover("Reading Chart"):
             st.markdown("Darker dots represent respondents in **safer communities**.")
 
+    # Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
             <p style="margin: 0; color: #333;">
-                <b>Interpretation:</b> The increasing trendline quantitatively demonstrates that life satisfaction rises in line with social support.
-                Furthermore, the concentration of darker red dots at greater satisfaction levels indicates that overall well-being is significantly multiplied by community safety.
+                <b>Interpretation:</b> The distribution demonstrates that life satisfaction generally rises in line with social support.
+                Furthermore, the concentration of darker red dots at greater satisfaction levels indicates that overall well-being is significantly strengthened by community safety.
             </p>
         </div>
     """, unsafe_allow_html=True)
+
 
 # VISUALIZATION 3: DYNAMIC DISTRIBUTION 
 with st.expander("Visualization 3: Distribution of Scores", expanded=False):
