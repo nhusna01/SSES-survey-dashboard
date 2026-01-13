@@ -55,8 +55,9 @@ st.markdown("""
 <img class="bottom-right-logo" src="https://img.icons8.com/color/64/feelings.png">
 """, unsafe_allow_html=True)
 
-
-/* ===== Animated Gradient Divider ===== */
+# ------------------------------
+# Animated Divider
+# ------------------------------
 st.markdown("""
 <style>
 .animated-divider {
