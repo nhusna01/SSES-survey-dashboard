@@ -28,14 +28,6 @@ st.markdown("""
     right: 20px;
     height: 60px;
 }
-
-/* Bottom-right floating icon */
-.bottom-right-logo {
-    position: absolute;
-    bottom: 20px;
-    right: 20px;
-    height: 60px;
-}
 </style>
 
 <!-- Header title & subtitle -->
@@ -50,9 +42,6 @@ st.markdown("""
 
 <!-- Top-right icon -->
 <img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
-
-<!-- Bottom-right icon -->
-<img class="bottom-right-logo" src="https://img.icons8.com/color/64/mood.png">
 """, unsafe_allow_html=True)
 
 # ------------------------------
