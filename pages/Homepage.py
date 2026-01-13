@@ -187,12 +187,16 @@ st.markdown("---")
 st.subheader("👥 Demographic Analysis")
 
 demo_options = ['gender', 'age', 'employment_status', 'education_level', 'marital_status', 'state', 'home_language']
-demo_options = ['gender', 'age', 'employment_status', 'education_level', 'marital_status', 'state', 'home_language']
+demo_options = [col for col in demo_options if col in df_current.columns]
 
 demo_col = st.selectbox(
     "Select Demographic Variable to Visualize",
     options=demo_options if demo_options else df_current.columns
 )
+
+# Automatically bin numeric columns (like age) for pie charts
+if df_current[demo_col].dtype in ['int64','float64']:
+    df_current[demo_col] = pd.cut(df_current[demo_col], bins=10).astype(str)
 
 col1, col2 = st.columns([2,1])
 
