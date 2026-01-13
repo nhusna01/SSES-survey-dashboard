@@ -527,6 +527,87 @@ elif selected_sub == "Emotional Regulation":
 
     st.plotly_chart(fig, use_container_width=True)
 
+import streamlit as st
+import plotly.express as px
+import pandas as pd
+
+# ===============================
+# Prepare Data
+# ===============================
+# Ensure employment_status is string with readable labels
+status_mapping = {0: 'EMPLOYED', 1: 'STUDENT', 2: 'UNEMPLOYED'}
+if df['employment_status'].dtype in [int, float]:
+    df['employment_status'] = df['employment_status'].map(status_mapping)
+df['employment_status'] = df['employment_status'].astype(str)
+
+# ===============================
+# Filter by Employment Status
+# ===============================
+employment_options = st.multiselect(
+    "Select Employment Status to Display:",
+    options=df['employment_status'].unique(),
+    default=df['employment_status'].unique()
+)
+df_filtered = df[df['employment_status'].isin(employment_options)]
+
+# ===============================
+# Columns to Plot
+# ===============================
+columns_to_plot = ['task_persistence', 'enjoy_learning']
+
+# Bold, bright, scientific color map
+color_map = {
+    'EMPLOYED': '#1f77b4',   # Blue
+    'STUDENT': '#ff7f0e',    # Orange
+    'UNEMPLOYED': '#2ca02c'  # Green
+}
+
+# ===============================
+# Plot Box Plots with Interpretation
+# ===============================
+for col in columns_to_plot:
+    fig_box = px.box(
+        df_filtered,
+        x='employment_status',
+        y=col,
+        color='employment_status',
+        points='all',  # show all data points
+        color_discrete_map=color_map,
+        title=f'{col.replace("_"," ").title()} by Employment Status',
+        hover_data=df_filtered.columns  # show full data on hover
+    )
+    
+    fig_box.update_layout(
+        xaxis_title='Employment Status',
+        yaxis_title=col.replace("_"," ").title(),
+        boxmode='group',
+        template='plotly_white',  # clean white background for scientific visualization
+        font=dict(family="Arial", size=12)
+    )
+    
+    st.plotly_chart(fig_box, use_container_width=True)
+
+    # ===============================
+    # Creative Interpretation
+    # ===============================
+    st.markdown(f"""
+    <div style="
+        background-color:#f0f0f0;
+        padding:12px;
+        border-radius:12px;
+        font-family:'Inter', sans-serif;
+        margin-bottom:20px;
+    ">
+        <strong>Interpretation:</strong>
+        <ul style="line-height:1.6;">
+            <li>Participants in the <span style='color:{color_map['EMPLOYED']}'>EMPLOYED</span> group tend to have a slightly higher median {col.replace("_"," ").title()} compared to other groups.</li>
+            <li>The distribution shows variability within the <span style='color:{color_map['STUDENT']}'>STUDENT</span> group, indicating diverse behaviors in this skill dimension.</li>
+            <li>The <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED</span> group shows more outliers, highlighting individual differences that may warrant further investigation.</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+
+
 # 5️⃣ Community Participation
 elif selected_sub == "Community Participation and Social Responsibility":
 
