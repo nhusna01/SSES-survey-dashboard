@@ -16,7 +16,7 @@ st.markdown(
 )
 
 st.markdown(
-    '<div class="subtitle">Exploring demographic characteristics, wellbeing, behavioral traits, and community participation</div>',
+    '<div class="subtitle">Exploring social and emotional skills, well-being outcome, and community engagement</div>',
     unsafe_allow_html=True
 )
 
@@ -138,7 +138,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-
 # ===============================
 # 📋 DATA SUMMARY
 # ===============================
@@ -174,6 +173,11 @@ if summary_option == "Overall Dataset Overview":
     })
 
     st.dataframe(summary_df, use_container_width=True)
+
+# ---------- DATASET SUMMARY ----------
+
+   st.markdown("**Full Dataset Summary**")
+    st.dataframe(df, use_container_width=True)
 
 # ---------- CATEGORICAL SUMMARY ----------
 elif summary_option == "Categorical Variables Summary":
