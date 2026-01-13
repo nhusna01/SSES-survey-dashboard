@@ -5,14 +5,12 @@ import base64
 from pathlib import Path
 from preprocess import load_data
 
-# Path to your local dataset
-DATA_PATH = Path("/content/cleaned_group_survey_data.csv")
+GOOGLE_SHEET_URL = "https://docs.google.com/spreadsheets/d/1_7nl2F8Vfd90h8ce2TreDW5D_m3WHr6vEFtg10xz3BI/export?format=csv&gid=1821075619"
 
 @st.cache_data(ttl=15)   # refresh every 15 seconds
 def load_data():
-    df = pd.read_csv(DATA_PATH)
+    df = pd.read_csv(GOOGLE_SHEET_URL)
     return df
-
 
 # SET PAGE CONFIG 
 st.set_page_config(
