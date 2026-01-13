@@ -403,6 +403,7 @@ subobjectives = {
     "To assess differences in overall wellbeing and life satisfaction across students, employed, "
     "and unemployed individuals."
 }
+
 selected_sub = st.selectbox(
     "Select a sub-objective to explore:",
     list(subobjectives.keys())
@@ -440,7 +441,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-)
 
 # ===============================
 # 🔹 Filter and plot visualizations per sub-objective
