@@ -354,39 +354,32 @@ with col4:
     """, unsafe_allow_html=True)
 
 
+
 # -----------------------------
-# 🔹 Sub-Objectives Definition
+# Sub-objectives and Icons
 # -----------------------------
 subobjectives = {
     "Correlation Between Likert Variables": 
-    "1️⃣ **Correlation Between Likert Variables**\n\n"
-    "To examine the relationships among Likert-scale variables related to social, emotional, well-being, "
-    "and community attributes across different employment status groups.",
-
+        "1️⃣ **Correlation Between Likert Variables**\n\n"
+        "To examine the relationships among Likert-scale variables related to social, emotional, wellbeing, "
+        "and community attributes across different employment status groups.",
     "Social & Emotional Skills": 
-    "2️⃣ **Social & Emotional Skills**\n\n"
-    "To compare emotional regulation skills (including emotional regulation, personal development, "
-    "social skills, and interaction) among students, employed, and unemployed individuals.",
-
+        "2️⃣ **Social & Emotional Skills**\n\n"
+        "To compare emotional regulation skills (including emotional control, calmness under pressure, "
+        "cheerfulness, and restfulness) among students, employed, and unemployed individuals.",
     "Task Persistence & Enjoy Learning": 
-    "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
-    "To examine variations in self-management and personal development skills, such as task persistence, "
-    "and enjoyment of learning, across different employment status groups.",
-
+        "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
+        "To examine variations in task persistence and enjoyment of learning across different employment status groups.",
     "Social Skills Grouped Bar Chart": 
-    "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
-    "To analyze differences in social and interpersonal skills, including teamwork, social support, "
-    "and helping others, during social interaction, among students, employed, and unemployed respondents.",
-
+        "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
+        "To analyze differences in social and interpersonal skills, including teamwork, social support, "
+        "helping others, and time spent on social interaction.",
     "Community Participation": 
-    "5️⃣ **Community Participation and Social Responsibility**\n\n"
-    "To investigate how community participation and civic engagement, such as community involvement, "
-    "and perceived community impact varies across employment status groups.",
-
+        "5️⃣ **Community Participation and Social Responsibility**\n\n"
+        "To investigate how community participation and civic engagement vary across employment status groups.",
     "Wellbeing and Life Satisfaction": 
-    "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-    "To assess differences in overall well-being and life satisfaction across students, employed, "
-    "and unemployed individuals."
+        "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
+        "To assess differences in overall wellbeing and life satisfaction across students, employed, and unemployed individuals."
 }
 
 objective_icons = {
@@ -399,68 +392,43 @@ objective_icons = {
 }
 
 # -----------------------------
-# Sidebar - Select Objective / Chapter
+# Sidebar: Select Sub-Objective
 # -----------------------------
 selected_sub = st.sidebar.selectbox(
     "Select Objective / Chapter:",
-    [
-        "Correlation Between Likert Variables",    # 1️⃣
-        "Social & Emotional Skills",               # 2️⃣
-        "Task Persistence & Enjoy Learning",      # 3️⃣
-        "Social Skills Grouped Bar Chart",        # 4️⃣
-        "Community Participation",                # 5️⃣
-        "Wellbeing and Life Satisfaction"         # 6️⃣
-    ]
+    list(subobjectives.keys())
 )
 
+# -----------------------------
+# Employment Status Filter
+# -----------------------------
+selected_group = st.segmented_control(
+    "Employment Status Filter:",
+    options=["All", "Students", "Employed", "Unemployed"]
+)
+
+status_mapping = {
+    "Students": 1,
+    "Employed": 0,
+    "Unemployed": 2
+}
+
+if selected_group and selected_group != "All":
+    filtered_df = df[df["employment_status"] == status_mapping[selected_group]]
+else:
+    filtered_df = df.copy()
+
+st.caption(f"Currently viewing data for: **{selected_group}**")
 
 # -----------------------------
-# Display Sub-Objective Description and Icon
+# Prepare Labels and Colors
 # -----------------------------
-st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
+status_mapping_str = {0: 'EMPLOYED', 1: 'STUDENT', 2: 'UNEMPLOYED'}
+if filtered_df['employment_status'].dtype in [int, float]:
+    filtered_df['employment_status'] = filtered_df['employment_status'].map(status_mapping_str)
+filtered_df['employment_status'] = filtered_df['employment_status'].astype(str)
 
-# ===============================
-# 1️⃣ Correlation Heatmap
-# ===============================
-if selected_sub == "Correlation Between Likert Variables":
-
-    likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
-        'social_support', 'helping_others', 'community_participation',
-        'community_impact', 'life_satisfaction', 'overall_health'
-    ]
-
-    # Use numeric employment status
-    df_corr = df[likert_cols + ['employment_status']].apply(pd.to_numeric, errors='coerce')
-    corr_df = df_corr.corr()
-
-    fig = px.imshow(
-        corr_df,
-        text_auto=True,
-        aspect="auto",
-        color_continuous_scale=px.colors.sequential.Viridis,
-        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
-    )
-    fig.update_layout(height=800)
-    st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("""
-    **Interpretation:**
-    - `social_support` and `helping_others` show strong positive correlation, indicating linked social behaviors.  
-    - Community engagement variables moderately correlate with `life_satisfaction` and `overall_health`.  
-    - Employment status shows slight positive correlation with wellbeing metrics.  
-    - Heatmap allows quick identification of variables to focus on for interventions and predictive modeling.
-    """)
-
-# -----------------------------
-# Prepare Data for Charts (String Labels)
-# -----------------------------
-status_mapping = {0: 'EMPLOYED', 1: 'STUDENT', 2: 'UNEMPLOYED'}
-if df['employment_status'].dtype in [int, float]:
-    df['employment_status'] = df['employment_status'].map(status_mapping)
-df['employment_status'] = df['employment_status'].astype(str)
-
-df['employment_status_label'] = df['employment_status'].map({
+filtered_df['employment_status_label'] = filtered_df['employment_status'].map({
     'EMPLOYED': 'Employed',
     'STUDENT': 'Student',
     'UNEMPLOYED': 'Unemployed'
@@ -472,24 +440,57 @@ color_map = {
     'UNEMPLOYED': '#fde725'  # Bright yellow
 }
 
+# -----------------------------
+# Display Sub-Objective Description
+# -----------------------------
+st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
+
+# ===============================
+# 1️⃣ Correlation Heatmap
+# ===============================
+if selected_sub == "Correlation Between Likert Variables":
+    likert_cols = [
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
+        'social_support', 'helping_others', 'community_participation',
+        'community_impact', 'life_satisfaction', 'overall_health'
+    ]
+    # Use numeric employment status for correlation
+    df_corr = filtered_df[likert_cols + ['employment_status']].apply(pd.to_numeric, errors='coerce')
+    corr_df = df_corr.corr()
+    
+    fig = px.imshow(
+        corr_df,
+        text_auto=True,
+        aspect="auto",
+        color_continuous_scale=px.colors.sequential.Viridis,
+        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
+    )
+    fig.update_layout(height=800)
+    st.plotly_chart(fig, width='stretch')
+
+    st.markdown("""
+    **Interpretation:**
+    - `social_support` and `helping_others` show strong positive correlation, indicating linked social behaviors.  
+    - Community engagement variables moderately correlate with `life_satisfaction` and `overall_health`.  
+    - Employment status shows slight positive correlation with wellbeing metrics.  
+    - Heatmap allows quick identification of variables to focus on for interventions and predictive modeling.
+    """)
+
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
 elif selected_sub == "Social & Emotional Skills":
-
     independent_vars = [
         'calm_under_pressure', 'cheerful', 'task_persistence',
         'social_support', 'enjoy_learning', 'helping_others'
     ]
-    df[independent_vars] = df[independent_vars].apply(pd.to_numeric, errors='coerce')
-
-    radar_data = df.groupby('employment_status_label')[independent_vars].mean().reset_index()
+    filtered_df[independent_vars] = filtered_df[independent_vars].apply(pd.to_numeric, errors='coerce')
+    radar_data = filtered_df.groupby('employment_status_label')[independent_vars].mean().reset_index()
     radar_data = radar_data.melt(
         id_vars='employment_status_label',
         var_name='Skill Dimension',
         value_name='Average Score'
     )
-
     fig = px.line_polar(
         radar_data,
         r='Average Score',
@@ -504,7 +505,7 @@ elif selected_sub == "Social & Emotional Skills":
         polar=dict(radialaxis=dict(visible=True, range=[1,5], tickvals=[1,2,3,4,5])),
         legend_title_text='Employment Status'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     st.markdown("""
     **Interpretation:**
@@ -518,15 +519,13 @@ elif selected_sub == "Social & Emotional Skills":
 # 3️⃣ Task Persistence & Enjoy Learning
 # ===============================
 elif selected_sub == "Task Persistence & Enjoy Learning":
-
     columns_to_plot = ['task_persistence', 'enjoy_learning']
-
     employment_options = st.multiselect(
         "Filter Employment Status:",
-        options=df['employment_status_label'].unique(),
-        default=df['employment_status_label'].unique()
+        options=filtered_df['employment_status_label'].unique(),
+        default=filtered_df['employment_status_label'].unique()
     )
-    df_filtered = df[df['employment_status_label'].isin(employment_options)]
+    df_filtered = filtered_df[filtered_df['employment_status_label'].isin(employment_options)]
 
     for col in columns_to_plot:
         fig_box = px.box(
@@ -546,7 +545,7 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
             template='plotly_white',
             font=dict(family="Arial", size=12)
         )
-        st.plotly_chart(fig_box, use_container_width=True)
+        st.plotly_chart(fig_box, width='stretch')
 
         st.markdown(f"""
         **Interpretation for {col.replace('_',' ').title()}:**
@@ -560,15 +559,13 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
 # 4️⃣ Social Skills Grouped Bar Chart
 # ===============================
 elif selected_sub == "Social Skills Grouped Bar Chart":
-
     group_vars = ['enjoy_learning', 'helping_others', 'teamwork']
-    df_avg = df.groupby('employment_status_label')[group_vars].mean().reset_index()
+    df_avg = filtered_df.groupby('employment_status_label')[group_vars].mean().reset_index()
     df_melt = df_avg.melt(
         id_vars='employment_status_label',
         var_name='Variable',
         value_name='Average Score'
     )
-
     fig_groupbar = px.bar(
         df_melt,
         x='employment_status_label',
@@ -580,7 +577,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         color_discrete_map=color_map
     )
     fig_groupbar.update_layout(template='plotly_white', font=dict(family="Arial", size=12))
-    st.plotly_chart(fig_groupbar, use_container_width=True)
+    st.plotly_chart(fig_groupbar, width='stretch')
 
     st.markdown("""
     **Interpretation:**
@@ -594,16 +591,14 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 # 5️⃣ Community Participation
 # ===============================
 elif selected_sub == "Community Participation":
-
     community_vars = ['community_participation', 'community_care', 'community_impact']
-    df_sunburst = df.groupby('employment_status_label')[community_vars].mean().reset_index()
+    df_sunburst = filtered_df.groupby('employment_status_label')[community_vars].mean().reset_index()
     df_melt = df_sunburst.melt(
         id_vars='employment_status_label',
         value_vars=community_vars,
         var_name='Community Skill',
         value_name='Average Score'
     )
-
     fig_sunburst = px.sunburst(
         df_melt,
         path=['employment_status_label', 'Community Skill'],
@@ -615,7 +610,7 @@ elif selected_sub == "Community Participation":
     )
     fig_sunburst.update_layout(margin=dict(t=50,l=0,r=0,b=0), uniformtext=dict(minsize=10,mode='hide'))
     fig_sunburst.update_traces(hovertemplate='<b>%{label}</b><br>Average Score: %{value:.2f}<extra></extra>')
-    st.plotly_chart(fig_sunburst, use_container_width=True)
+    st.plotly_chart(fig_sunburst, width='stretch')
 
     st.markdown("""
     **Interpretation:**
@@ -629,12 +624,11 @@ elif selected_sub == "Community Participation":
 # 6️⃣ Wellbeing and Life Satisfaction
 # ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
-
     wellbeing_vars = ['life_satisfaction', 'overall_health', 'wellbeing_belief']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
     fig = px.violin(
-        df,
+        filtered_df,
         x='employment_status_label',
         y=selected_var,
         color='employment_status_label',
@@ -643,7 +637,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         color_discrete_map=color_map,
         title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
     interpretations = {
         'life_satisfaction': [
@@ -674,14 +668,12 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     - {interpretations[selected_var][3]}
     """, unsafe_allow_html=True)
 
-st.info("📌 Visualization for this sub-objective will be added next.")
-
 # ===============================
 # Overall Conclusion
 # ===============================
 st.markdown(f"""
 <div style='background-color:{color_map['EMPLOYED']}; padding: 15px; border-radius: 10px;'>
 <b style='color:white;'>Overall Conclusion:</b><br>
-After analyzing multiple visualizations, the Grouped Bar Chart and Radar Chart provide the clearest comparison across employment status groups. Social skills variables such as `social_support` and `helping_others` are most strongly correlated with overall wellbeing objectives. These charts allow quick identification of key areas for intervention and display differences among EMPLOYED, STUDENT, and UNEMPLOYED participants in an interpretable manner.
+After reviewing all visualizations, the Grouped Bar Chart and Radar Chart are most effective for comparing skill levels across employment status. Social skills variables such as `social_support` and `helping_others` are most strongly correlated with overall wellbeing outcomes. These charts allow rapid identification of key areas for interventions and clearly show differences among EMPLOYED, STUDENT, and UNEMPLOYED participants.
 </div>
 """, unsafe_allow_html=True)
