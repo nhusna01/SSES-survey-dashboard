@@ -824,9 +824,6 @@ elif selected_sub == "Community Participation":
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
-# ===============================
-# Wellbeing and Life Satisfaction Violin Plot
-# ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
     wellbeing_vars = ['life_satisfaction', 'overall_health']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
