@@ -532,7 +532,7 @@ if selected_sub == "Correlation Between Likert Variables":
     # Conclusion
     # -----------------------------
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
-    st.markdown("""
+    st.markdown(f"""
     - Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.  
     - The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.  
     - This approach is suitable for descriptive insight generation and comparative analysis.
