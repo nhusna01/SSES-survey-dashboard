@@ -337,40 +337,41 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     """, unsafe_allow_html=True)
 
 
-# VISUALIZATION 3: DYNAMIC DISTRIBUTION (Continuous Data Focus)
+# VISUALIZATION 3: DYNAMIC DISTRIBUTION (Box Plot)
 with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
-    # 1. Selection Menu - Using "Pillar" or "Indicator" instead of Dimension
+    # 1. Selection Menu
     selected_dist = st.selectbox(
         "Select Pillar to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
         key="dist_selector_v3"
     )
     
-    # 2. Define Dynamic Interpretation Text
+    # 2. Define Dynamic Interpretation Text (Updated for Box Plot logic)
     if selected_dist == 'life_satisfaction':
-        text = "The distribution skews to the right, indicating that most respondents have moderate-to-high life satisfaction. The concentration between 3 and 4 suggests a generally pleasant psychological state across the demographic."
+        text = "The box plot shows a high median score. The 'box' (representing the middle 50% of people) is tight and positioned toward the top, proving that most respondents are consistently satisfied with their lives."
     elif selected_dist == 'social_support_index':
-        text = "The density plot shows a dominant peak around the 3.7 range. This suggests a fairly consistent, mid-high level of perceived support, with very few individuals reporting a complete lack of social connection."
+        text = "The median for social support is remarkably high. Even the lower 'whisker' of the plot doesn't drop significantly, indicating that almost everyone in the survey feels they have a baseline level of support."
     else:
-        text = "This pillar shows a wider spread, indicating a high variance in emotional regulation. The thicker middle section confirms most are stable, but the long 'tail' at the bottom highlights a group that may need additional psychological support."
+        text = "This pillar shows the largest 'spread.' The long whiskers indicate that while the average person is doing okay, there is a much wider gap between the most resilient and most vulnerable individuals in this group."
 
-    # 3. Create the Violin Plot (Best for Continuous Point Data)
-    # This shows the density (shape) and the box plot (summary stats) together
-    fig3 = px.violin(
+    # 3. Create the Box Plot
+    # Box plots are perfect for showing Median, Quartiles, and Outliers
+    fig3 = px.box(
         df, 
         y=selected_dist, 
-        box=True, # Shows the median and quartiles inside
-        points="all", # Shows individual data points next to the violin
+        points="all", # This shows every individual dot next to the box for transparency
+        notched=True, # Adds a 'notch' at the median to show confidence intervals
         color_discrete_sequence=['#D32F2F'],
         labels={selected_dist: "Score (1-5)"}
     ) 
     
     fig3.update_layout(
-        title=f"<b>Density and Spread of {selected_dist.replace('_', ' ').title()}</b>",
+        title=f"<b>Statistical Spread of {selected_dist.replace('_', ' ').title()}</b>",
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        yaxis=dict(range=[0.5, 5.5]) # Keeps the scale consistent
+        yaxis=dict(range=[0.5, 5.5], gridcolor='#EEEEEE'),
+        xaxis=dict(showticklabels=False) # Hides the X-axis label as it's not needed for a single box
     )
     
     st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
@@ -385,7 +386,6 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     """, unsafe_allow_html=True)
 
 st.markdown("---")
-
 # VISUALIZATION 4: GROUP WELL-BEING PROFILE ---
 with st.expander("Visualization 4: Group Psychological Profile", expanded=False):
     
