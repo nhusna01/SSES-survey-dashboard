@@ -497,6 +497,11 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
             xaxis=dict(tickmode='linear'),
             coloraxis_showscale=False # Keeps it neat by hiding the side color bar
         )
+        
+        # 3. Layout: Chart + Guide
+        col_chart6, col_info6 = st.columns([4, 1])
+        with col_chart6:
+            st.plotly_chart(fig6, use_container_width=True, key="bar_viz_6")
 
         # UPDATED: Integrated Indicator in the Layout
         fig6.update_layout(
