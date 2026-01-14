@@ -337,7 +337,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     """, unsafe_allow_html=True)
 
 
-# VISUALIZATION 3: DYNAMIC DISTRIBUTION (Box Plot)
+# VISUALIZATION 3: DYNAMIC DISTRIBUTION (Histogram)
 with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     # 1. Selection Menu
@@ -347,31 +347,33 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
         key="dist_selector_v3"
     )
     
-    # 2. Define Dynamic Interpretation Text (Updated for Box Plot logic)
+    # 2. Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
-        text = "The box plot shows a high median score. The 'box' (representing the middle 50% of people) is tight and positioned toward the top, proving that most respondents are consistently satisfied with their lives."
+        text = "The frequency bars show a clear right-skew. This means the majority of respondents are clustered in the 4.0 to 5.0 range, proving that high life satisfaction is the 'norm' for this group rather than the exception."
     elif selected_dist == 'social_support_index':
-        text = "The median for social support is remarkably high. Even the lower 'whisker' of the plot doesn't drop significantly, indicating that almost everyone in the survey feels they have a baseline level of support."
+        text = "The histogram reveals a high concentration of scores around 3.5 to 4.0. The lack of bars on the far left (scores 1-2) highlights that very few individuals feel completely isolated or unsupported."
     else:
-        text = "This pillar shows the largest 'spread.' The long whiskers indicate that while the average person is doing okay, there is a much wider gap between the most resilient and most vulnerable individuals in this group."
+        text = "This distribution is more 'spread out' across the x-axis. While the peak is still at the center (Score 3), the presence of bars across the entire range suggests a high diversity in how people manage their emotions."
 
-    # 3. Create the Box Plot
-    # Box plots are perfect for showing Median, Quartiles, and Outliers
-    fig3 = px.box(
+    # 3. Create the Histogram
+    # We use 'marginal="rug"' to show the exact 'point' data locations under the bars
+    fig3 = px.histogram(
         df, 
-        y=selected_dist, 
-        points="all", # This shows every individual dot next to the box for transparency
-        notched=True, # Adds a 'notch' at the median to show confidence intervals
+        x=selected_dist, 
+        nbins=20, 
+        marginal="rug", # Adds tiny lines at the bottom for every 'point' data entry
         color_discrete_sequence=['#D32F2F'],
+        opacity=0.85,
         labels={selected_dist: "Score (1-5)"}
     ) 
     
     fig3.update_layout(
-        title=f"<b>Statistical Spread of {selected_dist.replace('_', ' ').title()}</b>",
+        title=f"<b>Frequency Distribution of {selected_dist.replace('_', ' ').title()}</b>",
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        yaxis=dict(range=[0.5, 5.5], gridcolor='#EEEEEE'),
-        xaxis=dict(showticklabels=False) # Hides the X-axis label as it's not needed for a single box
+        xaxis=dict(range=[0.8, 5.2], gridcolor='#EEEEEE'),
+        yaxis_title="Number of Respondents",
+        bargap=0.05 # Small gap makes it look cleaner
     )
     
     st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
