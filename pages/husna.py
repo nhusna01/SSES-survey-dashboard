@@ -870,7 +870,7 @@ interpretations = {
     ],
 }
 
-    st.markdown("---") 
+st.markdown("---") 
  
     st.markdown("""
     **Conclusion for Wellbeing and Life Satisfaction:**
