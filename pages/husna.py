@@ -744,7 +744,6 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         # Interpretation
         st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
         st.markdown("""
-        **Interpretation:**
         - EMPLOYED participants show higher average scores across selected skills.  
         - STUDENT group shows moderate performance.  
         - UNEMPLOYED participants score lower.  
@@ -756,7 +755,6 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         # Conclusion
         st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
         st.markdown("""
-        **Conclusion for Social Skills Grouped Bar Chart:**
         - Highlights clear differences in social skill levels by employment.  
         - Useful to identify skill gaps and target interventions.  
         - EMPLOYED group consistently outperforms others.  
