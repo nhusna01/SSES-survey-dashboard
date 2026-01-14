@@ -608,7 +608,7 @@ elif selected_sub == "Social & Emotional Skills":
                 theta=[v.replace("_", " ").title() for v in radar_vars],
                 fill='toself',
                 name=row['employment_status_label'],
-                line_color=color_map.get(row['employment_status_label'])
+                line_color=color_map.get(row['employment_status_label.upper(), '#000000')'])
             )
         )
 
