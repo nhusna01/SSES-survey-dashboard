@@ -878,7 +878,6 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     - {interpretations[selected_var][3]}
     """)
 
-st.markdown("---") 
  
     st.markdown("""
     **Conclusion for Wellbeing and Life Satisfaction:**
