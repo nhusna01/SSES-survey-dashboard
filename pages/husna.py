@@ -451,92 +451,129 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 # 1️⃣ Correlation Heatmap
 # ===============================
-if selected_sub == "Correlation Between Likert Variables":
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-    likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning',
-        'social_support', 'helping_others', 'community_participation',
-        'community_impact', 'life_satisfaction', 'overall_health'
-    ]
+# -----------------------------
+# Likert variables
+# -----------------------------
+likert_cols = [
+    'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning',
+    'social_support', 'helping_others', 'community_participation',
+    'community_impact', 'life_satisfaction', 'overall_health'
+]
 
-    # -----------------------------
-    # SINGLE INTERACTIVITY:
-    # Variable selection (Likert)
-    # -----------------------------
-    selected_vars = st.multiselect(
-        "Select Likert variables for correlation analysis:",
-        options=likert_cols,
-        default=likert_cols
-    )
+# -----------------------------
+# Ensure 'employment_status_label' exists
+# -----------------------------
+if 'employment_status_label' not in filtered_df.columns:
+    filtered_df['employment_status_label'] = filtered_df['employment_status'].map({
+        0: 'Student',
+        1: 'Employed',
+        2: 'Unemployed',
+        'Student': 'Student',
+        'Employed': 'Employed',
+        'Unemployed': 'Unemployed'
+    })
 
-    if len(selected_vars) < 2:
-        st.warning("Please select at least two variables.")
-        st.stop()
+# -----------------------------
+# Variable selection (Likert)
+# -----------------------------
+selected_vars = st.multiselect(
+    "Select Likert variables for correlation analysis:",
+    options=likert_cols,
+    default=likert_cols
+)
 
-    # -----------------------------
-    # Target variable: Employment status (contextual filter)
-    # -----------------------------
-    target_status = st.selectbox(
-        "Employment status (target group):",
-        options=filtered_df['employment_status_label'].unique()
-    )
+if len(selected_vars) < 2:
+    st.warning("Please select at least two variables.")
+    st.stop()
 
-    df_target = filtered_df[
-        filtered_df['employment_status_label'] == target_status
-    ]
+# -----------------------------
+# Target variable: Employment status
+# -----------------------------
+target_status = st.selectbox(
+    "Employment status (target group):",
+    options=filtered_df['employment_status_label'].unique()
+)
 
-    # -----------------------------
-    # Prepare data
-    # -----------------------------
-    df_corr = df_target[selected_vars].apply(
-        pd.to_numeric, errors='coerce'
-    )
+# -----------------------------
+# Filter dataset by target_status
+# -----------------------------
+df_target = filtered_df[filtered_df['employment_status_label'] == target_status]
 
-    # -----------------------------
-    # Compute correlation matrix
-    # -----------------------------
-    correlation_matrix = df_corr.corr()
+if df_target.empty:
+    st.warning(f"No data available for the selected group: {target_status}")
+    st.stop()
 
-    # -----------------------------
-    # Heatmap
-    # -----------------------------
-    fig = px.imshow(
-        correlation_matrix,
-        text_auto=True,
-        aspect="auto",
-        color_continuous_scale=px.colors.sequential.Viridis,
-        title=f"Correlation Heatmap of Likert Variables ({target_status})"
-    )
+# -----------------------------
+# Keep only existing columns
+# -----------------------------
+existing_vars = [col for col in selected_vars if col in df_target.columns]
 
-    fig.update_layout(
-        xaxis_title='Variables',
-        yaxis_title='Variables',
-        xaxis_tickangle=-45,
-        height=800,
-        template='plotly_white'
-    )
+if len(existing_vars) < 2:
+    st.warning("Selected variables are not available in the dataset.")
+    st.stop()
 
-    st.plotly_chart(fig, use_container_width=True)
+# -----------------------------
+# Convert to numeric
+# -----------------------------
+df_corr = df_target[existing_vars].apply(pd.to_numeric, errors='coerce')
 
-    # -----------------------------
-    # Interpretation
-    # -----------------------------
-    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
-    st.markdown(f"""
-    - The heatmap shows relationships among social, community, and well-being indicators within the **{target_status}** group.  
-    - Variables related to social support and community participation tend to correlate with life satisfaction and overall health.  
-    - Using employment status as a target group enables focused subgroup analysis while preserving statistical validity.
-    """)
+if df_corr.dropna(how='all').shape[1] < 2:
+    st.warning("Not enough numeric data to compute correlation.")
+    st.stop()
 
-    # -----------------------------
-    # Conclusion
-    # -----------------------------
-    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
-    st.markdown(f"""
-    - Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.  
-    - The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.  
-    - This approach is suitable for descriptive insight generation and comparative analysis.
-    """)
+# -----------------------------
+# Compute correlation matrix
+# -----------------------------
+correlation_matrix = df_corr.corr()
+
+if correlation_matrix.empty:
+    st.warning("Correlation matrix is empty.")
+    st.stop()
+
+# -----------------------------
+# Plot heatmap
+# -----------------------------
+fig = px.imshow(
+    correlation_matrix,
+    text_auto=True,
+    aspect="auto",
+    color_continuous_scale=px.colors.sequential.Viridis,
+    title=f"Correlation Heatmap of Likert Variables ({target_status})"
+)
+
+fig.update_layout(
+    xaxis_title='Variables',
+    yaxis_title='Variables',
+    xaxis_tickangle=-45,
+    height=800,
+    template='plotly_white'
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+# -----------------------------
+# Interpretation
+# -----------------------------
+st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
+st.markdown(f"""
+- The heatmap shows relationships among social, community, and well-being indicators within the **{target_status}** group.
+- Variables related to social support and community participation tend to correlate with life satisfaction and overall health.
+- Using employment status as a target group enables focused subgroup analysis while preserving statistical validity.
+""")
+
+# -----------------------------
+# Conclusion
+# -----------------------------
+st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+st.markdown(f"""
+- Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.
+- The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.
+- This approach is suitable for descriptive insight generation and comparative analysis.
+""")
 
 
 # ===============================
