@@ -870,7 +870,6 @@ interpretations = {
     ],
 }
 
-st.markdown("---")  # Divider for clean separation
     st.markdown("---") 
  
     st.markdown("""
