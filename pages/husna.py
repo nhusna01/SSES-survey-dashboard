@@ -378,7 +378,7 @@ subobjectives = {
         "To investigate how community participation and civic engagement vary across employment status groups.",
     "Wellbeing and Life Satisfaction": 
         "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-        "To assess differences in overall well-being, and life satisfaction across students, employed, and unemployed individuals."
+        "To assess differences in overall well-being and life satisfaction across students, employed, and unemployed individuals."
 }
 
 objective_icons = {
@@ -453,35 +453,17 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 st.title("Correlation Heatmap: Employment Status vs. Selected Likert Scale Variables")
 
-# Get the encoded employment status column
-employment_col = 'employment_status'
-
-# --- Correlation Heatmap Section ---
 if selected_sub == "Correlation Between Likert Variables":
-    # Define Likert-scale columns
     likert_cols = [
-        'calm_under_pressure',
-        'cheerful',
-        'task_persistence',
-        'adaptability',
-        'social_support',
-        'helping_others',
-        'community_participation',
-        'community_impact',
-        'life_satisfaction',
-        'overall_health'
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
+        'social_support', 'helping_others', 'community_participation',
+        'community_impact', 'life_satisfaction', 'overall_health'
     ]
 
-    # Combine employment status + Likert columns
     cols_for_heatmap = ['employment_status'] + likert_cols
-
-    # Convert to numeric to avoid errors
     df_corr = filtered_df[cols_for_heatmap].apply(pd.to_numeric, errors='coerce')
-
-    # Calculate correlation matrix
     correlation_matrix_specific = df_corr.corr()
 
-    # Create Plotly heatmap
     fig = px.imshow(
         correlation_matrix_specific,
         text_auto=True,
@@ -490,7 +472,6 @@ if selected_sub == "Correlation Between Likert Variables":
         title='Correlation Heatmap: Employment Status vs. Selected Likert Scale Variables'
     )
 
-    # Update layout for readability
     fig.update_layout(
         xaxis_title='Variables',
         yaxis_title='Variables',
@@ -499,18 +480,25 @@ if selected_sub == "Correlation Between Likert Variables":
         width=1000
     )
 
-    # Display heatmap in Streamlit
     st.plotly_chart(fig, use_container_width=True)
 
-    # Interpretation section
+    # Interpretation
     st.markdown("""
     **Interpretation:**
     - `social_support` and `helping_others` show strong positive correlation, indicating linked social behaviors.  
-    - Community engagement variables (`community_participation`, `community_impact`) moderately correlate with `life_satisfaction` and `overall_health`.  
+    - Community engagement variables moderately correlate with `life_satisfaction` and `overall_health`.  
     - Employment status shows slight positive correlation with wellbeing metrics.  
-    - Heatmap allows quick identification of variables to focus on for interventions and predictive modeling.
+    - Heatmap allows quick identification of key variables for interventions and predictive modeling.
     """)
 
+    # Conclusion
+    st.markdown("""
+    **Conclusion for Correlation Heatmap:**
+    - Social behaviors and community participation are linked to wellbeing.  
+    - Employment status has mild association with life satisfaction and health.  
+    - Highlights which variables could be targets for intervention.  
+    - Useful for both descriptive and predictive insights.
+    """)
 
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
@@ -527,6 +515,13 @@ elif selected_sub == "Social & Emotional Skills":
         var_name='Skill Dimension',
         value_name='Average Score'
     )
+
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
+
     fig = px.line_polar(
         radar_data,
         r='Average Score',
@@ -546,13 +541,21 @@ elif selected_sub == "Social & Emotional Skills":
     st.markdown("""
     **Interpretation:**
     - EMPLOYED participants consistently score higher across all skill dimensions.  
-    - STUDENT group shows moderate social and emotional skills with some variability.  
-    - UNEMPLOYED participants have lower scores, highlighting areas for support.  
-    - Radar chart efficiently visualizes multiple skills at once for quick comparison.
+    - STUDENT group shows moderate skills with variability.  
+    - UNEMPLOYED participants have lower scores.  
+    - Radar chart efficiently compares multiple skills across employment groups.
+    """)
+
+    st.markdown("""
+    **Conclusion for Social & Emotional Skills Radar:**
+    - EMPLOYED group demonstrates stronger social and emotional skills.  
+    - STUDENT group is moderate with some differences between dimensions.  
+    - UNEMPLOYED group shows skill gaps that may need support.  
+    - Radar chart visually summarizes skill patterns clearly.
     """)
 
 # ===============================
-# 3️⃣ Task Persistence & Enjoy Learning
+# 3️⃣ Task Persistence & Enjoy Learning Boxplots
 # ===============================
 elif selected_sub == "Task Persistence & Enjoy Learning":
     columns_to_plot = ['task_persistence', 'enjoy_learning']
@@ -563,6 +566,12 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
     )
     df_filtered = filtered_df[filtered_df['employment_status_label'].isin(employment_options)]
 
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
+
     for col in columns_to_plot:
         fig_box = px.box(
             df_filtered,
@@ -571,8 +580,7 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
             color='employment_status_label',
             points='all',
             color_discrete_map=color_map,
-            title=f'{col.replace("_"," ").title()} by Employment Status',
-            hover_data=df_filtered.columns
+            title=f'{col.replace("_"," ").title()} by Employment Status'
         )
         fig_box.update_layout(
             xaxis_title='Employment Status',
@@ -585,18 +593,24 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
 
         st.markdown(f"""
         **Interpretation for {col.replace('_',' ').title()}:**
-        - EMPLOYED participants tend to have slightly higher median scores.  
-        - STUDENT group shows moderate variability in performance.  
-        - UNEMPLOYED participants have more outliers, indicating individual differences.  
-        - Box plot highlights distribution and spread for task persistence and enjoyment.
+        - EMPLOYED participants tend to have higher median scores.  
+        - STUDENT group shows moderate variability.  
+        - UNEMPLOYED participants have more outliers.  
+        - Box plot highlights spread and distributional differences.
         """)
+
+    st.markdown("""
+    **Conclusion for Task Persistence & Enjoy Learning Boxplots:**
+    - EMPLOYED group is generally more persistent and enjoys learning more.  
+    - STUDENT group has mixed results.  
+    - UNEMPLOYED group may need additional support.  
+    - Boxplots reveal individual variation and distribution patterns.
+    """)
 
 # ===============================
 # 4️⃣ Social Skills Grouped Bar Chart
 # ===============================
 elif selected_sub == "Social Skills Grouped Bar Chart":
-
-    # Let user select the social skill(s) to visualize
     social_skills = ['enjoy_learning', 'helping_others']
     selected_skills = st.multiselect(
         "Select Social Skill(s) to Display",
@@ -605,45 +619,35 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
     )
 
     if selected_skills:
-
-        # Define consistent color map for employment status
         color_map = {
-            'EMPLOYED': '#440154',   # Dark purple
-            'STUDENT': '#21918c',    # Bright teal
-            'UNEMPLOYED': '#fde725'  # Bright yellow
+            'EMPLOYED': '#440154',
+            'STUDENT': '#21918c',
+            'UNEMPLOYED': '#fde725'
         }
 
-        # Compute mean scores by employment status
         df_avg = (
             filtered_df
             .groupby('employment_status_label')[selected_skills]
             .mean()
             .reset_index()
         )
-
-        # Make employment labels uppercase to match color_map keys
         df_avg['employment_status_label'] = df_avg['employment_status_label'].str.upper()
 
-        # Reshape for plotting
         df_melt = df_avg.melt(
             id_vars='employment_status_label',
             var_name='Social Skill',
             value_name='Average Score'
         )
 
-        # Create grouped bar chart
         fig_groupbar = px.bar(
             df_melt,
             x='employment_status_label',
             y='Average Score',
-            color='employment_status_label',   # color by employment status
+            color='employment_status_label',
             barmode='group',
             title='Average Social Skill Scores by Employment Status',
-            labels={
-                'employment_status_label': 'Employment Status',
-                'Average Score': 'Mean Likert Score'
-            },
-            color_discrete_map=color_map       
+            labels={'employment_status_label': 'Employment Status', 'Average Score': 'Mean Likert Score'},
+            color_discrete_map=color_map
         )
 
         fig_groupbar.update_layout(
@@ -654,57 +658,46 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 
         st.plotly_chart(fig_groupbar, use_container_width=True)
 
-        # Interpretation
         st.markdown("""
         **Interpretation:**
-        - **Employed participants** generally demonstrate higher average scores across the selected social skills.  
-        - **Students** show moderate skill levels with noticeable variation between skills.  
-        - **Unemployed participants** record comparatively lower scores, indicating potential areas for social skill development.  
-        - The grouped bar chart enables clear comparison of **social skill averages across employment groups**, with consistent coloring for employment status.
+        - EMPLOYED participants show higher average scores across selected skills.  
+        - STUDENT group shows moderate performance.  
+        - UNEMPLOYED participants score lower.  
+        - Grouped bar chart allows comparison across employment groups.
         """)
 
+        st.markdown("""
+        **Conclusion for Social Skills Grouped Bar Chart:**
+        - Highlights clear differences in social skill levels by employment.  
+        - Useful to identify skill gaps and target interventions.  
+        - EMPLOYED group consistently outperforms others.  
+        - Visual comparison is easier than analyzing numbers alone.
+        """)
     else:
         st.warning("Please select at least one social skill to display.")
 
-
 # ===============================
-# 5️⃣ Community Participation
+# 5️⃣ Community Participation Histogram
 # ===============================
 elif selected_sub == "Community Participation":
+    community_vars = ['community_participation', 'community_impact']
 
-    community_vars = [
-        'community_participation',
-        'community_impact'
-    ]
-
-    # -----------------------------
-    # Melt data for histogram
-    # -----------------------------
     df_hist = filtered_df.melt(
         id_vars='employment_status_label',
         value_vars=community_vars,
         var_name='Community Dimension',
         value_name='Likert Score'
     )
-
     df_hist = df_hist.dropna()
     df_hist['Likert Score'] = df_hist['Likert Score'].astype(int)
-
-    # -----------------------------
-    # Define consistent color map
-    # -----------------------------
-    color_map = {
-        'EMPLOYED': '#440154',   # Dark purple
-        'STUDENT': '#21918c',    # Bright teal
-        'UNEMPLOYED': '#fde725'  # Bright yellow
-    }
-
-    # Ensure employment_status_label matches color_map keys
     df_hist['employment_status_label'] = df_hist['employment_status_label'].str.upper()
 
-    # -----------------------------
-    # Create histogram
-    # -----------------------------
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
+
     fig = px.histogram(
         df_hist,
         x='Likert Score',
@@ -714,9 +707,8 @@ elif selected_sub == "Community Participation":
         nbins=5,
         title='Distribution of Community Participation Scores by Employment Status',
         labels={'Likert Score': 'Likert Scale'},
-        color_discrete_map=color_map  # ✅ apply custom colors
+        color_discrete_map=color_map
     )
-
     fig.update_layout(
         template='plotly_white',
         bargap=0.2,
@@ -724,29 +716,37 @@ elif selected_sub == "Community Participation":
         xaxis_title='Likert Score',
         yaxis_title='Count'
     )
-
     fig.update_xaxes(dtick=1)
-
     st.plotly_chart(fig, use_container_width=True)
 
-    # -----------------------------
-    # Interpretation
-    # -----------------------------
     st.markdown("""
     **Interpretation:**
-    - **Employed respondents** show a higher concentration of upper Likert-scale scores (4–5), indicating stronger perceived community participation and impact.  
-    - **Students** display a wider spread of responses, suggesting varied levels of engagement in community-related activities.  
-    - **Unemployed respondents** tend to cluster more toward lower and neutral scores, reflecting comparatively reduced perceived involvement.  
-    - Overall, the histogram highlights **distributional differences across employment groups**, providing insights that are not observable through mean-based visualizations alone.
+    - EMPLOYED respondents have higher upper Likert scores (4–5).  
+    - STUDENT responses are more spread out.  
+    - UNEMPLOYED respondents lean toward lower/neutral scores.  
+    - Histogram reveals distribution differences that averages cannot capture.
     """)
 
+    st.markdown("""
+    **Conclusion for Community Participation Histogram:**
+    - Shows clear distributional differences in community engagement by employment.  
+    - EMPLOYED group is most engaged.  
+    - UNEMPLOYED group shows lower participation.  
+    - Useful for designing programs targeting lower-engaged groups.
+    """)
 
 # ===============================
-# 6️⃣ Wellbeing and Life Satisfaction
+# 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
     wellbeing_vars = ['life_satisfaction', 'overall_health', 'wellbeing_belief']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
+
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
 
     fig = px.violin(
         filtered_df,
@@ -762,22 +762,22 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 
     interpretations = {
         'life_satisfaction': [
-            "EMPLOYED participants report higher life satisfaction.",  
-            "STUDENT group shows moderate satisfaction with variability.",  
-            "UNEMPLOYED group reports lower satisfaction and more outliers.",  
-            "Violin plot highlights distribution differences clearly across employment groups."
+            "EMPLOYED participants report higher life satisfaction.",
+            "STUDENT group shows moderate satisfaction.",
+            "UNEMPLOYED group reports lower satisfaction with more outliers.",
+            "Violin plot highlights distribution differences."
         ],
         'overall_health': [
-            "EMPLOYED participants report slightly better health.",  
-            "STUDENT group shows consistent health.",  
-            "UNEMPLOYED group has more variability with occasional low scores.",  
-            "Violin plot visualizes spread and outliers effectively."
+            "EMPLOYED participants report slightly better health.",
+            "STUDENT group shows consistent health.",
+            "UNEMPLOYED group has more variability with occasional low scores.",
+            "Violin plot visualizes spread effectively."
         ],
         'wellbeing_belief': [
-            "EMPLOYED participants feel more positive about wellbeing.",  
-            "STUDENT group shows mixed perceptions.",  
-            "UNEMPLOYED group reports lower confidence in wellbeing.",  
-            "Violin plot provides clear view of perception variability."
+            "EMPLOYED participants feel more positive about wellbeing.",
+            "STUDENT group shows mixed perceptions.",
+            "UNEMPLOYED group reports lower confidence in wellbeing.",
+            "Violin plot provides clear view of variability."
         ]
     }
 
@@ -789,49 +789,10 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     - {interpretations[selected_var][3]}
     """, unsafe_allow_html=True)
 
-
-# ===============================
-# Overall Conclusion
-# ===============================
-st.markdown(
-    """
-    <style>
-    .conclusion-box {
-        font-family: 'Inter', sans-serif;
-        border-left: 6px solid #6A0DAD;        /* Same purple */
-        background-color: #f6f1fb;             /* Same light background */
-        padding: 1.5rem 2rem;
-        border-radius: 15px;
-        margin-top: 3rem;
-        max-width: 1000px;
-    }
-
-    .conclusion-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: #4B0082;
-        margin-bottom: 0.8rem;
-    }
-
-    .conclusion-text {
-        font-size: 17px;
-        font-weight: 400;
-        color: #2f2f2f;
-        line-height: 1.7;
-    }
-    </style>
-
-    <div class="conclusion-box">
-        <div class="conclusion-title">📌 Overall Conclusion</div>
-        <div class="conclusion-text">
-            The findings indicate that social and emotional skills, community participation,
-            and well-being differ across employment status groups. Variables such as social support,
-            helping others, and community participation show strong associations with life satisfaction
-            and overall health, aligning with the study’s main objective. The correlation heatmap and grouped 
-            bar charts are particularly effective in highlighting key relationships and comparative patterns 
-            among employment categories.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    st.markdown(f"""
+    **Conclusion for Wellbeing and Life Satisfaction Violin Plot:**
+    - EMPLOYED participants report higher wellbeing and health outcomes.  
+    - STUDENT group shows moderate levels with some variability.  
+    - UNEMPLOYED participants report lower wellbeing and more outliers.  
+    - Violin plot effectively shows distribution, spread, and outliers across employment groups.
+    """)
