@@ -542,56 +542,67 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-elif selected_sub == "Social & Emotional Skills":
-    independent_vars = [
-        'calm_under_pressure', 'cheerful', 'task_persistence',
-        'social_support', 'enjoy_learning', 'helping_others'
-    ]
-    filtered_df[independent_vars] = filtered_df[independent_vars].apply(pd.to_numeric, errors='coerce')
-    radar_data = filtered_df.groupby('employment_status_label')[independent_vars].mean().reset_index()
-    radar_data = radar_data.melt(
-        id_vars='employment_status_label',
-        var_name='Skill Dimension',
-        value_name='Average Score'
+elif selected_sub == "Task Persistence & Enjoy Learning":
+    # Columns to visualize (Likert-scale 1–5)
+    columns_to_plot = ['task_persistence', 'enjoy_learning']
+
+    # Filter by employment status
+    employment_options = st.multiselect(
+        "Filter Employment Status:",
+        options=filtered_df['employment_status_label'].unique(),
+        default=filtered_df['employment_status_label'].unique()
     )
 
+    df_filtered = filtered_df[
+        filtered_df['employment_status_label'].isin(employment_options)
+    ]
+
+    # Color mapping for employment status
     color_map = {
         'EMPLOYED': '#440154',
         'STUDENT': '#21918c',
         'UNEMPLOYED': '#fde725'
     }
 
-    fig = px.line_polar(
-        radar_data,
-        r='Average Score',
-        theta='Skill Dimension',
-        color='employment_status_label',
-        line_close=True,
-        color_discrete_map=color_map,
-        title='Emotional Regulation and Personal Skills by Employment Status'
-    )
-    fig.update_traces(fill='toself', opacity=0.7)
-    fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[1,5], tickvals=[1,2,3,4,5])),
-        legend_title_text='Employment Status'
-    )
-    st.plotly_chart(fig, width='stretch')
+    # Create boxplots for each Likert-scale column (1–5)
+    for col in columns_to_plot:
+        fig_box = px.box(
+            df_filtered,
+            x='employment_status_label',
+            y=col,
+            color='employment_status_label',
+            points='all',  # show all individual points
+            color_discrete_map=color_map,
+            title=f'{col.replace("_"," ").title()} by Employment Status'
+        )
+
+        fig_box.update_layout(
+            xaxis_title='Employment Status',
+            yaxis_title=f'{col.replace("_"," ").title()} (1–5 Likert Scale)',
+            boxmode='group',
+            template='plotly_white',
+            font=dict(family="Arial", size=12),
+            showlegend=False
+        )
+
+        st.plotly_chart(fig_box, use_container_width=True)
+
+        st.markdown(f"""
+        **Interpretation for {col.replace('_',' ').title()}:**
+        - Employed participants show higher median scores  
+        - Students display moderate variability  
+        - Unemployed participants exhibit more outliers  
+        - Boxplots clearly reveal distributional differences
+        """)
 
     st.markdown("""
-    **Interpretation:**
-    - EMPLOYED participants consistently score higher across all skill dimensions.  
-    - STUDENT group shows moderate skills with variability.  
-    - UNEMPLOYED participants have lower scores.  
-    - Radar chart efficiently compares multiple skills across employment groups.
+    **Conclusion for Task Persistence & Enjoy Learning:**
+    - Employed participants demonstrate stronger persistence and learning engagement  
+    - Students show mixed but balanced outcomes  
+    - Unemployed participants may require additional support  
+    - Boxplots effectively capture variability and group differences
     """)
 
-    st.markdown("""
-    **Conclusion for Social & Emotional Skills Radar:**
-    - EMPLOYED group demonstrates stronger social and emotional skills.  
-    - STUDENT group is moderate with some differences between dimensions.  
-    - UNEMPLOYED group shows skill gaps that may need support.  
-    - Radar chart visually summarizes skill patterns clearly.
-    """)
 
 # ===============================
 # 3️⃣ Task Persistence & Enjoy Learning Boxplots
