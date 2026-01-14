@@ -277,7 +277,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
 
         # Interpretation Box
         st.markdown(f"""
-            <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
+            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
                     <b>Interpretation:</b> Health, emotional control, and social safety are all factors that contribute to life satisfaction. 
                     Safety and support have a strong <b>0.68 correlation</b>, proving that community-level security is a direct foundation for social connection.
@@ -337,42 +337,47 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     """, unsafe_allow_html=True)
 
 
-# VISUALIZATION 3: DYNAMIC DISTRIBUTION 
-with st.expander("Visualization 3: Distribution of Scores", expanded=False):
+# VISUALIZATION 3: DYNAMIC DISTRIBUTION (Continuous Data Focus)
+with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
-    # 1. Selection Menu
+    # 1. Selection Menu - Using "Pillar" or "Indicator" instead of Dimension
     selected_dist = st.selectbox(
-        "Select Index to View Distribution:", 
+        "Select Pillar to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
         key="dist_selector_v3"
     )
     
     # 2. Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
-        text = "The distribution skews to the right, indicating that most respondents have moderate-to-high life satisfaction, with levels 3 and 4 being the highest. Only a small percentage of the studied population reported poor levels of satisfaction, indicating a generally pleasant psychological state."
+        text = "The distribution skews to the right, indicating that most respondents have moderate-to-high life satisfaction. The concentration between 3 and 4 suggests a generally pleasant psychological state across the demographic."
     elif selected_dist == 'social_support_index':
-        text = "With a dominant peak at the 3.5 index level, the majority of respondents fell into the middle-to-high range of social support. This suggests a fairly consistent, mid-high level of perceived support across the group, even while the community feels generally supported and there are few people at the ends of the scale."
+        text = "The density plot shows a dominant peak around the 3.7 range. This suggests a fairly consistent, mid-high level of perceived support, with very few individuals reporting a complete lack of social connection."
     else:
-        text = "The group as a whole have a wide range of emotional regulation abilities, with level 3 having the highest concentration of respondents. There is a significant cluster of people at the lower end of the scale who would benefit from further psychological help, even if a significant percentage of the group exhibits great resilience (levels 4 and 5)."
+        text = "This pillar shows a wider spread, indicating a high variance in emotional regulation. The thicker middle section confirms most are stable, but the long 'tail' at the bottom highlights a group that may need additional psychological support."
 
-    # 3. Create the Histogram (Research Red)
-    fig3 = px.histogram(
-        df, x=selected_dist, nbins=15, 
-        color_discrete_sequence=['#D32F2F'] 
+    # 3. Create the Violin Plot (Best for Continuous Point Data)
+    # This shows the density (shape) and the box plot (summary stats) together
+    fig3 = px.violin(
+        df, 
+        y=selected_dist, 
+        box=True, # Shows the median and quartiles inside
+        points="all", # Shows individual data points next to the violin
+        color_discrete_sequence=['#D32F2F'],
+        labels={selected_dist: "Score (1-5)"}
     ) 
     
     fig3.update_layout(
-        title=f"<b>Spread of {selected_dist.replace('_', ' ').title()}</b>",
+        title=f"<b>Density and Spread of {selected_dist.replace('_', ' ').title()}</b>",
         paper_bgcolor='rgba(0,0,0,0)', 
         plot_bgcolor='rgba(0,0,0,0)',
-        bargap=0.1
+        yaxis=dict(range=[0.5, 5.5]) # Keeps the scale consistent
     )
     
     st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
     
-    # 4. Dynamic Interpretation Box (Formatted exactly as you requested)
+    # 4. Dynamic Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> {text}
             </p>
