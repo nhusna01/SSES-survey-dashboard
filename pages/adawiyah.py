@@ -279,17 +279,17 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
                     <b>Interpretation:</b> Health, emotional control, and social safety are all factors that contribute to life satisfaction. 
-                    Safety and support have a strong <b>0.68 correlation</b>, proving that community-level security is a direct foundation for social connection.
+                    Safety and support have a strong <b>0.68 correlation</b>, proving that community-level security is a directly correlated with  social connection.
                 </p>
             </div>
         """, unsafe_allow_html=True)
     else:
         st.warning("Not enough data to generate correlation heatmap.")
 
-# --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT (Simplified) ---
+# --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT ---
 with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     
-    # Ensure indices are calculated (if not already done at the top of the script)
+    # Ensure indices are calculated
     df['social_support_index'] = df[['social_support', 'social_time', 'community_care']].mean(axis=1)
     df['community_safety_index'] = df[['neighborhood_safety', 'community_care']].mean(axis=1)
 
@@ -304,33 +304,33 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
         labels={
             'social_support_index': 'Support Score', 
             'life_satisfaction': 'Satisfaction', 
-            'community_safety_index': 'Safety'
+            'community_safety_index': 'Safety Level'
         }
     )
 
+    # UPDATED: Integrated Color Indicator (Legibility Fix)
     fig2.update_layout(
-        title="<b>Impact of Support & Safety</b>",
+        title="<b>Impact of Support & Safety on Satisfaction</b>",
         title_x=0.5,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
+        coloraxis_colorbar=dict(
+            title="Community Safety",
+            tickvals=[df['community_safety_index'].min(), df['community_safety_index'].max()],
+            ticktext=["Low Safety (Light)", "High Safety (Dark Red)"],
+            lenmode="pixels", len=200,
+        )
     )
 
-    # Layout: Chart + Guide
-    sc_chart_col, sc_guide_col = st.columns([4, 1])
-    with sc_chart_col:
-        st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
-
-    with sc_guide_col:
-        st.write("") 
-        with st.popover("Reading Chart"):
-            st.markdown("Darker dots represent respondents in **safer communities**.")
+    # Display the chart full-width (removed side columns)
+    st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
 
     # Interpretation Box
     st.markdown(f"""
         <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The distribution demonstrates that life satisfaction generally rises in line with social support.
-                Furthermore, the concentration of darker red dots at greater satisfaction levels indicates that overall well-being is significantly strengthened by community safety.
+                Furthermore, the concentration of <b>darker red dots</b> (High Safety) at greater satisfaction levels indicates that overall well-being is significantly strengthened by community safety.
             </p>
         </div>
     """, unsafe_allow_html=True)
