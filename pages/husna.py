@@ -238,11 +238,11 @@ employment_mapping = {
 }
 
 attribute_cols = [
-    "calm_under_pressure",
+    "calm_under_pressure", "cheerful",
     "enjoy_learning", "task_persistence",
     "social_support", "helping_others",
-    "community_participation", "community_impact", "neighborhood_safety", "community_care"
-    "life_satisfaction", "overall_health", "wellbeing_belief"
+    "community_participation", "community_impact", 
+    "life_satisfaction", "overall_health"
 ]
 
 # -------------------- METRICS --------------------
@@ -364,21 +364,21 @@ subobjectives = {
         "and community attributes across different employment status groups.",
     "Social & Emotional Skills": 
         "2️⃣ **Social & Emotional Skills**\n\n"
-        "To compare emotional regulation skills (including emotional control, social, "
+        "To compare emotional regulation skills including emotional control, social, "
         "emotional skills, and even interaction among students, employed, and unemployed individuals.",
     "Task Persistence & Enjoy Learning": 
         "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
         "To examine variations in task persistence and enjoyment of learning across different employment status groups.",
     "Social Skills Grouped Bar Chart": 
         "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
-        "To analyze differences in social and interpersonal skills, including teamwork, social support, "
+        "To analyze differences in social and interpersonal skills, including social support, "
         "and helping others in social interaction.",
     "Community Participation": 
         "5️⃣ **Community Participation and Social Responsibility**\n\n"
         "To investigate how community participation and civic engagement vary across employment status groups.",
     "Wellbeing and Life Satisfaction": 
         "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-        "To assess differences in overall well-being, well-being belief, and life satisfaction across students, employed, and unemployed individuals."
+        "To assess differences in overall well-being, and life satisfaction across students, employed, and unemployed individuals."
 }
 
 objective_icons = {
@@ -597,7 +597,7 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
 elif selected_sub == "Social Skills Grouped Bar Chart":
 
     # Let user select the social skill(s) to visualize
-    social_skills = ['enjoy_learning', 'helping_others', 'teamwork']
+    social_skills = ['enjoy_learning', 'helping_others']
     selected_skills = st.multiselect(
         "Select Social Skill(s) to Display",
         options=social_skills,
@@ -606,6 +606,13 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 
     if selected_skills:
 
+        # Define consistent color map for employment status
+        color_map = {
+            'EMPLOYED': '#440154',   # Dark purple
+            'STUDENT': '#21918c',    # Bright teal
+            'UNEMPLOYED': '#fde725'  # Bright yellow
+        }
+
         # Compute mean scores by employment status
         df_avg = (
             filtered_df
@@ -613,6 +620,9 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
             .mean()
             .reset_index()
         )
+
+        # Make employment labels uppercase to match color_map keys
+        df_avg['employment_status_label'] = df_avg['employment_status_label'].str.upper()
 
         # Reshape for plotting
         df_melt = df_avg.melt(
@@ -626,19 +636,20 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
             df_melt,
             x='employment_status_label',
             y='Average Score',
-            color='Social Skill',          # ✅ legend shows skills only
+            color='employment_status_label',   # color by employment status
             barmode='group',
             title='Average Social Skill Scores by Employment Status',
             labels={
                 'employment_status_label': 'Employment Status',
                 'Average Score': 'Mean Likert Score'
-            }
+            },
+            color_discrete_map=color_map       
         )
 
         fig_groupbar.update_layout(
             template='plotly_white',
             font=dict(family="Arial", size=12),
-            legend_title='Social Skill'
+            legend_title='Employment Status'
         )
 
         st.plotly_chart(fig_groupbar, use_container_width=True)
@@ -649,7 +660,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         - **Employed participants** generally demonstrate higher average scores across the selected social skills.  
         - **Students** show moderate skill levels with noticeable variation between skills.  
         - **Unemployed participants** record comparatively lower scores, indicating potential areas for social skill development.  
-        - The grouped bar chart enables clear comparison of **multiple social skills across employment groups** without redundant labeling.
+        - The grouped bar chart enables clear comparison of **social skill averages across employment groups**, with consistent coloring for employment status.
         """)
 
     else:
@@ -680,6 +691,18 @@ elif selected_sub == "Community Participation":
     df_hist['Likert Score'] = df_hist['Likert Score'].astype(int)
 
     # -----------------------------
+    # Define consistent color map
+    # -----------------------------
+    color_map = {
+        'EMPLOYED': '#440154',   # Dark purple
+        'STUDENT': '#21918c',    # Bright teal
+        'UNEMPLOYED': '#fde725'  # Bright yellow
+    }
+
+    # Ensure employment_status_label matches color_map keys
+    df_hist['employment_status_label'] = df_hist['employment_status_label'].str.upper()
+
+    # -----------------------------
     # Create histogram
     # -----------------------------
     fig = px.histogram(
@@ -690,7 +713,8 @@ elif selected_sub == "Community Participation":
         barmode='overlay',
         nbins=5,
         title='Distribution of Community Participation Scores by Employment Status',
-        labels={'Likert Score': 'Likert Scale'}
+        labels={'Likert Score': 'Likert Scale'},
+        color_discrete_map=color_map  # ✅ apply custom colors
     )
 
     fig.update_layout(
