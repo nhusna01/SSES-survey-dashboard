@@ -588,6 +588,7 @@ elif selected_sub == "Social & Emotional Skills":
     # -----------------------------
     # Create color map automatically for any employment status
     # -----------------------------
+    
     # Color mapping for employment status
     color_map = {
         'EMPLOYED': '#440154',
@@ -673,6 +674,10 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         filtered_df['employment_status_label'].isin(employment_options)
     ]
 
+    # -----------------------------
+    # Create color map automatically for any employment status
+    # -----------------------------
+    
     # Color mapping for employment status
     color_map = {
         'EMPLOYED': '#440154',
@@ -892,6 +897,11 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     wellbeing_vars = ['life_satisfaction', 'overall_health']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
+    # -----------------------------
+    # Create color map automatically for any employment status
+    # -----------------------------
+    
+    # Color mapping for employment status
     color_map = {
         'EMPLOYED': '#440154',
         'STUDENT': '#21918c',
