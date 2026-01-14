@@ -562,46 +562,65 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
 # 4️⃣ Social Skills Grouped Bar Chart
 # ===============================
 elif selected_sub == "Social Skills Grouped Bar Chart":
-    group_vars = ['enjoy_learning', 'helping_others', 'teamwork']
-    df_avg = filtered_df.groupby('employment_status_label')[group_vars].mean().reset_index()
-    df_melt = df_avg.melt(
-        id_vars='employment_status_label',
-        var_name='Variable',
-        value_name='Average Score'
+    # Let user select the social skill(s) to visualize
+    social_skills = ['enjoy_learning', 'helping_others', 'teamwork']
+    selected_skills = st.multiselect(
+        "Select Social Skill(s) to Display",
+        options=social_skills,
+        default=social_skills  # all selected by default
     )
-    fig_groupbar = px.bar(
-        df_melt,
-        x='employment_status_label',
-        y='Average Score',
-        color='employment_status_label',
-        barmode='group',
-        title='Average Scores of Selected Social Skills by Employment Status',
-        labels={'employment_status_label':'Employment Status'},
-        color_discrete_map=color_map
-    )
-    fig_groupbar.update_layout(template='plotly_white', font=dict(family="Arial", size=12))
-    st.plotly_chart(fig_groupbar, width='stretch')
 
-    st.markdown("""
-    **Interpretation:**
-    - EMPLOYED participants consistently score higher across social skills.  
-    - STUDENT group shows moderate engagement with variability.  
-    - UNEMPLOYED participants score lower, highlighting areas for potential interventions.  
-    - Grouped bar chart provides clear side-by-side comparison of multiple skills.
-    """)
+    if selected_skills:  # only proceed if at least one skill is selected
+        # Compute mean scores by employment status
+        df_avg = filtered_df.groupby('employment_status_label')[selected_skills].mean().reset_index()
+
+        # Reshape for plotting
+        df_melt = df_avg.melt(
+            id_vars='employment_status_label',
+            var_name='Variable',
+            value_name='Average Score'
+        )
+
+        # Create grouped bar chart
+        fig_groupbar = px.bar(
+            df_melt,
+            x='employment_status_label',
+            y='Average Score',
+            color='employment_status_label',
+            barmode='group',
+            title='Average Scores of Selected Social Skills by Employment Status',
+            labels={'employment_status_label':'Employment Status'},
+            color_discrete_map=color_map
+        )
+        fig_groupbar.update_layout(template='plotly_white', font=dict(family="Arial", size=12))
+        st.plotly_chart(fig_groupbar, use_container_width=True)
+
+        # Interpretation
+        st.markdown("""
+        **Interpretation:**
+        - EMPLOYED participants generally score higher across selected social skills.  
+        - STUDENT group shows moderate engagement with variability.  
+        - UNEMPLOYED participants score lower, highlighting areas for potential interventions.  
+        - Grouped bar chart provides clear side-by-side comparison of selected skills.
+        """)
+    else:
+        st.warning("Please select at least one social skill to display.")
 
 # ===============================
 # 5️⃣ Community Participation
 # ===============================
 elif selected_sub == "Community Participation":
     community_vars = ['community_participation', 'community_care', 'community_impact', 'neighbourhood_safety']
+
     df_sunburst = filtered_df.groupby('employment_status_label')[community_vars].mean().reset_index()
+
     df_melt = df_sunburst.melt(
         id_vars='employment_status_label',
         value_vars=community_vars,
         var_name='Community Skill',
         value_name='Average Score'
     )
+
     fig_sunburst = px.sunburst(
         df_melt,
         path=['employment_status_label', 'Community Skill'],
@@ -611,8 +630,16 @@ elif selected_sub == "Community Participation":
         color_continuous_scale=px.colors.sequential.Viridis,
         title='Community Participation by Employment Status'
     )
-    fig_sunburst.update_layout(margin=dict(t=50,l=0,r=0,b=0), uniformtext=dict(minsize=10,mode='hide'))
-    fig_sunburst.update_traces(hovertemplate='<b>%{label}</b><br>Average Score: %{value:.2f}<extra></extra>')
+
+    fig_sunburst.update_layout(
+        margin=dict(t=50, l=0, r=0, b=0),
+        uniformtext=dict(minsize=10, mode='hide')
+    )
+
+    fig_sunburst.update_traces(
+        hovertemplate='<b>%{label}</b><br>Average Score: %{value:.2f}<extra></extra>'
+    )
+
     st.plotly_chart(fig_sunburst, width='stretch')
 
     st.markdown("""
@@ -622,6 +649,7 @@ elif selected_sub == "Community Participation":
     - UNEMPLOYED participants have the lowest participation scores.  
     - Sunburst chart visually emphasizes the contribution to each community skill.
     """)
+
 
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction
