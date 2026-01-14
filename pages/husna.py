@@ -570,101 +570,106 @@ if selected_sub == "Correlation Between Likert Variables":
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
 elif selected_sub == "Social & Emotional Skills":
+    # -----------------------------
+    # Define radar variables (Likert-scale columns)
+    # -----------------------------
+    radar_vars = [
+        'calm_under_pressure',
+        'cheerful',
+        'task_persistence',
+        'adaptability',
+        'social_support',
+        'helping_others',
+        'community_participation', 
+        'community_impact',
+        'life_satisfaction',
+        'overall_health'
+    ]
 
-# -----------------------------
-# Define radar variables (Likert-scale columns)
-# -----------------------------
-  radar_vars = [
-      'calm_under_pressure',
-      'cheerful',
-      'task_persistence',
-      'adaptability',
-      'social_support',
-      'helping_others',
-      'community_participation', 
-      'community_impact',
-      'life_satisfaction',
-      'overall_health'
-  ]
-
-# -----------------------------
-# Select employment statuses
-# -----------------------------
-employment_options = st.multiselect(
-    "Select Employment Status for Radar Chart:",
-    options=filtered_df['employment_status_label'].unique(),
-    default=filtered_df['employment_status_label'].unique()
-)
-
-# Filter dataframe based on selection
-df_radar = filtered_df[
-    filtered_df['employment_status_label'].isin(employment_options)
-]
-
-# -----------------------------
-# Compute averages for each employment group
-# -----------------------------
-df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
-
-# -----------------------------
-# Create color map automatically for any employment status
-# -----------------------------
-default_colors = px.colors.qualitative.Plotly
-color_map = {status.upper(): default_colors[i % len(default_colors)]
-             for i, status in enumerate(df_avg['employment_status_label'])}
-
-# -----------------------------
-# Build radar chart
-# -----------------------------
-fig = go.Figure()
-
-for _, row in df_avg.iterrows():
-    fig.add_trace(
-        go.Scatterpolar(
-            r=[row[v] for v in radar_vars],
-            theta=[v.replace("_", " ").title() for v in radar_vars],
-            fill='toself',
-            name=row['employment_status_label'],
-            line_color=color_map.get(row['employment_status_label'].upper(), '#000000')
-        )
+    # -----------------------------
+    # Select employment statuses
+    # -----------------------------
+    employment_options = st.multiselect(
+        "Select Employment Status for Radar Chart:",
+        options=filtered_df['employment_status_label'].unique(),
+        default=filtered_df['employment_status_label'].unique()
     )
 
-# -----------------------------
-# Update layout with Likert-scale axis
-# -----------------------------
-fig.update_layout(
-    polar=dict(
-        radialaxis=dict(
-            visible=True,
-            range=[1, 5],
-            tickmode='array',
-            tickvals=[1, 2, 3, 4, 5],
-            ticktext=['1','2','3','4','5']
+    # Filter dataframe based on selection
+    df_radar = filtered_df[
+        filtered_df['employment_status_label'].isin(employment_options)
+    ]
+
+    # -----------------------------
+    # Compute averages for each employment group
+    # -----------------------------
+    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
+
+    # -----------------------------
+    # Create color map automatically for any employment status
+    # -----------------------------
+    default_colors = px.colors.qualitative.Plotly
+    color_map = {status.upper(): default_colors[i % len(default_colors)]
+                 for i, status in enumerate(df_avg['employment_status_label'])}
+
+    # -----------------------------
+    # Build radar chart
+    # -----------------------------
+    fig = go.Figure()
+
+    for _, row in df_avg.iterrows():
+        fig.add_trace(
+            go.Scatterpolar(
+                r=[row[v] for v in radar_vars],
+                theta=[v.replace("_", " ").title() for v in radar_vars],
+                fill='toself',
+                name=row['employment_status_label'],
+                line_color=color_map.get(row['employment_status_label'].upper(), '#000000'),
+                hovertemplate='%{theta}: %{r}<extra>%{fullData.name}</extra>'
+            )
         )
-    ),
-    title="Emotional Regulation and Personal Skills by Employment Status",
-    template='plotly_white',
-    showlegend=True
-)
 
-st.plotly_chart(fig, use_container_width=True)
+    # -----------------------------
+    # Update layout with Likert-scale axis
+    # -----------------------------
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 5],
+                tickmode='array',
+                tickvals=[1, 2, 3, 4, 5],
+                ticktext=['1','2','3','4','5']
+            )
+        ),
+        title="Emotional Regulation and Personal Skills by Employment Status",
+        template='plotly_white',
+        showlegend=True
+    )
 
-st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
-st.markdown(f"""
-- Employed individuals demonstrate stronger emotional regulation and personal skills.  
-- Students exhibit balanced but moderate skill levels.  
-- Unemployed individuals show lower scores across several dimensions.  
-- Radar chart enables holistic, multi-dimensional comparison.
-""")
+    st.plotly_chart(fig, use_container_width=True)
 
-   
-st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
-st.markdown(f"""
-- Emotional and personal skill profiles vary substantially by employment status.  
-- Employment appears to support stronger emotional stability and social capability.  
-- These insights can inform targeted training and psychosocial support initiatives.  
-- Such evidence highlights the importance of integrating emotional skill development into employment and educational policies.
-""")
+    # -----------------------------
+    # Interpretation
+    # -----------------------------
+    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
+    st.markdown("""
+    - Employed individuals demonstrate stronger emotional regulation and personal skills.  
+    - Students exhibit balanced but moderate skill levels.  
+    - Unemployed individuals show lower scores across several dimensions.  
+    - Radar chart enables holistic, multi-dimensional comparison.
+    """)
+
+    # -----------------------------
+    # Conclusion
+    # -----------------------------
+    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+    st.markdown("""
+    - Emotional and personal skill profiles vary substantially by employment status.  
+    - Employment appears to support stronger emotional stability and social capability.  
+    - These insights can inform targeted training and psychosocial support initiatives.  
+    - Such evidence highlights the importance of integrating emotional skill development into employment and educational policies.
+    """)
 
 
 # ===============================
