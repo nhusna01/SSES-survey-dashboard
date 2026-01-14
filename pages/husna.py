@@ -451,9 +451,6 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 # 1️⃣ Correlation Heatmap
 # ===============================
-import streamlit as st
-import pandas as pd
-import plotly.express as px
 
 # -----------------------------
 # Likert variables
@@ -579,8 +576,6 @@ st.markdown(f"""
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-import plotly.graph_objects as go
-
 elif selected_sub == "Social & Emotional Skills":
 
     radar_vars = [
