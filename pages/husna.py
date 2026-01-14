@@ -476,13 +476,6 @@ if selected_sub == "Correlation Between Likert Variables":
         st.warning("Please select at least two variables.")
         st.stop()
 
-    # -----------------------------
-    # Target variable: Employment status
-    # -----------------------------
-    target_status = st.selectbox(
-        "Employment status (target group):",
-        options=filtered_df['employment_status_label'].unique()
-    )
 
     # -----------------------------
     # Filter dataset by target_status
