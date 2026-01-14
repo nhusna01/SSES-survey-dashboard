@@ -460,7 +460,7 @@ if selected_sub == "Correlation Between Likert Variables":
     ]
 
     # -----------------------------
-    # INTERACTIVITY 1: Variable selection
+    # SINGLE INTERACTIVITY: Variable selection
     # -----------------------------
     selected_vars = st.multiselect(
         "Select Likert variables for correlation analysis:",
@@ -473,29 +473,9 @@ if selected_sub == "Correlation Between Likert Variables":
         st.stop()
 
     # -----------------------------
-    # INTERACTIVITY 2: Employment group filter
+    # Prepare data
     # -----------------------------
-    employment_group = st.selectbox(
-        "Select employment group:",
-        options=['ALL'] + filtered_df['employment_status'].unique().tolist()
-    )
-
-    if employment_group == 'ALL':
-        df_filtered_corr = filtered_df.copy()
-    else:
-        df_filtered_corr = filtered_df[
-            filtered_df['employment_status'] == employment_group
-        ]
-
-    # -----------------------------
-    # Encode employment status (exploratory)
-    # -----------------------------
-    employment_mapping = {'EMPLOYED': 2, 'STUDENT': 1, 'UNEMPLOYED': 0}
-
-    df_corr = df_filtered_corr[selected_vars + ['employment_status']].copy()
-    df_corr['employment_status'] = df_corr['employment_status'].map(employment_mapping)
-
-    df_corr[selected_vars] = df_corr[selected_vars].apply(
+    df_corr = filtered_df[selected_vars].apply(
         pd.to_numeric, errors='coerce'
     )
 
@@ -505,34 +485,14 @@ if selected_sub == "Correlation Between Likert Variables":
     correlation_matrix = df_corr.corr()
 
     # -----------------------------
-    # INTERACTIVITY 3: Correlation threshold slider
-    # -----------------------------
-    threshold = st.slider(
-        "Minimum absolute correlation value:",
-        min_value=0.0,
-        max_value=1.0,
-        value=0.3,
-        step=0.05
-    )
-
-    correlation_matrix_filtered = correlation_matrix.where(
-        correlation_matrix.abs() >= threshold
-    )
-
-    # -----------------------------
-    # INTERACTIVITY 4: Annotation toggle
-    # -----------------------------
-    show_values = st.checkbox("Show correlation values", value=True)
-
-    # -----------------------------
     # Heatmap
     # -----------------------------
     fig = px.imshow(
-        correlation_matrix_filtered,
-        text_auto=show_values,
+        correlation_matrix,
+        text_auto=True,
         aspect="auto",
         color_continuous_scale=px.colors.sequential.Viridis,
-        title="Interactive Correlation Heatmap of Likert Variables"
+        title="Interactive Correlation Heatmap of Selected Likert Variables"
     )
 
     fig.update_layout(
@@ -550,10 +510,9 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     st.markdown("""
     **Interpretation:**
-    - Social support and helping behaviors exhibit moderate positive correlations, indicating related social dimensions.  
-    - Community engagement variables show meaningful associations with life satisfaction and overall health.  
-    - Correlations involving employment status are exploratory and should be interpreted cautiously due to categorical encoding.  
-    - Interactive filtering enables focused exploration of the most relevant relationships.
+    - The heatmap reveals moderate positive relationships among social, community, and well-being indicators.  
+    - Variables related to social support and community engagement tend to correlate with life satisfaction and overall health.  
+    - Interactive variable selection enables focused exploration of specific relationships without visual clutter.
     """)
 
     # -----------------------------
@@ -561,11 +520,11 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     st.markdown("""
     **Conclusion for Correlation Heatmap:**
-    - Social and community-related variables are meaningfully associated with well-being outcomes.  
-    - Employment status demonstrates limited associations with health and life satisfaction.  
-    - High interactivity supports exploratory analysis, variable comparison, and targeted insight generation.  
-    - The visualization is effective for descriptive analysis and hypothesis generation.
+    - The visualization effectively supports exploratory analysis of Likert-scale variables.  
+    - User-driven variable selection enhances interpretability and analytical flexibility.  
+    - The interactive heatmap is suitable for identifying key relationships and informing further analysis.
     """)
+
 
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
