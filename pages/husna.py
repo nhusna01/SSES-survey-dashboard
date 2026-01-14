@@ -455,7 +455,7 @@ st.title("Correlation Heatmap: Employment Status vs. Selected Likert Scale Varia
 
 if selected_sub == "Correlation Between Likert Variables":
     likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
+        'calm_under_pressure', 'cheerful', 'task_persistence',
         'social_support', 'helping_others', 'community_participation',
         'community_impact', 'life_satisfaction', 'overall_health'
     ]
@@ -499,6 +499,7 @@ if selected_sub == "Correlation Between Likert Variables":
     - Highlights which variables could be targets for intervention.  
     - Useful for both descriptive and predictive insights.
     """)
+
 
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
