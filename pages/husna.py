@@ -542,65 +542,69 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-elif selected_sub == "Task Persistence & Enjoy Learning":
-    # Columns to visualize (Likert-scale 1–5)
-    columns_to_plot = ['task_persistence', 'enjoy_learning']
 
-    # Filter by employment status
-    employment_options = st.multiselect(
-        "Filter Employment Status:",
-        options=filtered_df['employment_status_label'].unique(),
-        default=filtered_df['employment_status_label'].unique()
-    )
+elif selected_sub == "Task Persistence & Enjoy Learning Radar Chart":  # could rename to "Emotional & Personal Skills Radar"
 
-    df_filtered = filtered_df[
-        filtered_df['employment_status_label'].isin(employment_options)
+    radar_vars = [
+        'calm_under_pressure',  # Emotional regulation
+        'cheerful',             # Personal well-being
+        'task_persistence',     # Personal skill
+        'enjoy_learning',       # Personal skill
+        'helping_others',       # Social skill
+        'social_support'        # Social skill
     ]
 
-    # Color mapping for employment status
+    employment_options = st.multiselect(
+        "Select Employment Status for Radar Chart:",
+        options=df['employment_status_label'].unique(),
+        default=df['employment_status_label'].unique()
+    )
+
+    df_filtered = df[df['employment_status_label'].isin(employment_options)]
+
     color_map = {
         'EMPLOYED': '#440154',
         'STUDENT': '#21918c',
         'UNEMPLOYED': '#fde725'
     }
 
-    # Create boxplots for each Likert-scale column (1–5)
-    for col in columns_to_plot:
-        fig_box = px.box(
-            df_filtered,
-            x='employment_status_label',
-            y=col,
-            color='employment_status_label',
-            points='all',  # show all individual points
-            color_discrete_map=color_map,
-            title=f'{col.replace("_"," ").title()} by Employment Status'
-        )
+    # Compute averages for radar chart
+    df_avg = df_filtered.groupby('employment_status_label')[radar_vars].mean().reset_index()
 
-        fig_box.update_layout(
-            xaxis_title='Employment Status',
-            yaxis_title=f'{col.replace("_"," ").title()} (1–5 Likert Scale)',
-            boxmode='group',
-            template='plotly_white',
-            font=dict(family="Arial", size=12),
-            showlegend=False
-        )
+    fig = go.Figure()
 
-        st.plotly_chart(fig_box, use_container_width=True)
+    for idx, row in df_avg.iterrows():
+        fig.add_trace(go.Scatterpolar(
+            r=[row[var] for var in radar_vars],
+            theta=[var.replace("_"," ").title() for var in radar_vars],
+            fill='toself',
+            name=row['employment_status_label'],
+            line_color=color_map[row['employment_status_label']]
+        ))
 
-        st.markdown(f"""
-        **Interpretation for {col.replace('_',' ').title()}:**
-        - Employed participants show higher median scores  
-        - Students display moderate variability  
-        - Unemployed participants exhibit more outliers  
-        - Boxplots clearly reveal distributional differences
-        """)
+    fig.update_layout(
+        polar=dict(radialaxis=dict(visible=True, range=[1,5])),
+        showlegend=True,
+        title="Emotional Regulation, Personal & Social Skills by Employment Status",
+        template='plotly_white'
+    )
 
+    st.plotly_chart(fig, width='stretch')
+
+    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown("""
-    **Conclusion for Task Persistence & Enjoy Learning:**
-    - Employed participants demonstrate stronger persistence and learning engagement  
-    - Students show mixed but balanced outcomes  
-    - Unemployed participants may require additional support  
-    - Boxplots effectively capture variability and group differences
+    - EMPLOYED participants show higher levels across emotional regulation, personal skills, and social skills.  
+    - STUDENT group shows moderate scores in all dimensions.  
+    - UNEMPLOYED participants have lower scores, indicating potential areas for support programs.  
+    - Radar chart provides a clear multidimensional profile for each employment group.
+    """)
+
+    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+    st.markdown("""
+    - Employment status is strongly associated with emotional, personal, and social skill levels.  
+    - Radar visualization highlights comparative strengths and weaknesses.  
+    - Useful for designing interventions targeting lower-scoring employment groups.
+    - This insight can guide targeted training and support programs to enhance overall well-being and skill development.
     """)
 
 
