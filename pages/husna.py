@@ -238,7 +238,7 @@ employment_mapping = {
 }
 
 attribute_cols = [
-    "calm_under_pressure", "cheerful", 
+    "calm_under_pressure",
     "enjoy_learning", "task_persistence",
     "social_support", "helping_others",
     "community_participation", "community_impact", "neighborhood_safety", "community_care"
@@ -643,44 +643,77 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 # 5️⃣ Community Participation
 # ===============================
 elif selected_sub == "Community Participation":
-    community_vars = ['community_participation', 'community_care', 'community_impact', 'neighborhood_safety']
 
-    df_sunburst = filtered_df.groupby('employment_status_label')[community_vars].mean().reset_index()
+    community_vars = [
+        'community_participation',
+        'community_impact'
+    ]
 
-    df_melt = df_sunburst.melt(
+    # -----------------------------
+    # Melt data for Likert analysis
+    # -----------------------------
+    df_likert = filtered_df.melt(
         id_vars='employment_status_label',
         value_vars=community_vars,
-        var_name='Community Skill',
-        value_name='Average Score'
+        var_name='Community Dimension',
+        value_name='Likert Score'
     )
 
-    fig_sunburst = px.sunburst(
-        df_melt,
-        path=['employment_status_label', 'Community Skill'],
-        values='Average Score',
-        color='Average Score',
-        hover_data={'Average Score': ':.2f'},
-        color_continuous_scale=px.colors.sequential.Viridis,
-        title='Community Participation by Employment Status'
+    df_likert = df_likert.dropna()
+    df_likert['Likert Score'] = df_likert['Likert Score'].astype(int)
+
+    # -----------------------------
+    # Count responses
+    # -----------------------------
+    df_count = (
+        df_likert
+        .groupby(['employment_status_label', 'Community Dimension', 'Likert Score'])
+        .size()
+        .reset_index(name='Count')
     )
 
-    fig_sunburst.update_layout(
-        margin=dict(t=50, l=0, r=0, b=0),
-        uniformtext=dict(minsize=10, mode='hide')
+    # -----------------------------
+    # Normalize to percentages
+    # -----------------------------
+    df_count['Percentage'] = (
+        df_count['Count'] /
+        df_count.groupby(
+            ['employment_status_label', 'Community Dimension']
+        )['Count'].transform('sum')
+    ) * 100
+
+    # -----------------------------
+    # Create stacked Likert bar chart
+    # -----------------------------
+    fig = px.bar(
+        df_count,
+        x='Percentage',
+        y='Community Dimension',
+        color='Likert Score',
+        facet_col='employment_status_label',
+        orientation='h',
+        color_continuous_scale=px.colors.diverging.RdBu,
+        title='Distribution of Community-Related Likert Responses by Employment Status'
     )
 
-    fig_sunburst.update_traces(
-        hovertemplate='<b>%{label}</b><br>Average Score: %{value:.2f}<extra></extra>'
+    fig.update_layout(
+        bargap=0.15,
+        legend_title='Likert Score',
+        xaxis_title='Percentage of Responses (%)',
+        yaxis_title='Community Dimension'
     )
 
-    st.plotly_chart(fig_sunburst, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
+    # -----------------------------
+    # Interpretation (4 points)
+    # -----------------------------
     st.markdown("""
     **Interpretation:**
-    - EMPLOYED participants show the highest engagement in community activities.  
-    - STUDENT group participates moderately across all activities.  
-    - UNEMPLOYED participants have the lowest participation scores.  
-    - Sunburst chart visually emphasizes the contribution to each community skill.
+    - **Employed respondents** show the highest proportion of high (4–5) Likert responses, indicating stronger perceived community engagement and impact.  
+    - **Students** exhibit greater variability across low, neutral, and high responses, suggesting heterogeneous levels of community participation.  
+    - **Unemployed respondents** display comparatively fewer high-scale responses, reflecting reduced perceived involvement and community influence.  
+    - Overall, the **distribution-based Likert visualization** reveals meaningful differences across employment groups that are not captured by mean-based summaries.
     """)
 
 
