@@ -233,46 +233,59 @@ st.markdown("### Research Visualizations")
 # VISUALIZATION 1: CORRELATION HEATMAP 
 with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
     
+    # Ensure indices are defined before plotting
+    # (Calculated here just in case they weren't defined earlier in your script)
+    if 'social_support_index' not in df.columns:
+        df['social_support_index'] = df[['social_support', 'social_time', 'community_care']].mean(axis=1)
+    if 'community_safety_index' not in df.columns:
+        df['community_safety_index'] = df[['neighborhood_safety', 'community_care']].mean(axis=1)
+    if 'emotion_management_index' not in df.columns:
+        df['emotion_management_index'] = df[['calm_under_pressure', 'emotional_control']].mean(axis=1)
+
     viz1_cols = ['life_satisfaction', 'social_support_index', 'community_safety_index', 'emotion_management_index', 'overall_health']
     available_viz_cols = [col for col in viz1_cols if col in df.columns]
 
     if len(available_viz_cols) > 1:
         corr_matrix = df[available_viz_cols].corr()
 
-        # UPDATED: color_continuous_scale set to 'Reds' to match the pink theme
+        # Create Heatmap
         fig1 = px.imshow(
             corr_matrix, 
             text_auto=".2f", 
             color_continuous_scale='Reds', 
             aspect="auto",
-            labels=dict(color="Strength"),
-            zmin=0, zmax=1 # Focus on positive correlations for a cleaner look
+            zmin=0, zmax=1,
+            labels=dict(color="Correlation Strength") # This names the color indicator
         )
 
+        # UPDATED: Customizing the color bar to act as the "Guide"
         fig1.update_layout(
             title="<b>Variable Correlation Analysis</b>",
             title_x=0.5,
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
+            coloraxis_colorbar=dict(
+                title="Strength",
+                tickvals=[0, 0.5, 1],
+                ticktext=["Weak (White)", "Medium", "Strong (Red)"], # Directly tells the user what colors mean
+                lenmode="pixels", len=300,
+            )
         )
 
-        col_chart1, col_info1 = st.columns([4, 1])
-        with col_chart1:
-            st.plotly_chart(fig1, use_container_width=True, key="heatmap_1")
-        
-        with col_info1:
-            st.write("") 
-            with st.popover("Guide"):
-                st.markdown("**Color Key:**\n- Dark Red: Strong Link\n- White: No Link")
+        # Simplified layout: Just the chart (No more col_info1 button)
+        st.plotly_chart(fig1, use_container_width=True, key="heatmap_1")
 
+        # Interpretation Box
         st.markdown(f"""
-            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+            <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
                 <p style="margin: 0; color: #333;">
                     <b>Interpretation:</b> Health, emotional control, and social safety are all factors that contribute to life satisfaction. 
-                    Safety and support have a strong 0.68 correlation, which shows that community-level actions could set the basis to increase happiness levels.
+                    Safety and support have a strong <b>0.68 correlation</b>, proving that community-level security is a direct foundation for social connection.
                 </p>
             </div>
         """, unsafe_allow_html=True)
+    else:
+        st.warning("Not enough data to generate correlation heatmap.")
 
 # --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT (Simplified) ---
 with st.expander("Visualization 2: Social & Community Impact", expanded=False):
