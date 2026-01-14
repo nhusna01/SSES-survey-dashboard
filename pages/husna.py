@@ -574,18 +574,18 @@ elif selected_sub == "Social & Emotional Skills":
 # -----------------------------
 # Define radar variables (Likert-scale columns)
 # -----------------------------
-radar_vars = [
-    'calm_under_pressure',
-    'cheerful',
-    'task_persistence',
-    'adaptability',
-    'social_support',
-    'helping_others',
-    'community_participation',
-    'community_impact',
-    'life_satisfaction',
-    'overall_health'
-]
+  radar_vars = [
+      'calm_under_pressure',
+      'cheerful',
+      'task_persistence',
+      'adaptability',
+      'social_support',
+      'helping_others',
+      'community_participation', 
+      'community_impact',
+      'life_satisfaction',
+      'overall_health'
+  ]
 
 # -----------------------------
 # Select employment statuses
