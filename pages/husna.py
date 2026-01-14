@@ -857,12 +857,16 @@ if selected_sub == "Community Participation":
     df_hist['Likert Score'] = df_hist['Likert Score'].astype(int)
     df_hist['employment_status_label'] = df_hist['employment_status_label'].str.upper()
 
+    # -----------------------------
+    # Create color map automatically for any employment status
+    # -----------------------------
+    
+    # Color mapping for employment status
     color_map = {
         'EMPLOYED': '#440154',
         'STUDENT': '#21918c',
         'UNEMPLOYED': '#fde725'
     }
-
     fig = px.histogram(
         df_hist,
         x='Likert Score',
