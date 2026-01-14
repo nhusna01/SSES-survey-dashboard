@@ -521,8 +521,8 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     # Interpretation
     # -----------------------------
+    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown(f"""
-    **Interpretation:**
     - The heatmap shows relationships among social, community, and well-being indicators within the **{target_status}** group.  
     - Variables related to social support and community participation tend to correlate with life satisfaction and overall health.  
     - Using employment status as a target group enables focused subgroup analysis while preserving statistical validity.
@@ -531,8 +531,8 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     # Conclusion
     # -----------------------------
+    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     st.markdown("""
-    **Conclusion for Correlation Heatmap:**
     - Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.  
     - The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.  
     - This approach is suitable for descriptive insight generation and comparative analysis.
@@ -542,6 +542,8 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
+import plotly.graph_objects as go
+
 elif selected_sub == "Social & Emotional Skills":
 
     radar_vars = [
@@ -569,6 +571,13 @@ elif selected_sub == "Social & Emotional Skills":
     # Compute averages for each employment group
     df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
 
+    # Color mapping
+    color_map = {
+        'EMPLOYED': '#440154',   # Dark purple
+        'STUDENT': '#21918c',    # Bright teal
+        'UNEMPLOYED': '#fde725'  # Bright yellow
+    }
+
     # -----------------------------
     # Build radar chart
     # -----------------------------
@@ -581,7 +590,7 @@ elif selected_sub == "Social & Emotional Skills":
                 theta=[v.replace("_", " ").title() for v in radar_vars],
                 fill='toself',
                 name=row['employment_status_label'],
-                line_color=color_map[row['employment_status_label']]
+                line_color=color_map.get(row['employment_status_label'], '#000000')  # fallback black
             )
         )
 
