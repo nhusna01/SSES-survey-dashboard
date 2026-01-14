@@ -561,13 +561,9 @@ elif selected_sub == "Social & Emotional Skills":
         'calm_under_pressure',
         'cheerful',
         'task_persistence',
-        'adaptability',
+        'enjoy_learning',
         'social_support',
-        'helping_others',
-        'community_participation', 
-        'community_impact',
-        'life_satisfaction',
-        'overall_health'
+        'helping_others'
     ]
 
     # -----------------------------
@@ -592,9 +588,12 @@ elif selected_sub == "Social & Emotional Skills":
     # -----------------------------
     # Create color map automatically for any employment status
     # -----------------------------
-    default_colors = px.colors.qualitative.Plotly
-    color_map = {status.upper(): default_colors[i % len(default_colors)]
-                 for i, status in enumerate(df_avg['employment_status_label'])}
+    # Color mapping for employment status
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
 
     # -----------------------------
     # Build radar chart
