@@ -491,33 +491,25 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
             }
         )
 
-        fig6.update_layout(
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
-            xaxis=dict(tickmode='linear'),
-            coloraxis_showscale=False # Keeps it neat by hiding the side color bar
-        )
-        
-        # 3. Layout: Chart + Guide
-        col_chart6, col_info6 = st.columns([4, 1])
-        with col_chart6:
-            st.plotly_chart(fig6, use_container_width=True, key="bar_viz_6")
-
-        # UPDATED: Integrated Indicator in the Layout
+        # 3. COMBINED LAYOUT UPDATES (Fixed the indicator issue)
         fig6.update_layout(
             title="<b>How a Safe Community Drives Life Satisfaction</b>",
             title_x=0.5,
             plot_bgcolor='rgba(0,0,0,0)',
             paper_bgcolor='rgba(0,0,0,0)',
             xaxis=dict(tickmode='linear'),
-            # This color bar now acts as your "Guide" automatically
+            # IMPORTANT: Ensure showscale is True and configured here
+            coloraxis_showscale=True, 
             coloraxis_colorbar=dict(
                 title="Satisfaction",
                 tickvals=[safety_avg['life_satisfaction'].min(), safety_avg['life_satisfaction'].max()],
-                ticktext=["Lower", "Higher (Stronger Impact)"],
+                ticktext=["Lower", "Higher"],
                 lenmode="pixels", len=200
             )
         )
+
+        # Display Chart (Moved this AFTER all updates are finished)
+        st.plotly_chart(fig6, use_container_width=True, key="bar_viz_6")
 
         # 4. Insight Box
         st.markdown(f"""
