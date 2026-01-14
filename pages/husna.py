@@ -541,70 +541,67 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-
-elif selected_sub == "Task Persistence & Enjoy Learning Radar Chart":  # could rename to "Emotional & Personal Skills Radar"
+# ===============================
+# 2️⃣ Social & Emotional Skills Radar
+# ===============================
+elif selected_sub == "Social & Emotional Skills":
 
     radar_vars = [
-        'calm_under_pressure',  # Emotional regulation
-        'cheerful',             # Personal well-being
-        'task_persistence',     # Personal skill
-        'enjoy_learning',       # Personal skill
-        'helping_others',       # Social skill
-        'social_support'        # Social skill
+        'calm_under_pressure',
+        'cheerful',
+        'task_persistence',
+        'enjoy_learning',
+        'helping_others',
+        'social_support'
     ]
 
     employment_options = st.multiselect(
         "Select Employment Status for Radar Chart:",
-        options=df['employment_status_label'].unique(),
-        default=df['employment_status_label'].unique()
+        options=filtered_df['employment_status_label'].unique(),
+        default=filtered_df['employment_status_label'].unique()
     )
 
-    df_filtered = df[df['employment_status_label'].isin(employment_options)]
+    df_radar = filtered_df[
+        filtered_df['employment_status_label'].isin(employment_options)
+    ]
 
-    color_map = {
-        'EMPLOYED': '#440154',
-        'STUDENT': '#21918c',
-        'UNEMPLOYED': '#fde725'
-    }
-
-    # Compute averages for radar chart
-    df_avg = df_filtered.groupby('employment_status_label')[radar_vars].mean().reset_index()
+    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
 
     fig = go.Figure()
 
-    for idx, row in df_avg.iterrows():
+    for _, row in df_avg.iterrows():
         fig.add_trace(go.Scatterpolar(
-            r=[row[var] for var in radar_vars],
-            theta=[var.replace("_"," ").title() for var in radar_vars],
+            r=[row[v] for v in radar_vars],
+            theta=[v.replace("_", " ").title() for v in radar_vars],
             fill='toself',
-            name=row['employment_status_label'],
-            line_color=color_map[row['employment_status_label']]
+            name=row['employment_status_label']
         ))
 
     fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[1,5])),
-        showlegend=True,
-        title="Emotional Regulation, Personal & Social Skills by Employment Status",
-        template='plotly_white'
+        polar=dict(radialaxis=dict(visible=True, range=[1, 5])),
+        title="Emotional Regulation and Personal Skills by Employment Status",
+        template='plotly_white',
+        showlegend=True
     )
 
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
     st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown("""
-    - EMPLOYED participants show higher levels across emotional regulation, personal skills, and social skills.  
-    - STUDENT group shows moderate scores in all dimensions.  
-    - UNEMPLOYED participants have lower scores, indicating potential areas for support programs.  
-    - Radar chart provides a clear multidimensional profile for each employment group.
-    """)
+- Employed individuals demonstrate stronger emotional regulation and personal skills.  
+- Students exhibit balanced but moderate skill levels.  
+- Unemployed individuals show lower scores across several dimensions.  
+- Radar chart enables holistic, multi-dimensional comparison.
+""")
 
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     st.markdown("""
-    - Employment status is strongly associated with emotional, personal, and social skill levels.  
-    - Radar visualization highlights comparative strengths and weaknesses.  
-    - Useful for designing interventions targeting lower-scoring employment groups.
-    - This insight can guide targeted training and support programs to enhance overall well-being and skill development.
-    """)
+- Emotional and personal skill profiles vary substantially by employment status.  
+- Employment appears to support stronger emotional stability and social capability.  
+- These insights can inform targeted training and psychosocial support initiatives.
+- Such evidence highlights the importance of integrating emotional skill development into employment and educational policies.
+""")
+
 
 
 # ===============================
