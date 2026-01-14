@@ -549,6 +549,9 @@ if selected_sub == "Correlation Between Likert Variables":
 - The heatmap shows relationships among social, community, and well-being indicators within the **{target_status}** group.
 - Variables related to social support and community participation tend to correlate with life satisfaction and overall health.
 - Using employment status as a target group enables focused subgroup analysis while preserving statistical validity.
+- Strong positive correlations between helping others and community participation suggest that social engagement may reinforce personal well-being.
+- Moderate correlations among emotional regulation variables indicate that emotional skills are interconnected but may vary independently across individuals.
+
 """)
 
     # -----------------------------
@@ -559,6 +562,7 @@ if selected_sub == "Correlation Between Likert Variables":
 - Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.
 - The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.
 - This approach is suitable for descriptive insight generation and comparative analysis.
+- Moderate correlations among emotional regulation variables indicate that emotional skills are interconnected but may vary independently across individuals.
 """)
 
 
