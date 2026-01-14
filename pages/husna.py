@@ -460,7 +460,8 @@ if selected_sub == "Correlation Between Likert Variables":
     ]
 
     # -----------------------------
-    # SINGLE INTERACTIVITY: Variable selection
+    # SINGLE INTERACTIVITY:
+    # Variable selection (Likert)
     # -----------------------------
     selected_vars = st.multiselect(
         "Select Likert variables for correlation analysis:",
@@ -473,9 +474,21 @@ if selected_sub == "Correlation Between Likert Variables":
         st.stop()
 
     # -----------------------------
+    # Target variable: Employment status (contextual filter)
+    # -----------------------------
+    target_status = st.selectbox(
+        "Employment status (target group):",
+        options=filtered_df['employment_status_label'].unique()
+    )
+
+    df_target = filtered_df[
+        filtered_df['employment_status_label'] == target_status
+    ]
+
+    # -----------------------------
     # Prepare data
     # -----------------------------
-    df_corr = filtered_df[selected_vars].apply(
+    df_corr = df_target[selected_vars].apply(
         pd.to_numeric, errors='coerce'
     )
 
@@ -492,7 +505,7 @@ if selected_sub == "Correlation Between Likert Variables":
         text_auto=True,
         aspect="auto",
         color_continuous_scale=px.colors.sequential.Viridis,
-        title="Interactive Correlation Heatmap of Selected Likert Variables"
+        title=f"Correlation Heatmap of Likert Variables ({target_status})"
     )
 
     fig.update_layout(
@@ -508,11 +521,11 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     # Interpretation
     # -----------------------------
-    st.markdown("""
+    st.markdown(f"""
     **Interpretation:**
-    - The heatmap reveals moderate positive relationships among social, community, and well-being indicators.  
-    - Variables related to social support and community engagement tend to correlate with life satisfaction and overall health.  
-    - Interactive variable selection enables focused exploration of specific relationships without visual clutter.
+    - The heatmap shows relationships among social, community, and well-being indicators within the **{target_status}** group.  
+    - Variables related to social support and community participation tend to correlate with life satisfaction and overall health.  
+    - Using employment status as a target group enables focused subgroup analysis while preserving statistical validity.
     """)
 
     # -----------------------------
@@ -520,9 +533,9 @@ if selected_sub == "Correlation Between Likert Variables":
     # -----------------------------
     st.markdown("""
     **Conclusion for Correlation Heatmap:**
-    - The visualization effectively supports exploratory analysis of Likert-scale variables.  
-    - User-driven variable selection enhances interpretability and analytical flexibility.  
-    - The interactive heatmap is suitable for identifying key relationships and informing further analysis.
+    - Correlation patterns vary by employment group, highlighting subgroup-specific dynamics.  
+    - The visualization supports exploratory analysis without imposing artificial numerical ordering on categorical variables.  
+    - This approach is suitable for descriptive insight generation and comparative analysis.
     """)
 
 
