@@ -597,10 +597,10 @@ elif selected_sub == "Social & Emotional Skills":
 # 3️⃣ Task Persistence & Enjoy Learning Boxplots
 # ===============================
 elif selected_sub == "Task Persistence & Enjoy Learning":
-    # Columns to visualize (Likert-scale only)
+    # Columns to visualize (Likert-scale 1–5)
     columns_to_plot = ['task_persistence', 'enjoy_learning']
 
-    # Employment filter
+    # Filter by employment status
     employment_options = st.multiselect(
         "Filter Employment Status:",
         options=filtered_df['employment_status_label'].unique(),
@@ -618,28 +618,28 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         'UNEMPLOYED': '#fde725'
     }
 
-    # Create boxplots for each selected Likert column
+    # Create boxplots for each Likert-scale column (1–5)
     for col in columns_to_plot:
         fig_box = px.box(
             df_filtered,
             x='employment_status_label',
             y=col,
             color='employment_status_label',
-            points='all',  # shows all individual points
+            points='all',  # show all individual points
             color_discrete_map=color_map,
             title=f'{col.replace("_"," ").title()} by Employment Status'
         )
 
         fig_box.update_layout(
             xaxis_title='Employment Status',
-            yaxis_title=col.replace("_"," ").title(),
+            yaxis_title=f'{col.replace("_"," ").title()} (1–5 Likert Scale)',
             boxmode='group',
             template='plotly_white',
             font=dict(family="Arial", size=12),
             showlegend=False
         )
 
-        st.plotly_chart(fig_box, use_container_width=True)  # Stretch to container width
+        st.plotly_chart(fig_box, use_container_width=True)
 
         st.markdown(f"""
         **Interpretation for {col.replace('_',' ').title()}:**
