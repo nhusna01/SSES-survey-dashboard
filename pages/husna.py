@@ -824,6 +824,9 @@ elif selected_sub == "Community Participation":
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
+# ===============================
+# Wellbeing and Life Satisfaction Violin Plot
+# ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
     wellbeing_vars = ['life_satisfaction', 'overall_health']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
@@ -850,33 +853,35 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         yaxis_title=selected_var.replace("_", " ").title(),
         template='plotly_white',
         font=dict(family="Arial", size=12),
-        showlegend=False   
+        showlegend=False
     )
 
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
-interpretations = {
-    'life_satisfaction': [
-        "Employed participants report higher life satisfaction.",
-        "Students show moderate satisfaction levels.",
-        "Unemployed participants report lower satisfaction with greater variability.",
-        "Violin plot highlights distributional differences."
-    ],
-    'overall_health': [
-        "Employed participants report slightly better health.",
-        "Students show relatively consistent health levels.",
-        "Unemployed participants exhibit greater variability with lower values.",
-        "Violin plot effectively visualizes spread and density."
-    ],
-}
+    # -----------------------------
+    # Interpretation Section
+    # -----------------------------
+    st.markdown("### Interpretation")
+    for point in interpretations[selected_var]:
+        st.markdown(f"- {point}")
 
-st.markdown("---") 
+    st.markdown("---")  # Divider between interpretation and conclusion
 
-st.markdown("""
-**Conclusion for Wellbeing and Life Satisfaction:**
-- Wellbeing outcomes differ noticeably across employment groups  
-- Employed participants generally report higher well-being and health  
-- Students show moderate and stable outcomes  
-- Unemployed participants demonstrate lower well-being with greater dispersion  
-- Violin plots effectively capture distribution, density, and outliers
-"""),
+    # -----------------------------
+    # Conclusion Section (different from interpretation)
+    # -----------------------------
+    st.markdown("### Conclusion")
+    if selected_var == 'life_satisfaction':
+        st.markdown("""
+        - Life satisfaction is generally higher among employed participants, indicating positive well-being.  
+        - Students maintain balanced satisfaction, reflecting moderate engagement and support.  
+        - Unemployed participants report lower satisfaction, suggesting areas for targeted interventions.  
+        - Overall, employment status strongly influences life satisfaction outcomes.
+        """)
+    else:  # overall_health
+        st.markdown("""
+        - Overall health trends are slightly better among employed participants, with less variability.  
+        - Students maintain fairly consistent health levels.  
+        - Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
+        - Violin plots effectively reveal group-level differences in health distributions.
+        """)
