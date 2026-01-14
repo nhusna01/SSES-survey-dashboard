@@ -389,8 +389,8 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     """, unsafe_allow_html=True)
 
 st.markdown("---")
-# VISUALIZATION 4: GROUP WELL-BEING PROFILE ---
-with st.expander("Visualization 4: Group Psychological Profile", expanded=False):
+# VISUALIZATION 4: GROUP WELL-BEING PROFILE
+with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
     
     # 1. Prepare Data
     categories = ['Life Sat.', 'Social Support', 'Safety', 'Emotion Mgmt.']
@@ -469,7 +469,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=False)
 st.markdown("---")
 
 # VISUALIZATION 5: COMMUNITY CARE IMPACT 
-with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", expanded=False):
+with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", expanded=True):
     
     # 1. Prepare Data: Average satisfaction per Community Safety level
     # We use community_safety_index which we know exists in your df
@@ -526,7 +526,7 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
 st.markdown("---")
 
 # VISUALIZATION 6: EMOTIONAL MANAGEMENT SHAPE
-with st.expander("Visualization 6: Emotional Stability across Health Status", expanded=False):
+with st.expander("Visualization 6: Emotional Stability across Health Status", expanded=True):
     
     # 1. Create Violin Plot
     # UPDATED: Unified Red sequence from light to deep red
