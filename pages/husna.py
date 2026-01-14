@@ -592,7 +592,12 @@ elif selected_sub == "Social & Emotional Skills":
     df_radar = filtered_df[
         filtered_df['employment_status_label'].isin(employment_options)
     ]
-
+    # Color mapping for employment status
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
     # Compute averages for each employment group
     df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
 
@@ -629,6 +634,7 @@ elif selected_sub == "Social & Emotional Skills":
         template='plotly_white',
         showlegend=True
     )
+            
 
     st.plotly_chart(fig, use_container_width=True)
 
