@@ -668,22 +668,23 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         )
 
         st.plotly_chart(fig_box, use_container_width=True)
-
+        
+        st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
         st.markdown(f"""
-        **Interpretation for {col.replace('_',' ').title()}:**
         - Employed participants show higher median scores  
         - Students display moderate variability  
         - Unemployed participants exhibit more outliers  
         - Boxplots clearly reveal distributional differences
         """)
-
-    st.markdown("""
-    **Conclusion for Task Persistence & Enjoy Learning:**
-    - Employed participants demonstrate stronger persistence and learning engagement  
-    - Students show mixed but balanced outcomes  
-    - Unemployed participants may require additional support  
-    - Boxplots effectively capture variability and group differences
-    """)
+   
+        st.markdown("---")
+        st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+        st.markdown("""
+        - Employed participants demonstrate stronger persistence and learning engagement  
+        - Students show mixed but balanced outcomes  
+        - Unemployed participants may require additional support  
+        - Boxplots effectively capture variability and group differences
+        """)
 
 
 # ===============================
