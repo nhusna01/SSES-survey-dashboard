@@ -576,7 +576,7 @@ st.markdown(f"""
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-elif selected_sub == "Social & Emotional Skills":
+if selected_sub == "Social & Emotional Skills":
 
     radar_vars = [
         'calm_under_pressure',
