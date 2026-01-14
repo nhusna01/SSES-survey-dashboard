@@ -372,7 +372,7 @@ subobjectives = {
     "Social Skills Grouped Bar Chart": 
         "4️⃣ **Social Skills and Interpersonal Interaction**\n\n"
         "To analyze differences in social and interpersonal skills, including teamwork, social support, "
-        "helping others, and time spent on social interaction.",
+        "and helping others in social interaction.",
     "Community Participation": 
         "5️⃣ **Community Participation and Social Responsibility**\n\n"
         "To investigate how community participation and civic engagement vary across employment status groups.",
@@ -650,70 +650,53 @@ elif selected_sub == "Community Participation":
     ]
 
     # -----------------------------
-    # Melt data for Likert analysis
+    # Melt data for histogram
     # -----------------------------
-    df_likert = filtered_df.melt(
+    df_hist = filtered_df.melt(
         id_vars='employment_status_label',
         value_vars=community_vars,
         var_name='Community Dimension',
         value_name='Likert Score'
     )
 
-    df_likert = df_likert.dropna()
-    df_likert['Likert Score'] = df_likert['Likert Score'].astype(int)
+    df_hist = df_hist.dropna()
+    df_hist['Likert Score'] = df_hist['Likert Score'].astype(int)
 
     # -----------------------------
-    # Count responses
+    # Create histogram
     # -----------------------------
-    df_count = (
-        df_likert
-        .groupby(['employment_status_label', 'Community Dimension', 'Likert Score'])
-        .size()
-        .reset_index(name='Count')
-    )
-
-    # -----------------------------
-    # Normalize to percentages
-    # -----------------------------
-    df_count['Percentage'] = (
-        df_count['Count'] /
-        df_count.groupby(
-            ['employment_status_label', 'Community Dimension']
-        )['Count'].transform('sum')
-    ) * 100
-
-    # -----------------------------
-    # Create stacked Likert bar chart
-    # -----------------------------
-    fig = px.bar(
-        df_count,
-        x='Percentage',
-        y='Community Dimension',
-        color='Likert Score',
-        facet_col='employment_status_label',
-        orientation='h',
-        color_continuous_scale=px.colors.diverging.RdBu,
-        title='Distribution of Community-Related Likert Responses by Employment Status'
+    fig = px.histogram(
+        df_hist,
+        x='Likert Score',
+        color='employment_status_label',
+        facet_col='Community Dimension',
+        barmode='overlay',
+        nbins=5,
+        title='Distribution of Community Participation Scores by Employment Status',
+        labels={'Likert Score': 'Likert Scale'}
     )
 
     fig.update_layout(
-        bargap=0.15,
-        legend_title='Likert Score',
-        xaxis_title='Percentage of Responses (%)',
-        yaxis_title='Community Dimension'
+        template='plotly_white',
+        bargap=0.2,
+        legend_title='Employment Status',
+        xaxis_title='Likert Score',
+        yaxis_title='Count'
     )
+
+    fig.update_xaxes(dtick=1)
 
     st.plotly_chart(fig, use_container_width=True)
 
     # -----------------------------
-    # Interpretation (4 points)
+    # Interpretation
     # -----------------------------
     st.markdown("""
     **Interpretation:**
-    - **Employed respondents** show the highest proportion of high (4–5) Likert responses, indicating stronger perceived community engagement and impact.  
-    - **Students** exhibit greater variability across low, neutral, and high responses, suggesting heterogeneous levels of community participation.  
-    - **Unemployed respondents** display comparatively fewer high-scale responses, reflecting reduced perceived involvement and community influence.  
-    - Overall, the **distribution-based Likert visualization** reveals meaningful differences across employment groups that are not captured by mean-based summaries.
+    - **Employed respondents** show a higher concentration of upper Likert-scale scores (4–5), indicating stronger perceived community participation and impact.  
+    - **Students** display a wider spread of responses, suggesting varied levels of engagement in community-related activities.  
+    - **Unemployed respondents** tend to cluster more toward lower and neutral scores, reflecting comparatively reduced perceived involvement.  
+    - Overall, the histogram highlights **distributional differences across employment groups**, providing insights that are not observable through mean-based visualizations alone.
     """)
 
 
