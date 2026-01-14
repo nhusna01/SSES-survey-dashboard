@@ -94,17 +94,16 @@ if not df.empty:
         st.markdown("### Data Exploration")
     
     with method_col:
-        # Using a popover for methodology keeps the UI clean
-        with st.popover("View Methodology"):
-            st.markdown("#### Indexing Logic")
-            st.write("To improve analysis, raw variables were grouped into indices:")
-            st.markdown("""
-            - **Social Support Index:** `social_support`, `social_time`, `community_care`
-            - **Emotion Management:** `calm_under_pressure`, `emotional_control`
-            - **Community Safety:** `neighborhood_safety`, `community_care`
-            """)
-            st.caption("Calculation: Arithmetic Mean of grouped variables.")
-
+        # HOVER FIX: Replacing popover with a button tooltip
+        st.button(
+            "View Methodology", 
+            help="""**Indexing Logic:** Raw variables were grouped into indices using Arithmetic Mean calculation:
+            
+- **Social Support:** social_support, social_time, community_care
+- **Emotion Management:** calm_under_pressure, emotional_control
+- **Community Safety:** neighborhood_safety, community_care""",
+            use_container_width=True
+        )
     # 2. Data Preview Expander - Set to TRUE to be open by default
     with st.expander("🔍 Preview & Filter Raw Dataset", expanded=True):
         
