@@ -476,6 +476,11 @@ if selected_sub == "Correlation Between Likert Variables":
         st.warning("Please select at least two variables.")
         st.stop()
 
+    target_status = "Employed"  # or whatever value you want
+    df_target = filtered_df[filtered_df['employment_status_label'] == target_status]
+    # or safer version:
+    # df_target = filtered_df.loc[filtered_df['employment_status_label'] == target_status]
+
 
     # -----------------------------
     # Filter dataset by target_status
