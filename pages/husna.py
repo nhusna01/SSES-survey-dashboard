@@ -541,9 +541,6 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
 # ===============================
-# ===============================
-# 2️⃣ Social & Emotional Skills Radar
-# ===============================
 elif selected_sub == "Social & Emotional Skills":
 
     radar_vars = [
@@ -565,20 +562,32 @@ elif selected_sub == "Social & Emotional Skills":
         filtered_df['employment_status_label'].isin(employment_options)
     ]
 
-    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
+    df_avg = (
+        df_radar
+        .groupby('employment_status_label')[radar_vars]
+        .mean()
+        .reset_index()
+    )
 
     fig = go.Figure()
 
     for _, row in df_avg.iterrows():
-        fig.add_trace(go.Scatterpolar(
-            r=[row[v] for v in radar_vars],
-            theta=[v.replace("_", " ").title() for v in radar_vars],
-            fill='toself',
-            name=row['employment_status_label']
-        ))
+        fig.add_trace(
+            go.Scatterpolar(
+                r=[row[v] for v in radar_vars],
+                theta=[v.replace("_", " ").title() for v in radar_vars],
+                fill='toself',
+                name=row['employment_status_label']
+            )
+        )
 
     fig.update_layout(
-        polar=dict(radialaxis=dict(visible=True, range=[1, 5])),
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 5]
+            )
+        ),
         title="Emotional Regulation and Personal Skills by Employment Status",
         template='plotly_white',
         showlegend=True
@@ -586,20 +595,26 @@ elif selected_sub == "Social & Emotional Skills":
 
     st.plotly_chart(fig, use_container_width=True)
 
+    # -----------------------------
+    # Interpretation
+    # -----------------------------
     st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown("""
 - Employed individuals demonstrate stronger emotional regulation and personal skills.  
 - Students exhibit balanced but moderate skill levels.  
 - Unemployed individuals show lower scores across several dimensions.  
-- Radar chart enables holistic, multi-dimensional comparison.
+- The radar chart enables holistic, multi-dimensional comparison across groups.
 """)
 
+    # -----------------------------
+    # Conclusion
+    # -----------------------------
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     st.markdown("""
 - Emotional and personal skill profiles vary substantially by employment status.  
 - Employment appears to support stronger emotional stability and social capability.  
-- These insights can inform targeted training and psychosocial support initiatives.
-- Such evidence highlights the importance of integrating emotional skill development into employment and educational policies.
+- These insights can inform targeted training and psychosocial support initiatives.  
+- The results highlight the importance of integrating emotional skill development into employment and educational policies.
 """)
 
 
