@@ -110,7 +110,7 @@ if not df.empty:
         
         # DATASET DESCRIPTION BOX
         st.markdown("""
-            <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1; margin-bottom: 20px;">
+            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1; margin-bottom: 20px;">
                 <p style="margin: 0; color: #333; font-size: 15px;">
                     <b>About this Dataset:</b> This cleaned dataset contains survey responses that focused on 
                     social-emotional well-being. It captures how individuals perceive their <b>social networks</b>, 
