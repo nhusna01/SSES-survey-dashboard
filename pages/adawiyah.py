@@ -325,8 +325,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
     # Simplified layout: Just the chart (No more col_info1 button)
         st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
 
-    # Display the chart full-width (removed side columns)
-    st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
+    
 
     # Interpretation Box
     st.markdown(f"""
