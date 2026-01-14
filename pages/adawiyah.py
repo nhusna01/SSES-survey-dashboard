@@ -65,8 +65,7 @@ with st.expander("View Research Objective", expanded=True):
 
 st.markdown("---")
 
-# 1. Initialize df as an empty DataFrame at the very start
-# This ensures line 69 always knows what 'df' is!
+# Initialize df as an empty DataFrame at the very start
 df = pd.DataFrame() 
 
 csv_url = "https://raw.githubusercontent.com/nhusna01/SSES-survey-dashboard/refs/heads/main/dataset/Adawiyah_SSES_cleaned.csv"
@@ -77,17 +76,17 @@ def fetch_data(url):
     # ... (your indexing logic here) ...
     return data
 
-# 2. Attempt to fill 'df' with real data
+# Attempt to fill 'df' with real data
 with st.spinner("Accessing Research Data..."):
     try:
         df = fetch_data(csv_url)
     except Exception as e:
         st.error(f"Connection Error: {e}")
-        # df is already an empty DataFrame from line 1, so no NameError will happen
+        
 
 # INTERACTIVE EXPLORATION SECTION 
 if not df.empty:
-    # 1. Header and Methodology Popover
+    # Header and Methodology Popover
     head_col, method_col = st.columns([3, 1])
     
     with head_col:
@@ -104,7 +103,7 @@ if not df.empty:
 - **Community Safety:** neighborhood_safety, community_care""",
             use_container_width=True
         )
-    # 2. Data Preview Expander - Set to TRUE to be open by default
+    # Data Preview Expander 
     with st.expander("🔍 Preview & Filter Raw Dataset", expanded=True):
         
         # DATASET DESCRIPTION BOX
@@ -118,7 +117,7 @@ if not df.empty:
             </div>
         """, unsafe_allow_html=True)
 
-        # 3. Search and Filtering Logic
+        # Search and Filtering Logic
         search_query = st.text_input("Search data by any value:", placeholder="Search by state, education level, or scores...")
         
         # Apply search filter
@@ -131,7 +130,7 @@ if not df.empty:
             df_display = df.head(10)
             st.caption("Showing first 10 rows. Use the search bar above to filter all records.")
 
-        # 4. Display the table with interactive features
+        # Display the table with interactive features
         st.dataframe(
             df_display, 
             use_container_width=True,
@@ -146,7 +145,7 @@ st.markdown("---")
 # INTERACTIVE METRICS SECTION 
 
 if not df.empty:
-    # 1. Sidebar Interactivity: Filtering the Data
+    # Sidebar Interactivity: Filtering the Data
     st.sidebar.header("Filters")
     st.sidebar.write("Adjust the range to update the key metrics")
     
@@ -167,7 +166,7 @@ if not df.empty:
 
     st.subheader("Key Performance Indicators")
 
-    # 2. Layout: Summary Metrics in clean columns
+    # Layout: Summary Metrics in clean columns
     col1, col2, col3, col4 = st.columns(4)
 
     # Calculations based on FILTERED data
@@ -194,7 +193,7 @@ if not df.empty:
         </style>
     """, unsafe_allow_html=True)
 
-    # 3. Displaying Metrics with Black & White Icons
+    # Displaying Metrics with Black & White Icons
     col1.metric(
         label="✦ Avg. Life Satisfaction", 
         value=f"{avg_life_sat:.2f}",
@@ -225,7 +224,7 @@ if not df.empty:
 
 st.markdown("---")
 
-# RESEARCH VISUALIZATIONS (UNIFIED PINK THEME) 
+# RESEARCH VISUALIZATIONS 
 
 st.markdown("### Research Visualizations")
 
@@ -257,7 +256,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
             labels=dict(color="Correlation Strength") # This names the color indicator
         )
 
-        # UPDATED: Customizing the color bar to act as the "Guide"
+        # Customizing the color bar 
         fig1.update_layout(
             title="<b>Variable Correlation Analysis</b>",
             title_x=0.5,
@@ -271,7 +270,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
             )
         )
 
-        # Simplified layout: Just the chart (No more col_info1 button)
+        # Simplified layout: Just the chart 
         st.plotly_chart(fig1, use_container_width=True, key="heatmap_1")
 
         # Interpretation Box
@@ -308,7 +307,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=True):
         }
     )
 
-    # UPDATED: Integrated Color Indicator (Legibility Fix)
+    # Integrated Color Indicator 
     fig2.update_layout(
         title="<b>Impact of Support & Safety on Satisfaction</b>",
         title_x=0.5,
@@ -341,14 +340,14 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=True):
 # VISUALIZATION 3: DYNAMIC DISTRIBUTION (Histogram)
 with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
-    # 1. Selection Menu
+    # Selection Menu
     selected_dist = st.selectbox(
         "Select Pillar to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
         key="dist_selector_v3"
     )
     
-    # 2. Define Dynamic Interpretation Text
+    # Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
         text = "The frequency bars show a clear right-skew. This means the majority of respondents are clustered in the 4.0 to 5.0 range, proving that high life satisfaction is the 'norm' for this group rather than the exception."
     elif selected_dist == 'social_support_index':
@@ -356,7 +355,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     else:
         text = "This distribution is more 'spread out' across the x-axis. While the peak is still at the center (Score 3), the presence of bars across the entire range suggests a high diversity in how people manage their emotions."
 
-    # 3. Create the Histogram
+    # Create the Histogram
     # We use 'marginal="rug"' to show the exact 'point' data locations under the bars
     fig3 = px.histogram(
         df, 
@@ -379,7 +378,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
     
-    # 4. Dynamic Interpretation Box
+    # Dynamic Interpretation Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5 ; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
             <p style="margin: 0; color: #333;">
@@ -393,7 +392,7 @@ st.markdown("---")
 # VISUALIZATION 4: GROUP WELL-BEING PROFILE
 with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
     
-    # 1. Prepare Data
+    # Prepare Data
     categories = ['Life Sat.', 'Social Support', 'Safety', 'Emotion Mgmt.']
     values = [
         df['life_satisfaction'].mean(), 
@@ -421,7 +420,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
         name='Group Average'
     ))
 
-    # 3. Clean up the Layout
+    # Clean up the Layout
     fig5.update_layout(
         polar=dict(
             radialaxis=dict(
@@ -454,10 +453,10 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
         margin=dict(t=80, b=40, l=40, r=40) # Adds space so labels aren't cut off
     )
 
-    # 4. Display Chart
+    # Display Chart
     st.plotly_chart(fig5, use_container_width=True, key="radar_viz_5")
 
-    # 5. Scientific Insight Box
+    # Scientific Insight Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
             <p style="margin: 0; color: #333;">
@@ -472,13 +471,13 @@ st.markdown("---")
 # VISUALIZATION 5: COMMUNITY CARE IMPACT 
 with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", expanded=True):
     
-    # 1. Prepare Data: Average satisfaction per Community Safety level
+    # Prepare Data: Average satisfaction per Community Safety level
     # We use community_safety_index which we know exists in your df
     if 'community_safety_index' in df.columns:
         # We group by safety and find the mean satisfaction for each level
         safety_avg = df.groupby('community_safety_index')['life_satisfaction'].mean().reset_index()
 
-        # 2. Create Bar Chart
+        # Create Bar Chart
         fig6 = px.bar(
             safety_avg, 
             x='community_safety_index', 
@@ -492,7 +491,7 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
             }
         )
 
-        # 3. COMBINED LAYOUT UPDATES (Fixed the indicator issue)
+        # COMBINED LAYOUT UPDATES 
         fig6.update_layout(
             title="<b>How a Safe Community Drives Life Satisfaction</b>",
             title_x=0.5,
@@ -509,10 +508,10 @@ with st.expander("Visualization 5: Community Safety vs. Average Satisfaction", e
             )
         )
 
-        # Display Chart (Moved this AFTER all updates are finished)
+        # Display Chart 
         st.plotly_chart(fig6, use_container_width=True, key="bar_viz_6")
 
-        # 4. Insight Box
+        # Insight Box
         st.markdown(f"""
             <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
                 <p style="margin: 0; color: #333;">
@@ -529,8 +528,7 @@ st.markdown("---")
 # VISUALIZATION 6: EMOTIONAL MANAGEMENT SHAPE
 with st.expander("Visualization 6: Emotional Stability across Health Status", expanded=True):
     
-    # 1. Create Violin Plot
-    # UPDATED: Unified Red sequence from light to deep red
+    # Create Violin Plot
     red_sequence = ['#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#D32F2F']
 
     fig7 = px.violin(
@@ -552,7 +550,7 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
         showlegend=False
     )
 
-    # 2. Layout: Chart + Guide
+    # Layout: Chart + Guide
     col_chart7, col_info7 = st.columns([4, 1])
     with col_chart7:
         st.plotly_chart(fig7, use_container_width=True, key="violin_viz_7")
@@ -562,7 +560,7 @@ with st.expander("Visualization 6: Emotional Stability across Health Status", ex
         with st.popover("Guide"):
             st.markdown("The **width** of the violin shows where most people are. A 'fat' middle means most people have average scores.")
 
-    # 3. Insight Box
+    # Insight Box
     st.markdown(f"""
         <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
