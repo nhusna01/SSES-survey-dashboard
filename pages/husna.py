@@ -241,8 +241,8 @@ attribute_cols = [
     "calm_under_pressure", "cheerful", 
     "enjoy_learning", "task_persistence",
     "social_support", "helping_others",
-    "community_participation", "community_impact",
-    "life_satisfaction", "overall_health"
+    "community_participation", "community_impact", "community_participation", "community_care"
+    "life_satisfaction", "overall_health", "wellbeing_belief"
 ]
 
 # -------------------- METRICS --------------------
@@ -321,7 +321,7 @@ with col2:
     <div class="summary-card">
         <div class="icon-row">
             <span>🧩</span>
-            <span class="info-icon" title="Total number of key attributes analysed, including social, emotional, and wellbeing indicators">❓</span>
+            <span class="info-icon" title="Total number of key attributes analysed, including social, emotional, and well-being indicators">❓</span>
         </div>
         <div class="summary-value">{total_attributes}</div>
         <div class="summary-title">Total Attributes</div>
@@ -360,12 +360,12 @@ with col4:
 subobjectives = {
     "Correlation Between Likert Variables": 
         "1️⃣ **Correlation Between Likert Variables**\n\n"
-        "To examine the relationships among Likert-scale variables related to social, emotional, well-being, "
+        "To examine the relationships among Likert-scale variables related to social, emotional, and well-being, "
         "and community attributes across different employment status groups.",
     "Social & Emotional Skills": 
         "2️⃣ **Social & Emotional Skills**\n\n"
-        "To compare emotional regulation skills (including emotional control, calmness under pressure, "
-        "cheerfulness, and restfulness) among students, employed, and unemployed individuals.",
+        "To compare emotional regulation skills (including emotional control, social, "
+        "emotional skills, and even interaction among students, employed, and unemployed individuals.",
     "Task Persistence & Enjoy Learning": 
         "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
         "To examine variations in task persistence and enjoyment of learning across different employment status groups.",
@@ -378,7 +378,7 @@ subobjectives = {
         "To investigate how community participation and civic engagement vary across employment status groups.",
     "Wellbeing and Life Satisfaction": 
         "6️⃣ **Wellbeing and Life Satisfaction**\n\n"
-        "To assess differences in overall well-being and life satisfaction across students, employed, and unemployed individuals."
+        "To assess differences in overall well-being, well-being belief, and life satisfaction across students, employed, and unemployed individuals."
 }
 
 objective_icons = {
@@ -594,7 +594,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 # 5️⃣ Community Participation
 # ===============================
 elif selected_sub == "Community Participation":
-    community_vars = ['community_participation', 'community_care', 'community_impact']
+    community_vars = ['community_participation', 'community_care', 'community_impact', 'neighbourhood_safety']
     df_sunburst = filtered_df.groupby('employment_status_label')[community_vars].mean().reset_index()
     df_melt = df_sunburst.melt(
         id_vars='employment_status_label',
@@ -617,10 +617,10 @@ elif selected_sub == "Community Participation":
 
     st.markdown("""
     **Interpretation:**
-    - EMPLOYED participants show highest engagement in community activities.  
+    - EMPLOYED participants show the highest engagement in community activities.  
     - STUDENT group participates moderately across all activities.  
     - UNEMPLOYED participants have the lowest participation scores.  
-    - Sunburst chart visually emphasizes contribution to each community skill.
+    - Sunburst chart visually emphasizes the contribution to each community skill.
     """)
 
 # ===============================
