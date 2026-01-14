@@ -342,18 +342,18 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     # 1. Selection Menu
     selected_dist = st.selectbox(
-        "Select Pillar to View Distribution:", 
+        "Select Index to View Distribution:", 
         ['life_satisfaction', 'social_support_index', 'emotion_management_index'],
         key="dist_selector_v3"
     )
     
     # 2. Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
-        text = "The frequency bars show a clear right-skew. This means the majority of respondents are clustered in the 4.0 to 5.0 range, proving that high life satisfaction is the 'norm' for this group rather than the exception."
+        text = "The majority of respondents received a score of 3 or 4, indicating a right-skewed data set. This suggests that people generally have moderate to high levels of life satisfaction."
     elif selected_dist == 'social_support_index':
-        text = "The histogram reveals a high concentration of scores around 3.5 to 4.0. The lack of bars on the far left (scores 1-2) highlights that very few individuals feel completely isolated or unsupported."
+        text = "Few people feel alone (scores of 2 or less), and the peak at 3.5 indicates that while people feel well-supported, their experiences are generally very similar."
     else:
-        text = "This distribution is more 'spread out' across the x-axis. While the peak is still at the center (Score 3), the presence of bars across the entire range suggests a high diversity in how people manage their emotions."
+        text = "The majority of respondents have a "neutral" or "average" capacity to control their emotions, as indicated by the highest concentration of respondents at score 3."
 
     # 3. Create the Histogram
     # We use 'marginal="rug"' to show the exact 'point' data locations under the bars
@@ -380,7 +380,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     # 4. Dynamic Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> {text}
             </p>
