@@ -595,22 +595,29 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
 # 4️⃣ Social Skills Grouped Bar Chart
 # ===============================
 elif selected_sub == "Social Skills Grouped Bar Chart":
+
     # Let user select the social skill(s) to visualize
     social_skills = ['enjoy_learning', 'helping_others', 'teamwork']
     selected_skills = st.multiselect(
         "Select Social Skill(s) to Display",
         options=social_skills,
-        default=social_skills  # all selected by default
+        default=social_skills
     )
 
-    if selected_skills:  # only proceed if at least one skill is selected
+    if selected_skills:
+
         # Compute mean scores by employment status
-        df_avg = filtered_df.groupby('employment_status_label')[selected_skills].mean().reset_index()
+        df_avg = (
+            filtered_df
+            .groupby('employment_status_label')[selected_skills]
+            .mean()
+            .reset_index()
+        )
 
         # Reshape for plotting
         df_melt = df_avg.melt(
             id_vars='employment_status_label',
-            var_name='Variable',
+            var_name='Social Skill',
             value_name='Average Score'
         )
 
@@ -619,25 +626,35 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
             df_melt,
             x='employment_status_label',
             y='Average Score',
-            color='employment_status_label',
+            color='Social Skill',          # ✅ legend shows skills only
             barmode='group',
-            title='Average Scores of Selected Social Skills by Employment Status',
-            labels={'employment_status_label':'Employment Status'},
-            color_discrete_map=color_map
+            title='Average Social Skill Scores by Employment Status',
+            labels={
+                'employment_status_label': 'Employment Status',
+                'Average Score': 'Mean Likert Score'
+            }
         )
-        fig_groupbar.update_layout(template='plotly_white', font=dict(family="Arial", size=12))
+
+        fig_groupbar.update_layout(
+            template='plotly_white',
+            font=dict(family="Arial", size=12),
+            legend_title='Social Skill'
+        )
+
         st.plotly_chart(fig_groupbar, use_container_width=True)
 
         # Interpretation
         st.markdown("""
         **Interpretation:**
-        - EMPLOYED participants generally score higher across selected social skills.  
-        - STUDENT group shows moderate engagement with variability.  
-        - UNEMPLOYED participants score lower, highlighting areas for potential interventions.  
-        - Grouped bar chart provides clear side-by-side comparison of selected skills.
+        - **Employed participants** generally demonstrate higher average scores across the selected social skills.  
+        - **Students** show moderate skill levels with noticeable variation between skills.  
+        - **Unemployed participants** record comparatively lower scores, indicating potential areas for social skill development.  
+        - The grouped bar chart enables clear comparison of **multiple social skills across employment groups** without redundant labeling.
         """)
+
     else:
         st.warning("Please select at least one social skill to display.")
+
 
 # ===============================
 # 5️⃣ Community Participation
