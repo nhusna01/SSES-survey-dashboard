@@ -451,33 +451,64 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 # 1️⃣ Correlation Heatmap
 # ===============================
-if selected_sub == "Correlation Between Likert Variables":
-    likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'adaptability',
-        'social_support', 'helping_others', 'community_participation',
-        'community_impact', 'life_satisfaction', 'overall_health'
-    ]
-    # Use numeric employment status for correlation
-    df_corr = filtered_df[likert_cols + ['employment_status']].apply(pd.to_numeric, errors='coerce')
-    corr_df = df_corr.corr()
-    
-    fig = px.imshow(
-        corr_df,
-        text_auto=True,
-        aspect="auto",
-        color_continuous_scale=px.colors.sequential.Viridis,
-        title="Correlation Heatmap: Social, Emotional, Wellbeing & Community Attributes"
-    )
-    fig.update_layout(height=800)
-    st.plotly_chart(fig, width='stretch')
 
-    st.markdown("""
-    **Interpretation:**
-    - `social_support` and `helping_others` show strong positive correlation, indicating linked social behaviors.  
-    - Community engagement variables moderately correlate with `life_satisfaction` and `overall_health`.  
-    - Employment status shows slight positive correlation with wellbeing metrics.  
-    - Heatmap allows quick identification of variables to focus on for interventions and predictive modeling.
-    """)
+st.title("Correlation Heatmap: Employment Status vs. Selected Likert Scale Variables")
+
+# Get the encoded employment status column
+employment_col = 'employment_status'
+
+# Define the specific Likert-scale columns
+selected_likert_cols = [
+    'calm_under_pressure',
+    'cheerful',
+    'task_persistence',
+    'adaptability',
+    'social_support',
+    'helping_others',
+    'community_participation',
+    'community_impact',
+    'life_satisfaction',
+    'overall_health'
+]
+
+# Combine employment status and selected Likert scale columns for correlation
+cols_for_heatmap = [employment_col] + selected_likert_cols
+
+# Convert columns to numeric to avoid errors
+df_corr = df[cols_for_heatmap].apply(pd.to_numeric, errors='coerce')
+
+# Calculate correlation matrix
+correlation_matrix_specific = df_corr.corr()
+
+# Create an interactive heatmap with Plotly
+fig = px.imshow(
+    correlation_matrix_specific,
+    text_auto=True,
+    aspect="auto",
+    color_continuous_scale=px.colors.sequential.Viridis,
+    title='Correlation Heatmap: Employment Status vs. Selected Likert Scale Variables'
+)
+
+# Update layout for readability
+fig.update_layout(
+    xaxis_title='Variables',
+    yaxis_title='Variables',
+    xaxis_tickangle=-45,
+    height=800,
+    width=1000
+)
+
+# Display the heatmap in Streamlit
+st.plotly_chart(fig, use_container_width=True)
+
+# Interpretation section
+st.markdown("""
+**Interpretation:**
+- `social_support` and `helping_others` show a strong positive correlation, indicating linked social behaviors.  
+- Community engagement variables (`community_participation`, `community_impact`) moderately correlate with `life_satisfaction` and `overall_health`.  
+- Employment status shows a slight positive correlation with well-being metrics.  
+- Heatmap allows quick identification of variables to focus on for interventions and predictive modeling.
+""")
 
 # ===============================
 # 2️⃣ Social & Emotional Skills Radar
