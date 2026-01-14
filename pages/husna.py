@@ -909,5 +909,3 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         - Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
         - Violin plots effectively reveal group-level differences in health distributions.
         """)
-
-
