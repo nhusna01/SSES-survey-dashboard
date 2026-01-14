@@ -629,6 +629,15 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         'UNEMPLOYED': '#fde725'
     }
 
+    # Likert scale labels
+    likert_labels = {
+        1: "1 = Strongly Disagree",
+        2: "2 = Disagree",
+        3: "3 = Neutral",
+        4: "4 = Agree",
+        5: "5 = Strongly Agree"
+    }
+
     # Create boxplots for each Likert-scale column (1–5)
     for col in columns_to_plot:
         fig_box = px.box(
@@ -638,7 +647,15 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
             color='employment_status_label',
             points='all',  # show all individual points
             color_discrete_map=color_map,
-            title=f'{col.replace("_"," ").title()} by Employment Status'
+            title=f'{col.replace("_"," ").title()} by Employment Status',
+            hover_data={col: True}  # Show actual Likert value on hover
+        )
+
+        # Force y-axis to show only integers 1-5
+        fig_box.update_yaxes(
+            tickmode='array',
+            tickvals=[1, 2, 3, 4, 5],
+            ticktext=[likert_labels[i] for i in range(1, 6)]
         )
 
         fig_box.update_layout(
@@ -808,7 +825,7 @@ elif selected_sub == "Community Participation":
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
-    wellbeing_vars = ['life_satisfaction', 'overall_health', 'wellbeing_belief']
+    wellbeing_vars = ['life_satisfaction', 'overall_health']
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
     color_map = {
@@ -851,12 +868,6 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
             "Unemployed participants exhibit greater variability with lower values.",
             "Violin plot effectively visualizes spread and density."
         ],
-        'wellbeing_belief': [
-            "Employed participants express more positive wellbeing beliefs.",
-            "Students display mixed perceptions of wellbeing.",
-            "Unemployed participants report lower confidence in wellbeing.",
-            "Violin plot provides a clear view of variability."
-        ]
     }
 
     st.markdown(f"""
@@ -870,8 +881,8 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     st.markdown("""
     **Conclusion for Wellbeing and Life Satisfaction:**
     - Wellbeing outcomes differ noticeably across employment groups  
-    - Employed participants generally report higher wellbeing and health  
+    - Employed participants generally report higher well-being and health  
     - Students show moderate and stable outcomes  
-    - Unemployed participants demonstrate lower wellbeing with greater dispersion  
+    - Unemployed participants demonstrate lower well-being with greater dispersion  
     - Violin plots effectively capture distribution, density, and outliers
     """)
