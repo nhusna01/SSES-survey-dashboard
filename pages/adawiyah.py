@@ -349,19 +349,19 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     # 2. Define Dynamic Interpretation Text
     if selected_dist == 'life_satisfaction':
-        text = "The majority of respondents received a score of 3 or 4, indicating a right-skewed data set. This suggests that people generally have moderate to high levels of life satisfaction."
+        text = "The majority of respondents received a score of 3 or 4, indicating a right-skewed data set. This suggests that people generally have moderate to high levels of life satisfaction."
     elif selected_dist == 'social_support_index':
         text = "Few people feel alone (scores of 2 or less), and the peak at 3.5 indicates that while people feel well-supported, their experiences are generally very similar."
     else:
-        text = "The majority of respondents have a "neutral" or "average" capacity to control their emotions, as indicated by the highest concentration of respondents at score 3."
+        # FIXED: Changed inner quotes to single quotes to avoid syntax error
+        text = "The majority of respondents have a 'neutral' or 'average' capacity to control their emotions, as indicated by the highest concentration of respondents at score 3."
 
     # 3. Create the Histogram
-    # We use 'marginal="rug"' to show the exact 'point' data locations under the bars
     fig3 = px.histogram(
         df, 
         x=selected_dist, 
         nbins=20, 
-        marginal="rug", # Adds tiny lines at the bottom for every 'point' data entry
+        marginal="rug", 
         color_discrete_sequence=['#D32F2F'],
         opacity=0.85,
         labels={selected_dist: "Score (1-5)"}
@@ -373,14 +373,15 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
         plot_bgcolor='rgba(0,0,0,0)',
         xaxis=dict(range=[0.8, 5.2], gridcolor='#EEEEEE'),
         yaxis_title="Number of Respondents",
-        bargap=0.05 # Small gap makes it look cleaner
+        bargap=0.05 
     )
     
     st.plotly_chart(fig3, use_container_width=True, key="dist_chart_v3")
     
     # 4. Dynamic Interpretation Box
+    # Updated border-left color to #D32F2F for consistency with the bars
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
+        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> {text}
             </p>
