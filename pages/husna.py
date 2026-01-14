@@ -571,11 +571,6 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 elif selected_sub == "Social & Emotional Skills":
 
-    import streamlit as st
-import plotly.graph_objects as go
-import pandas as pd
-import plotly.express as px
-
 # -----------------------------
 # Define radar variables (Likert-scale columns)
 # -----------------------------
@@ -652,28 +647,19 @@ fig.update_layout(
     showlegend=True
 )
 
-# -----------------------------
-# Display chart in Streamlit
-# -----------------------------
 st.plotly_chart(fig, use_container_width=True)
 
-
-    # -----------------------------
-    # Interpretation
-    # -----------------------------
-    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
-    st.markdown("""
+st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
+st.markdown(f"""
 - Employed individuals demonstrate stronger emotional regulation and personal skills.  
 - Students exhibit balanced but moderate skill levels.  
 - Unemployed individuals show lower scores across several dimensions.  
 - Radar chart enables holistic, multi-dimensional comparison.
 """)
 
-    # -----------------------------
-    # Conclusion
-    # -----------------------------
-    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
-    st.markdown("""
+   
+st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+st.markdown(f"""
 - Emotional and personal skill profiles vary substantially by employment status.  
 - Employment appears to support stronger emotional stability and social capability.  
 - These insights can inform targeted training and psychosocial support initiatives.  
