@@ -38,9 +38,6 @@ st.markdown("""
         Interactive dashboard for Emotional Resilience & Personal Development
     </p>
 </div>
-
-<!-- Top-right icon -->
-<img class="top-right-logo" src="https://img.icons8.com/color/64/emotional-intelligence.png">
 """, unsafe_allow_html=True)
 
 # ------------------------------
