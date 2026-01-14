@@ -629,30 +629,34 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 
     if selected_skills:
         color_map = {
-            'EMPLOYED': '#440154',
-            'STUDENT': '#21918c',
-            'UNEMPLOYED': '#fde725'
+            'enjoy_learning': '#440154',
+            'helping_others': '#21918c'
         }
 
+        # Compute mean scores by employment status
         df_avg = (
             filtered_df
             .groupby('employment_status_label')[selected_skills]
             .mean()
             .reset_index()
         )
+
+        # Uppercase labels for consistency
         df_avg['employment_status_label'] = df_avg['employment_status_label'].str.upper()
 
+        # Melt for plotting
         df_melt = df_avg.melt(
             id_vars='employment_status_label',
             var_name='Social Skill',
             value_name='Average Score'
         )
 
+        # Create grouped bar chart
         fig_groupbar = px.bar(
             df_melt,
-            x='employment_status_label',
+            x='employment_status_label',  # x-axis shows employment status once
             y='Average Score',
-            color='employment_status_label',
+            color='Social Skill',         # color shows different skills
             barmode='group',
             title='Average Social Skill Scores by Employment Status',
             labels={'employment_status_label': 'Employment Status', 'Average Score': 'Mean Likert Score'},
@@ -662,19 +666,21 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         fig_groupbar.update_layout(
             template='plotly_white',
             font=dict(family="Arial", size=12),
-            legend_title='Employment Status'
+            legend_title='Social Skill'
         )
 
         st.plotly_chart(fig_groupbar, use_container_width=True)
 
+        # Interpretation
         st.markdown("""
         **Interpretation:**
         - EMPLOYED participants show higher average scores across selected skills.  
         - STUDENT group shows moderate performance.  
         - UNEMPLOYED participants score lower.  
-        - Grouped bar chart allows comparison across employment groups.
+        - Grouped bar chart allows clear comparison across employment groups without repeated x-axis labels.
         """)
 
+        # Conclusion
         st.markdown("""
         **Conclusion for Social Skills Grouped Bar Chart:**
         - Highlights clear differences in social skill levels by employment.  
@@ -684,6 +690,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         """)
     else:
         st.warning("Please select at least one social skill to display.")
+
 
 # ===============================
 # 5️⃣ Community Participation Histogram
