@@ -871,12 +871,12 @@ interpretations = {
 }
 
 st.markdown("---") 
- 
-    st.markdown("""
-    **Conclusion for Wellbeing and Life Satisfaction:**
-    - Wellbeing outcomes differ noticeably across employment groups  
-    - Employed participants generally report higher well-being and health  
-    - Students show moderate and stable outcomes  
-    - Unemployed participants demonstrate lower well-being with greater dispersion  
-    - Violin plots effectively capture distribution, density, and outliers
-    """)
+
+st.markdown("""
+**Conclusion for Wellbeing and Life Satisfaction:**
+- Wellbeing outcomes differ noticeably across employment groups  
+- Employed participants generally report higher well-being and health  
+- Students show moderate and stable outcomes  
+- Unemployed participants demonstrate lower well-being with greater dispersion  
+- Violin plots effectively capture distribution, density, and outliers
+"""),
