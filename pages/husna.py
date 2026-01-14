@@ -615,7 +615,9 @@ elif selected_sub == "Social & Emotional Skills":
                 name=row['employment_status_label'],
                 line_color=color_map.get(row['employment_status_label.upper(), '#000000')'])
             )
+            )
         )
+            
 
     # -----------------------------
     # Layout with integer Likert scale
