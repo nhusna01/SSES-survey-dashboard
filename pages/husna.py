@@ -321,7 +321,7 @@ with col2:
     <div class="summary-card">
         <div class="icon-row">
             <span>🧩</span>
-            <span class="info-icon" title="Total number of key attributes analysed, including social, emotional, and well-being indicators">❓</span>
+            <span class="info-icon" title="Total number of key attributes analysed, including social, emotional, community engagement and well-being indicators">❓</span>
         </div>
         <div class="summary-value">{total_attributes}</div>
         <div class="summary-title">Total Attributes</div>
