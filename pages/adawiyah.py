@@ -322,7 +322,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=False):
         )
     )
 
-    # Display the chart full-width (removed side columns)
+    # Display the chart full-width (No side columns)
     st.plotly_chart(fig2, use_container_width=True, key="scatter_viz_2")
 
     
