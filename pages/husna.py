@@ -864,7 +864,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         showlegend=False
     )
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')  # updated for new Streamlit
 
     # Interpretations dictionary
     interpretations = {
