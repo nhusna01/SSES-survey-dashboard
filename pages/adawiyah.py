@@ -87,13 +87,14 @@ with st.spinner("Accessing Research Data..."):
 
 # INTERACTIVE EXPLORATION SECTION 
 if not df.empty:
-    # Header and Methodology button
+    # 1. Header and Methodology Popover
     head_col, method_col = st.columns([3, 1])
     
     with head_col:
         st.markdown("### Data Exploration")
     
     with method_col:
+        # Using a popover for methodology keeps the UI clean
         with st.popover("View Methodology"):
             st.markdown("#### Indexing Logic")
             st.write("To improve analysis, raw variables were grouped into indices:")
@@ -104,34 +105,42 @@ if not df.empty:
             """)
             st.caption("Calculation: Arithmetic Mean of grouped variables.")
 
-    # Using an expander for the actual data table
-    with st.expander("Preview & Filter Raw Dataset", expanded=False):
+    # 2. Data Preview Expander - Set to TRUE to be open by default
+    with st.expander("🔍 Preview & Filter Raw Dataset", expanded=True):
         
-        # DATASET DESCRIPTION BOX  ---
+        # DATASET DESCRIPTION BOX
         st.markdown("""
-            <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1; margin-bottom: 20px;">
+            <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F; margin-bottom: 20px;">
                 <p style="margin: 0; color: #333; font-size: 15px;">
                     <b>About this Dataset:</b> This cleaned dataset contains survey responses that focused on 
                     social-emotional well-being. It captures how individuals perceive their <b>social networks</b>, 
-                    <b>environmental safety</b>, and their internal ability to <b>manage emotions</b>. The data has been 
-                    cleaned to ensure statistical accuracy.
+                    <b>environmental safety</b>, and their internal ability to <b>manage emotions</b>.
                 </p>
             </div>
         """, unsafe_allow_html=True)
 
-        # Search bar
-        search_query = st.text_input("🔍 Search data by any value:", placeholder="Search by score, category, or ID...")
+        # 3. Search and Filtering Logic
+        search_query = st.text_input("Search data by any value:", placeholder="Search by state, education level, or scores...")
         
         # Apply search filter
         if search_query:
+            # Filters the dataframe if any column contains the search string
             df_display = df[df.apply(lambda row: row.astype(str).str.contains(search_query, case=False).any(), axis=1)]
-            st.write(f"Showing {len(df_display)} matching results:")
+            st.info(f"Showing {len(df_display)} matching results:")
         else:
+            # Default view - showing first 10 rows to keep it clean
             df_display = df.head(10)
-            st.caption("Showing first 10 rows. Use the search bar above to filter.")
+            st.caption("Showing first 10 rows. Use the search bar above to filter all records.")
 
-        # Display the table
-        st.dataframe(df_display, use_container_width=True)
+        # 4. Display the table with interactive features
+        st.dataframe(
+            df_display, 
+            use_container_width=True,
+            column_config={
+                "life_satisfaction": st.column_config.NumberColumn("Satisfaction"),
+                "overall_health": st.column_config.NumberColumn("Health")
+            }
+        )
 
 st.markdown("---")
 
