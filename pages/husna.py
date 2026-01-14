@@ -451,8 +451,6 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 # 1️⃣ Correlation Heatmap
 # ===============================
-st.title("Correlation Heatmap: Employment Status vs. Selected Likert Scale Variables")
-
 if selected_sub == "Correlation Between Likert Variables":
     likert_cols = [
         'calm_under_pressure', 'cheerful', 'task_persistence',
@@ -461,9 +459,19 @@ if selected_sub == "Correlation Between Likert Variables":
     ]
 
     cols_for_heatmap = ['employment_status'] + likert_cols
-    df_corr = filtered_df[cols_for_heatmap].apply(pd.to_numeric, errors='coerce')
+
+    # Encode employment status numerically
+    employment_mapping = {'EMPLOYED': 2, 'STUDENT': 1, 'UNEMPLOYED': 0}
+    df_corr = filtered_df[cols_for_heatmap].copy()
+    df_corr['employment_status'] = df_corr['employment_status'].map(employment_mapping)
+
+    # Ensure Likert columns are numeric
+    df_corr[likert_cols] = df_corr[likert_cols].apply(pd.to_numeric, errors='coerce')
+
+    # Compute correlation matrix
     correlation_matrix_specific = df_corr.corr()
 
+    # Create heatmap
     fig = px.imshow(
         correlation_matrix_specific,
         text_auto=True,
@@ -485,17 +493,17 @@ if selected_sub == "Correlation Between Likert Variables":
     # Interpretation
     st.markdown("""
     **Interpretation:**
-    - `social_support` and `helping_others` show strong positive correlation, indicating linked social behaviors.  
+    - `social_support` and `helping_others` show a strong positive correlation, indicating linked social behaviors.  
     - Community engagement variables moderately correlate with `life_satisfaction` and `overall_health`.  
-    - Employment status shows slight positive correlation with wellbeing metrics.  
+    - Employment status shows a slight positive correlation with well-being metrics.  
     - Heatmap allows quick identification of key variables for interventions and predictive modeling.
     """)
 
     # Conclusion
     st.markdown("""
     **Conclusion for Correlation Heatmap:**
-    - Social behaviors and community participation are linked to wellbeing.  
-    - Employment status has mild association with life satisfaction and health.  
+    - Social behaviors and community participation are linked to well-being.  
+    - Employment status has a mild association with life satisfaction and health.  
     - Highlights which variables could be targets for intervention.  
     - Useful for both descriptive and predictive insights.
     """)
