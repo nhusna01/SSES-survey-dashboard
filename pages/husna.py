@@ -821,7 +821,7 @@ if selected_sub == "Community Participation":
     st.markdown("---")
 
     # Conclusion
-    st.markdown('<h3 style="color:red;">Conclusion for Community Participation</h3>', unsafe_allow_html=True)
+    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     st.markdown("""
 - Community engagement varies clearly by employment status.  
 - EMPLOYED participants demonstrate the highest levels of participation.  
