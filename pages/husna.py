@@ -855,19 +855,35 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 
     st.plotly_chart(fig, use_container_width=True)
 
+    # Interpretations dictionary
+    interpretations = {
+        'life_satisfaction': [
+            "Employed participants report higher life satisfaction.",
+            "Students show moderate satisfaction levels.",
+            "Unemployed participants report lower satisfaction with greater variability.",
+            "Violin plot highlights distributional differences."
+        ],
+        'overall_health': [
+            "Employed participants report slightly better health.",
+            "Students show relatively consistent health levels.",
+            "Unemployed participants exhibit greater variability with lower values.",
+            "Violin plot effectively visualizes spread and density."
+        ]
+    }
+
     # -----------------------------
     # Interpretation Section
     # -----------------------------
-    st.markdown("### Interpretation")
+    st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     for point in interpretations[selected_var]:
         st.markdown(f"- {point}")
 
-    st.markdown("---")  # Divider between interpretation and conclusion
+    st.markdown("---")  # Divider
 
     # -----------------------------
-    # Conclusion Section (different from interpretation)
+    # Conclusion Section
     # -----------------------------
-    st.markdown("### Conclusion")
+    st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     if selected_var == 'life_satisfaction':
         st.markdown("""
         - Life satisfaction is generally higher among employed participants, indicating positive well-being.  
@@ -882,3 +898,6 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         - Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
         - Violin plots effectively reveal group-level differences in health distributions.
         """)
+
+st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
+st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
