@@ -241,7 +241,7 @@ attribute_cols = [
     "calm_under_pressure", "cheerful", 
     "enjoy_learning", "task_persistence",
     "social_support", "helping_others",
-    "community_participation", "community_impact", "community_participation", "community_care"
+    "community_participation", "community_impact", "neighborhood_safety", "community_care"
     "life_satisfaction", "overall_health", "wellbeing_belief"
 ]
 
@@ -610,7 +610,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 # 5️⃣ Community Participation
 # ===============================
 elif selected_sub == "Community Participation":
-    community_vars = ['community_participation', 'community_care', 'community_impact', 'neighbourhood_safety']
+    community_vars = ['community_participation', 'community_care', 'community_impact', 'neighborhood_safety']
 
     df_sunburst = filtered_df.groupby('employment_status_label')[community_vars].mean().reset_index()
 
