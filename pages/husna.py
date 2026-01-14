@@ -364,7 +364,7 @@ subobjectives = {
         "and community attributes across different employment status groups.",
     "Social & Emotional Skills": 
         "2️⃣ **Social & Emotional Skills**\n\n"
-        "To compare emotional regulation skills including emotional control, social, "
+        "To compare emotional regulation skills, including emotional control, social, "
         "emotional skills, and even interaction among students, employed, and unemployed individuals.",
     "Task Persistence & Enjoy Learning": 
         "3️⃣ **Task Persistence & Enjoy Learning**\n\n"
@@ -453,7 +453,7 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 if selected_sub == "Correlation Between Likert Variables":
     likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence',
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning'
         'social_support', 'helping_others', 'community_participation',
         'community_impact', 'life_satisfaction', 'overall_health'
     ]
@@ -568,12 +568,16 @@ elif selected_sub == "Social & Emotional Skills":
 # ===============================
 elif selected_sub == "Task Persistence & Enjoy Learning":
     columns_to_plot = ['task_persistence', 'enjoy_learning']
+
     employment_options = st.multiselect(
         "Filter Employment Status:",
         options=filtered_df['employment_status_label'].unique(),
         default=filtered_df['employment_status_label'].unique()
     )
-    df_filtered = filtered_df[filtered_df['employment_status_label'].isin(employment_options)]
+
+    df_filtered = filtered_df[
+        filtered_df['employment_status_label'].isin(employment_options)
+    ]
 
     color_map = {
         'EMPLOYED': '#440154',
@@ -591,30 +595,34 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
             color_discrete_map=color_map,
             title=f'{col.replace("_"," ").title()} by Employment Status'
         )
+
         fig_box.update_layout(
             xaxis_title='Employment Status',
             yaxis_title=col.replace("_"," ").title(),
             boxmode='group',
             template='plotly_white',
-            font=dict(family="Arial", size=12)
+            font=dict(family="Arial", size=12),
+            showlegend=False  
         )
+
         st.plotly_chart(fig_box, width='stretch')
 
         st.markdown(f"""
         **Interpretation for {col.replace('_',' ').title()}:**
-        - EMPLOYED participants tend to have higher median scores.  
-        - STUDENT group shows moderate variability.  
-        - UNEMPLOYED participants have more outliers.  
-        - Box plot highlights spread and distributional differences.
+        - Employed participants show higher median scores  
+        - Students display moderate variability  
+        - Unemployed participants exhibit more outliers  
+        - Boxplots clearly reveal distributional differences
         """)
 
     st.markdown("""
-    **Conclusion for Task Persistence & Enjoy Learning Boxplots:**
-    - EMPLOYED group is generally more persistent and enjoys learning more.  
-    - STUDENT group has mixed results.  
-    - UNEMPLOYED group may need additional support.  
-    - Boxplots reveal individual variation and distribution patterns.
+    **Conclusion for Task Persistence & Enjoy Learning:**
+    - Employed participants demonstrate stronger persistence and learning engagement  
+    - Students show mixed but balanced outcomes  
+    - Unemployed participants may require additional support  
+    - Boxplots effectively capture variability and group differences
     """)
+
 
 # ===============================
 # 4️⃣ Social Skills Grouped Bar Chart
@@ -774,41 +782,51 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         color_discrete_map=color_map,
         title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
     )
+
+    fig.update_layout(
+        xaxis_title='Employment Status',
+        yaxis_title=selected_var.replace("_", " ").title(),
+        template='plotly_white',
+        font=dict(family="Arial", size=12),
+        showlegend=False   # ✅ removes duplicate employment label
+    )
+
     st.plotly_chart(fig, width='stretch')
 
     interpretations = {
         'life_satisfaction': [
-            "EMPLOYED participants report higher life satisfaction.",
-            "STUDENT group shows moderate satisfaction.",
-            "UNEMPLOYED group reports lower satisfaction with more outliers.",
-            "Violin plot highlights distribution differences."
+            "Employed participants report higher life satisfaction.",
+            "Students show moderate satisfaction levels.",
+            "Unemployed participants report lower satisfaction with greater variability.",
+            "Violin plot highlights distributional differences."
         ],
         'overall_health': [
-            "EMPLOYED participants report slightly better health.",
-            "STUDENT group shows consistent health.",
-            "UNEMPLOYED group has more variability with occasional low scores.",
-            "Violin plot visualizes spread effectively."
+            "Employed participants report slightly better health.",
+            "Students show relatively consistent health levels.",
+            "Unemployed participants exhibit greater variability with lower values.",
+            "Violin plot effectively visualizes spread and density."
         ],
         'wellbeing_belief': [
-            "EMPLOYED participants feel more positive about wellbeing.",
-            "STUDENT group shows mixed perceptions.",
-            "UNEMPLOYED group reports lower confidence in wellbeing.",
-            "Violin plot provides clear view of variability."
+            "Employed participants express more positive wellbeing beliefs.",
+            "Students display mixed perceptions of wellbeing.",
+            "Unemployed participants report lower confidence in wellbeing.",
+            "Violin plot provides a clear view of variability."
         ]
     }
 
     st.markdown(f"""
     **Interpretation:**
-    - <span style='color:{color_map['EMPLOYED']}'>EMPLOYED:</span> {interpretations[selected_var][0]}  
-    - <span style='color:{color_map['STUDENT']}'>STUDENT:</span> {interpretations[selected_var][1]}  
-    - <span style='color:{color_map['UNEMPLOYED']}'>UNEMPLOYED:</span> {interpretations[selected_var][2]}  
+    - {interpretations[selected_var][0]}  
+    - {interpretations[selected_var][1]}  
+    - {interpretations[selected_var][2]}  
     - {interpretations[selected_var][3]}
-    """, unsafe_allow_html=True)
+    """)
 
-    st.markdown(f"""
-    **Conclusion for Wellbeing and Life Satisfaction Violin Plot:**
-    - EMPLOYED participants report higher wellbeing and health outcomes.  
-    - STUDENT group shows moderate levels with some variability.  
-    - UNEMPLOYED participants report lower wellbeing and more outliers.  
-    - Violin plot effectively shows distribution, spread, and outliers across employment groups.
+    st.markdown("""
+    **Conclusion for Wellbeing and Life Satisfaction:**
+    - Wellbeing outcomes differ noticeably across employment groups  
+    - Employed participants generally report higher wellbeing and health  
+    - Students show moderate and stable outcomes  
+    - Unemployed participants demonstrate lower wellbeing with greater dispersion  
+    - Violin plots effectively capture distribution, density, and outliers
     """)
