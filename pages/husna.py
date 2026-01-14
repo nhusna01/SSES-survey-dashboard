@@ -880,21 +880,11 @@ selected_var = st.selectbox(
     options=list(interpretations.keys())
 )
 
-# Display the interpretations as a bullet list
 st.markdown("**Interpretations:**")
 for point in interpretations[selected_var]:
     st.markdown(f"- {point}")
 
-st.markdown("---")  # Optional divider
-
-    st.markdown(f"""
-    **Interpretation:**
-    - {interpretations[selected_var][0]}  
-    - {interpretations[selected_var][1]}  
-    - {interpretations[selected_var][2]}  
-    - {interpretations[selected_var][3]}
-    """)
-    
+st.markdown("---")  # Divider for clean separation
     st.markdown("---") 
  
     st.markdown("""
