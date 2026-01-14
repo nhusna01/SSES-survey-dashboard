@@ -897,15 +897,15 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
     if selected_var == 'life_satisfaction':
         st.markdown("""
-        - Life satisfaction is generally higher among employed participants, indicating positive well-being.  
-        - Students maintain balanced satisfaction, reflecting moderate engagement and support.  
-        - Unemployed participants report lower satisfaction, suggesting areas for targeted interventions.  
-        - Overall, employment status strongly influences life satisfaction outcomes.
-        """)
+- Life satisfaction is generally higher among employed participants, indicating positive well-being.  
+- Students maintain balanced satisfaction, reflecting moderate engagement and support.  
+- Unemployed participants report lower satisfaction, suggesting areas for targeted interventions.  
+- Overall, employment status strongly influences life satisfaction outcomes.
+""")
     else:  # overall_health
         st.markdown("""
-        - Overall health trends are slightly better among employed participants, with less variability.  
-        - Students maintain fairly consistent health levels.  
-        - Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
-        - Violin plots effectively reveal group-level differences in health distributions.
-        """)
+- Overall health trends are slightly better among employed participants, with less variability.  
+- Students maintain fairly consistent health levels.  
+- Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
+- Violin plots effectively reveal group-level differences in health distributions.
+""")
