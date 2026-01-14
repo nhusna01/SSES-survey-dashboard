@@ -742,6 +742,7 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         st.plotly_chart(fig_groupbar, use_container_width=True)
 
         # Interpretation
+        st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
         st.markdown("""
         **Interpretation:**
         - EMPLOYED participants show higher average scores across selected skills.  
@@ -750,7 +751,10 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
         - Grouped bar chart allows clear comparison across employment groups without repeated x-axis labels.
         """)
 
+        st.markdown("---")
+
         # Conclusion
+        st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
         st.markdown("""
         **Conclusion for Social Skills Grouped Bar Chart:**
         - Highlights clear differences in social skill levels by employment.  
