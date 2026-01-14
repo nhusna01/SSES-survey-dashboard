@@ -453,7 +453,7 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 # ===============================
 if selected_sub == "Correlation Between Likert Variables":
     likert_cols = [
-        'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning'
+        'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning',
         'social_support', 'helping_others', 'community_participation',
         'community_impact', 'life_satisfaction', 'overall_health'
     ]
