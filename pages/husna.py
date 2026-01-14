@@ -837,9 +837,16 @@ st.markdown("""
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
+# ===============================
+# 6️⃣ Wellbeing and Life Satisfaction Violin Plot
+# ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
+
     wellbeing_vars = ['life_satisfaction', 'overall_health']
-    selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
+    selected_var = st.selectbox(
+        "Select wellbeing indicator:",
+        wellbeing_vars
+    )
 
     color_map = {
         'EMPLOYED': '#440154',
@@ -855,7 +862,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         box=True,
         points='all',
         color_discrete_map=color_map,
-        title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
+        title=f'Distribution of {selected_var.replace("_", " ").title()} by Employment Status'
     )
 
     fig.update_layout(
@@ -866,9 +873,12 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         showlegend=False
     )
 
-    st.plotly_chart(fig, width='stretch')  # updated
+    
+    st.plotly_chart(fig, use_container_width=True)
 
+    # -----------------------------
     # Interpretations dictionary
+    # -----------------------------
     interpretations = {
         'life_satisfaction': [
             "Employed participants report higher life satisfaction.",
@@ -891,12 +901,13 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     for point in interpretations[selected_var]:
         st.markdown(f"- {point}")
 
-    st.markdown("---")  # Divider
+    st.markdown("---")
 
     # -----------------------------
     # Conclusion Section
     # -----------------------------
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
+
     if selected_var == 'life_satisfaction':
         st.markdown("""
 - Life satisfaction is generally higher among employed participants, indicating positive well-being.  
@@ -904,7 +915,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 - Unemployed participants report lower satisfaction, suggesting areas for targeted interventions.  
 - Overall, employment status strongly influences life satisfaction outcomes.
 """)
-    else:  # overall_health
+    else:
         st.markdown("""
 - Overall health trends are slightly better among employed participants, with less variability.  
 - Students maintain fairly consistent health levels.  
