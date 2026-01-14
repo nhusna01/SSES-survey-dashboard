@@ -693,15 +693,9 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
     ]
 
     # -----------------------------
-    # Create color map automatically for any employment status
+    # Use Viridis color scheme
     # -----------------------------
-    
-    # Color mapping for employment status
-    color_map = {
-        'EMPLOYED': '#440154',
-        'STUDENT': '#21918c',
-        'UNEMPLOYED': '#fde725'
-    }
+    viridis_colors = px.colors.sequential.Viridis
 
     # Likert scale labels
     likert_labels = {
@@ -720,9 +714,9 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
             y=col,
             color='employment_status_label',
             points='all',  # show all individual points
-            color_discrete_map=color_map,
+            color_discrete_sequence=viridis_colors,
             title=f'{col.replace("_"," ").title()} by Employment Status',
-            hover_data={col: True}  # Show actual Likert value on hover
+            hover_data={col: True}
         )
 
         # Force y-axis to show only integers 1-5
@@ -742,16 +736,19 @@ elif selected_sub == "Task Persistence & Enjoy Learning":
         )
 
         st.plotly_chart(fig_box, use_container_width=True)
-        
+
+        # Interpretation
         st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
-        st.markdown(f"""
+        st.markdown("""
         - Employed participants show higher median scores  
         - Students display moderate variability  
         - Unemployed participants exhibit more outliers  
         - Boxplots clearly reveal distributional differences
         """)
-   
+
         st.markdown("---")
+
+        # Conclusion
         st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
         st.markdown("""
         - Employed participants demonstrate stronger persistence and learning engagement  
