@@ -571,121 +571,92 @@ if selected_sub == "Correlation Between Likert Variables":
 # ===============================
 elif selected_sub == "Social & Emotional Skills":
 
-    radar_vars = [
-        'calm_under_pressure',
-        'cheerful',
-        'task_persistence',
-        'enjoy_learning',
-        'helping_others',
-        'social_support'
-    ]
+    import streamlit as st
+import plotly.graph_objects as go
+import pandas as pd
+import plotly.express as px
 
-    # -----------------------------
-    # Employment status filter
-    # -----------------------------
-    employment_options = st.multiselect(
-        "Select Employment Status for Radar Chart:",
-        options=filtered_df['employment_status_label'].unique(),
-        default=filtered_df['employment_status_label'].unique()
-    )
+# -----------------------------
+# Define radar variables (Likert-scale columns)
+# -----------------------------
+radar_vars = [
+    'calm_under_pressure',
+    'cheerful',
+    'task_persistence',
+    'adaptability',
+    'social_support',
+    'helping_others',
+    'community_participation',
+    'community_impact',
+    'life_satisfaction',
+    'overall_health'
+]
 
-    df_radar = filtered_df[
-        filtered_df['employment_status_label'].isin(employment_options)
-    ]
-    # Color mapping for employment status
-    color_map = {
-        'EMPLOYED': '#440154',
-        'STUDENT': '#21918c',
-        'UNEMPLOYED': '#fde725'
-    }
-    # Compute averages for each employment group
-    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
+# -----------------------------
+# Select employment statuses
+# -----------------------------
+employment_options = st.multiselect(
+    "Select Employment Status for Radar Chart:",
+    options=filtered_df['employment_status_label'].unique(),
+    default=filtered_df['employment_status_label'].unique()
+)
 
-    # -----------------------------
-    # Build radar chart
-    # -----------------------------
-    fig = go.Figure()
+# Filter dataframe based on selection
+df_radar = filtered_df[
+    filtered_df['employment_status_label'].isin(employment_options)
+]
 
-    for _, row in df_avg.iterrows():
-        employment_options = st.multiselect(
-        "Select Employment Status for Radar Chart:",
-        options=filtered_df['employment_status_label'].unique(),
-        default=filtered_df['employment_status_label'].unique()
-    )
+# -----------------------------
+# Compute averages for each employment group
+# -----------------------------
+df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
 
-    df_radar = filtered_df[
-        filtered_df['employment_status_label'].isin(employment_options)
-    ]
-    # Color mapping for employment status
-    color_map = {
-        'EMPLOYED': '#440154',
-        'STUDENT': '#21918c',
-        'UNEMPLOYED': '#fde725'
-    }
-    # Compute averages for each employment group
-    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
+# -----------------------------
+# Create color map automatically for any employment status
+# -----------------------------
+default_colors = px.colors.qualitative.Plotly
+color_map = {status.upper(): default_colors[i % len(default_colors)]
+             for i, status in enumerate(df_avg['employment_status_label'])}
 
-    # -----------------------------
-    # Build radar chart
-    # -----------------------------
-    fig = go.Figure()
+# -----------------------------
+# Build radar chart
+# -----------------------------
+fig = go.Figure()
 
-    for _, row in df_avg.iterrows():
-        fig.add_trace(
-            go.Scatterpolar(
-                r=[row[v] for v in radar_vars],
-                theta=[v.replace("_", " ").title() for v in radar_vars],
-                fill='toself',
-                name=row['employment_status_label'],
-                line_color=color_map.get(row['employment_status_label.upper(), #000000']
-                                        )
-                                         
-                                        )                           
-            )
-
+for _, row in df_avg.iterrows():
+    fig.add_trace(
+        go.Scatterpolar(
+            r=[row[v] for v in radar_vars],
+            theta=[v.replace("_", " ").title() for v in radar_vars],
+            fill='toself',
+            name=row['employment_status_label'],
+            line_color=color_map.get(row['employment_status_label'].upper(), '#000000')
         )
-            
-
-    # -----------------------------
-    # Layout with integer Likert scale
-    # -----------------------------
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[1, 5],
-                tickmode='array',
-                tickvals=[1, 2, 3, 4, 5],
-                ticktext=['1','2','3','4','5']
-            )
-        ),
-        title="Emotional Regulation and Personal Skills by Employment Status",
-        template='plotly_white',
-        showlegend=True
     )
-            
-            
 
-    # -----------------------------
-    # Layout with integer Likert scale
-    # -----------------------------
-    fig.update_layout(
-        polar=dict(
-            radialaxis=dict(
-                visible=True,
-                range=[1, 5],
-                tickmode='array',
-                tickvals=[1, 2, 3, 4, 5],
-                ticktext=['1','2','3','4','5']
-            )
-        ),
-        title="Emotional Regulation and Personal Skills by Employment Status",
-        template='plotly_white',
-        showlegend=True
-    )
-            
+# -----------------------------
+# Update layout with Likert-scale axis
+# -----------------------------
+fig.update_layout(
+    polar=dict(
+        radialaxis=dict(
+            visible=True,
+            range=[1, 5],
+            tickmode='array',
+            tickvals=[1, 2, 3, 4, 5],
+            ticktext=['1','2','3','4','5']
+        )
+    ),
+    title="Emotional Regulation and Personal Skills by Employment Status",
+    template='plotly_white',
+    showlegend=True
+)
 
-    st.plotly_chart(fig, use_container_width=True)
+# -----------------------------
+# Display chart in Streamlit
+# -----------------------------
+st.plotly_chart(fig, use_container_width=True)
+
 
     # -----------------------------
     # Interpretation
