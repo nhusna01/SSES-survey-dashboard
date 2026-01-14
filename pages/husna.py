@@ -920,15 +920,9 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
     selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
     # -----------------------------
-    # Create color map automatically for any employment status
+    # Use Viridis color scheme automatically
     # -----------------------------
-    
-    # Color mapping for employment status
-    color_map = {
-        'EMPLOYED': '#440154',
-        'STUDENT': '#21918c',
-        'UNEMPLOYED': '#fde725'
-    }
+    viridis_colors = px.colors.sequential.Viridis  # built-in Viridis palette
 
     fig = px.violin(
         filtered_df,
@@ -937,7 +931,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         color='employment_status_label',
         box=True,
         points='all',
-        color_discrete_map=color_map,
+        color_discrete_sequence=viridis_colors,
         title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
     )
 
