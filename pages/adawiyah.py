@@ -287,7 +287,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
         st.warning("Not enough data to generate correlation heatmap.")
 
 # --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT ---
-with st.expander("Visualization 2: Social & Community Impact", expanded=False):
+with st.expander("Visualization 2: Social & Community Impact", expanded=True):
     
     # Ensure indices are calculated
     df['social_support_index'] = df[['social_support', 'social_time', 'community_care']].mean(axis=1)
