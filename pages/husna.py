@@ -850,25 +850,42 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         yaxis_title=selected_var.replace("_", " ").title(),
         template='plotly_white',
         font=dict(family="Arial", size=12),
-        showlegend=False   # ✅ removes duplicate employment label
+        showlegend=False   
     )
 
     st.plotly_chart(fig, width='stretch')
 
-    interpretations = {
-        'life_satisfaction': [
-            "Employed participants report higher life satisfaction.",
-            "Students show moderate satisfaction levels.",
-            "Unemployed participants report lower satisfaction with greater variability.",
-            "Violin plot highlights distributional differences."
-        ],
-        'overall_health': [
-            "Employed participants report slightly better health.",
-            "Students show relatively consistent health levels.",
-            "Unemployed participants exhibit greater variability with lower values.",
-            "Violin plot effectively visualizes spread and density."
-        ],
-    }
+import streamlit as st
+
+# Dictionary of interpretations
+interpretations = {
+    'life_satisfaction': [
+        "Employed participants report higher life satisfaction.",
+        "Students show moderate satisfaction levels.",
+        "Unemployed participants report lower satisfaction with greater variability.",
+        "Violin plot highlights distributional differences."
+    ],
+    'overall_health': [
+        "Employed participants report slightly better health.",
+        "Students show relatively consistent health levels.",
+        "Unemployed participants exhibit greater variability with lower values.",
+        "Violin plot effectively visualizes spread and density."
+    ],
+}
+
+# --- Streamlit interactive section ---
+st.markdown("### Interpretations by Variable")
+selected_var = st.selectbox(
+    "Select a variable to view interpretations:",
+    options=list(interpretations.keys())
+)
+
+# Display the interpretations as a bullet list
+st.markdown("**Interpretations:**")
+for point in interpretations[selected_var]:
+    st.markdown(f"- {point}")
+
+st.markdown("---")  # Optional divider
 
     st.markdown(f"""
     **Interpretation:**
