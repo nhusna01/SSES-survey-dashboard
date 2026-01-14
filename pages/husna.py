@@ -855,9 +855,6 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
 
     st.plotly_chart(fig, width='stretch')
 
-import streamlit as st
-
-# Dictionary of interpretations
 interpretations = {
     'life_satisfaction': [
         "Employed participants report higher life satisfaction.",
@@ -872,17 +869,6 @@ interpretations = {
         "Violin plot effectively visualizes spread and density."
     ],
 }
-
-# --- Streamlit interactive section ---
-st.markdown("### Interpretations by Variable")
-selected_var = st.selectbox(
-    "Select a variable to view interpretations:",
-    options=list(interpretations.keys())
-)
-
-st.markdown("**Interpretations:**")
-for point in interpretations[selected_var]:
-    st.markdown(f"- {point}")
 
 st.markdown("---")  # Divider for clean separation
     st.markdown("---") 
