@@ -765,7 +765,8 @@ elif selected_sub == "Social Skills Grouped Bar Chart":
 # ===============================
 # 5️⃣ Community Participation Histogram
 # ===============================
-elif selected_sub == "Community Participation":
+if selected_sub == "Community Participation":
+
     community_vars = ['community_participation', 'community_impact']
 
     df_hist = filtered_df.melt(
@@ -774,6 +775,7 @@ elif selected_sub == "Community Participation":
         var_name='Community Dimension',
         value_name='Likert Score'
     )
+
     df_hist = df_hist.dropna()
     df_hist['Likert Score'] = df_hist['Likert Score'].astype(int)
     df_hist['employment_status_label'] = df_hist['employment_status_label'].str.upper()
@@ -795,6 +797,7 @@ elif selected_sub == "Community Participation":
         labels={'Likert Score': 'Likert Scale'},
         color_discrete_map=color_map
     )
+
     fig.update_layout(
         template='plotly_white',
         bargap=0.2,
@@ -802,43 +805,38 @@ elif selected_sub == "Community Participation":
         xaxis_title='Likert Score',
         yaxis_title='Count'
     )
-    fig.update_xaxes(dtick=1)
-    st.plotly_chart(fig, width='stretch')  # updated
 
-    # -----------------------------
-    # Interpretation Section
-    # -----------------------------
+    fig.update_xaxes(dtick=1)
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Interpretation
     st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown("""
-- EMPLOYED respondents have higher upper Likert scores (4–5).  
-- STUDENT responses are more spread out.  
-- UNEMPLOYED respondents lean toward lower/neutral scores.  
-- Histogram reveals distribution differences that averages cannot capture.
+- EMPLOYED respondents tend to score higher on the Likert scale (4–5).  
+- STUDENT responses are more evenly distributed across scores.  
+- UNEMPLOYED respondents cluster around lower and neutral scores.  
+- The histogram reveals distribution patterns that mean values alone may obscure.
 """)
 
-# Divider
-st.markdown("---")
+    st.markdown("---")
 
-# -----------------------------
-# Conclusion Section
-# -----------------------------
-st.markdown('<h3 style="color:red;">Conclusion for Community Participation Histogram</h3>', unsafe_allow_html=True)
-st.markdown("""
-- Shows clear distributional differences in community engagement by employment.  
-- EMPLOYED group is most engaged.  
-- UNEMPLOYED group shows lower participation.  
-- Useful for designing programs targeting lower-engaged groups.
+    # Conclusion
+    st.markdown('<h3 style="color:red;">Conclusion for Community Participation</h3>', unsafe_allow_html=True)
+    st.markdown("""
+- Community engagement varies clearly by employment status.  
+- EMPLOYED participants demonstrate the highest levels of participation.  
+- UNEMPLOYED participants show comparatively lower engagement.  
+- These findings can guide targeted community involvement initiatives.
 """)
+
 
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
 # ===============================
 elif selected_sub == "Wellbeing and Life Satisfaction":
+
     wellbeing_vars = ['life_satisfaction', 'overall_health']
-    selected_var = st.selectbox(
-        "Select wellbeing indicator:",
-        wellbeing_vars
-    )
+    selected_var = st.selectbox("Select wellbeing indicator:", wellbeing_vars)
 
     color_map = {
         'EMPLOYED': '#440154',
@@ -854,7 +852,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         box=True,
         points='all',
         color_discrete_map=color_map,
-        title=f'Distribution of {selected_var.replace("_", " ").title()} by Employment Status'
+        title=f'Distribution of {selected_var.replace("_"," ").title()} by Employment Status'
     )
 
     fig.update_layout(
@@ -865,52 +863,43 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         showlegend=False
     )
 
-    
     st.plotly_chart(fig, use_container_width=True)
 
-    # -----------------------------
-    # Interpretations dictionary
-    # -----------------------------
     interpretations = {
         'life_satisfaction': [
             "Employed participants report higher life satisfaction.",
-            "Students show moderate satisfaction levels.",
-            "Unemployed participants report lower satisfaction with greater variability.",
-            "Violin plot highlights distributional differences."
+            "Students demonstrate moderate and stable satisfaction levels.",
+            "Unemployed participants show lower satisfaction with greater variability.",
+            "Violin plots reveal full distributional patterns across groups."
         ],
         'overall_health': [
-            "Employed participants report slightly better health.",
-            "Students show relatively consistent health levels.",
-            "Unemployed participants exhibit greater variability with lower values.",
-            "Violin plot effectively visualizes spread and density."
+            "Employed participants report slightly better overall health.",
+            "Students maintain relatively consistent health outcomes.",
+            "Unemployed participants exhibit wider variability with lower scores.",
+            "Density and spread differences are clearly visible in the violin plot."
         ]
     }
 
-    # -----------------------------
-    # Interpretation Section
-    # -----------------------------
+    # Interpretation
     st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     for point in interpretations[selected_var]:
         st.markdown(f"- {point}")
 
     st.markdown("---")
 
-    # -----------------------------
-    # Conclusion Section
-    # -----------------------------
+    # Conclusion
     st.markdown('<h3 style="color:red;">Conclusion</h3>', unsafe_allow_html=True)
-
     if selected_var == 'life_satisfaction':
         st.markdown("""
-- Life satisfaction is generally higher among employed participants, indicating positive well-being.  
-- Students maintain balanced satisfaction, reflecting moderate engagement and support.  
-- Unemployed participants report lower satisfaction, suggesting areas for targeted interventions.  
-- Overall, employment status strongly influences life satisfaction outcomes.
+- Life satisfaction is highest among employed participants, indicating positive well-being.  
+- Students maintain balanced satisfaction levels across the distribution.  
+- Unemployed participants experience lower satisfaction, suggesting potential social or economic stressors.  
+- Employment status plays a significant role in shaping subjective well-being outcomes.
 """)
     else:
         st.markdown("""
-- Overall health trends are slightly better among employed participants, with less variability.  
-- Students maintain fairly consistent health levels.  
-- Unemployed participants show lower health scores with a wider spread, highlighting potential health disparities.  
-- Violin plots effectively reveal group-level differences in health distributions.
+- Overall health outcomes are slightly better among employed individuals.  
+- Students show consistent health levels with minimal dispersion.  
+- Unemployed participants display wider variability and lower scores.  
+- These patterns highlight potential health inequalities linked to employment status.
 """)
