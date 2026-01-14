@@ -286,7 +286,7 @@ with st.expander("Visualization 1: Correlation Heatmap", expanded=True):
     else:
         st.warning("Not enough data to generate correlation heatmap.")
 
-# --- VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT ---
+# VISUALIZATION 2: SOCIAL & COMMUNITY IMPACT
 with st.expander("Visualization 2: Social & Community Impact", expanded=True):
     
     # Ensure indices are calculated
@@ -329,7 +329,7 @@ with st.expander("Visualization 2: Social & Community Impact", expanded=True):
 
     # Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF0F5 ; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> The distribution demonstrates that life satisfaction generally rises in line with social support.
                 Furthermore, the concentration of <b>darker red dots</b> (High Safety) at greater satisfaction levels indicates that overall well-being is significantly strengthened by community safety.
@@ -381,7 +381,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     
     # 4. Dynamic Interpretation Box
     st.markdown(f"""
-        <div style="background-color: #FFF5F5; padding: 15px; border-radius: 10px; border-left: 5px solid #D32F2F;">
+        <div style="background-color: #FFF0F5 ; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> {text}
             </p>
@@ -389,6 +389,7 @@ with st.expander("Visualization 3: Distribution of Scores", expanded=True):
     """, unsafe_allow_html=True)
 
 st.markdown("---")
+
 # VISUALIZATION 4: GROUP WELL-BEING PROFILE
 with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
     
@@ -458,7 +459,7 @@ with st.expander("Visualization 4: Group Psychological Profile", expanded=True):
 
     # 5. Scientific Insight Box
     st.markdown(f"""
-        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1;">
+        <div style="background-color: #FFF0F5; padding: 15px; border-radius: 10px; border-left: 5px solid #FFB6C1 ;">
             <p style="margin: 0; color: #333;">
                 <b>Interpretation:</b> A balanced psychological profile is shown by the radar chart, with all dimensions regularly averaging between 3.5 and 4.0. 
                 The group's overall well-being is shown by this symmetrical diamond shape, which indicates internal emotional regulation and external environmental factors like safety and support are in balance.
