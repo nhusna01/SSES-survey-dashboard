@@ -607,16 +607,60 @@ elif selected_sub == "Social & Emotional Skills":
     fig = go.Figure()
 
     for _, row in df_avg.iterrows():
+        employment_options = st.multiselect(
+        "Select Employment Status for Radar Chart:",
+        options=filtered_df['employment_status_label'].unique(),
+        default=filtered_df['employment_status_label'].unique()
+    )
+
+    df_radar = filtered_df[
+        filtered_df['employment_status_label'].isin(employment_options)
+    ]
+    # Color mapping for employment status
+    color_map = {
+        'EMPLOYED': '#440154',
+        'STUDENT': '#21918c',
+        'UNEMPLOYED': '#fde725'
+    }
+    # Compute averages for each employment group
+    df_avg = df_radar.groupby('employment_status_label')[radar_vars].mean().reset_index()
+
+    # -----------------------------
+    # Build radar chart
+    # -----------------------------
+    fig = go.Figure()
+
+    for _, row in df_avg.iterrows():
         fig.add_trace(
             go.Scatterpolar(
                 r=[row[v] for v in radar_vars],
                 theta=[v.replace("_", " ").title() for v in radar_vars],
                 fill='toself',
                 name=row['employment_status_label'],
-                line_color=color_map.get(row['employment_status_label.upper(), '#000000')'])
+                line_color=color_map.get(row['employment_status_label.upper(), '#000000')']                            
             )
             )
         )
+            
+
+    # -----------------------------
+    # Layout with integer Likert scale
+    # -----------------------------
+    fig.update_layout(
+        polar=dict(
+            radialaxis=dict(
+                visible=True,
+                range=[1, 5],
+                tickmode='array',
+                tickvals=[1, 2, 3, 4, 5],
+                ticktext=['1','2','3','4','5']
+            )
+        ),
+        title="Emotional Regulation and Personal Skills by Employment Status",
+        template='plotly_white',
+        showlegend=True
+    )
+            
             
 
     # -----------------------------
