@@ -803,17 +803,18 @@ elif selected_sub == "Community Participation":
         yaxis_title='Count'
     )
     fig.update_xaxes(dtick=1)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')  # updated
+
     # -----------------------------
     # Interpretation Section
     # -----------------------------
     st.markdown('<h3 style="color:red;">Interpretation</h3>', unsafe_allow_html=True)
     st.markdown("""
-    - EMPLOYED respondents have higher upper Likert scores (4–5).  
-    - STUDENT responses are more spread out.  
-    - UNEMPLOYED respondents lean toward lower/neutral scores.  
-    - Histogram reveals distribution differences that averages cannot capture.
-    """)
+- EMPLOYED respondents have higher upper Likert scores (4–5).  
+- STUDENT responses are more spread out.  
+- UNEMPLOYED respondents lean toward lower/neutral scores.  
+- Histogram reveals distribution differences that averages cannot capture.
+""")
 
 # Divider
 st.markdown("---")
@@ -828,9 +829,6 @@ st.markdown("""
 - UNEMPLOYED group shows lower participation.  
 - Useful for designing programs targeting lower-engaged groups.
 """)
-
-
-
 
 # ===============================
 # 6️⃣ Wellbeing and Life Satisfaction Violin Plot
@@ -864,7 +862,7 @@ elif selected_sub == "Wellbeing and Life Satisfaction":
         showlegend=False
     )
 
-    st.plotly_chart(fig, width='stretch')  # updated for new Streamlit
+    st.plotly_chart(fig, width='stretch')  # updated
 
     # Interpretations dictionary
     interpretations = {
