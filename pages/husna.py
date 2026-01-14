@@ -455,7 +455,7 @@ st.markdown(f"## {objective_icons[selected_sub]} {subobjectives[selected_sub]}")
 if selected_sub == "Correlation Between Likert Variables":
 
     # -----------------------------
-    # Likert variables
+    # 1️⃣ Likert variables
     # -----------------------------
     likert_cols = [
         'calm_under_pressure', 'cheerful', 'task_persistence', 'enjoy_learning',
@@ -464,7 +464,24 @@ if selected_sub == "Correlation Between Likert Variables":
     ]
 
     # -----------------------------
-    # Variable selection (Likert)
+    # 2️⃣ Select employment status dynamically
+    # -----------------------------
+    target_status = st.selectbox(
+        "Select Employment Status for Correlation Analysis:",
+        options=filtered_df['employment_status_label'].dropna().unique()
+    )
+
+    # -----------------------------
+    # 3️⃣ Filter dataset for selected employment status
+    # -----------------------------
+    df_target = filtered_df[filtered_df['employment_status_label'] == target_status]
+
+    if df_target.empty:
+        st.warning(f"No data available for the selected group: {target_status}")
+        st.stop()
+
+    # -----------------------------
+    # 4️⃣ Select Likert variables
     # -----------------------------
     selected_vars = st.multiselect(
         "Select Likert variables for correlation analysis:",
@@ -476,9 +493,8 @@ if selected_sub == "Correlation Between Likert Variables":
         st.warning("Please select at least two variables.")
         st.stop()
 
-
     # -----------------------------
-    # Keep only existing columns
+    # 5️⃣ Keep only existing columns
     # -----------------------------
     existing_vars = [col for col in selected_vars if col in df_target.columns]
 
@@ -487,7 +503,7 @@ if selected_sub == "Correlation Between Likert Variables":
         st.stop()
 
     # -----------------------------
-    # Convert to numeric
+    # 6️⃣ Convert to numeric
     # -----------------------------
     df_corr = df_target[existing_vars].apply(pd.to_numeric, errors='coerce')
 
@@ -496,7 +512,7 @@ if selected_sub == "Correlation Between Likert Variables":
         st.stop()
 
     # -----------------------------
-    # Compute correlation matrix
+    # 7️⃣ Compute correlation matrix
     # -----------------------------
     correlation_matrix = df_corr.corr()
 
@@ -505,8 +521,10 @@ if selected_sub == "Correlation Between Likert Variables":
         st.stop()
 
     # -----------------------------
-    # Plot heatmap
+    # 8️⃣ Plot interactive heatmap
     # -----------------------------
+    import plotly.express as px
+
     fig = px.imshow(
         correlation_matrix,
         text_auto=True,
